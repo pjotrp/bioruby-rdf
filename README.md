@@ -2,9 +2,10 @@
 
 [![Build Status](https://secure.travis-ci.org/pjotrp/bioruby-rdf.png)](http://travis-ci.org/pjotrp/bioruby-rdf)
 
-Full description goes here
+Library and tools for using a triple-store with biological data.
 
-Note: this software is under active development!
+Note: this software is under active development! See also the [design
+doc](https://github.com/pjotrp/bioruby-rdf/blob/master/doc/design.md).
 
 ## Installation
 
