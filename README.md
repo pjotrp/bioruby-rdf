@@ -2,7 +2,13 @@
 
 [![Build Status](https://secure.travis-ci.org/pjotrp/bioruby-rdf.png)](http://travis-ci.org/pjotrp/bioruby-rdf)
 
-Library and tools for using a triple-store with biological data.
+Library and tools for using a triple-store with biological data. This
+project is linked with next generation sequencing, genome browsing, visualisation and
+QTL mapping. E.g.
+
+* [bio-ngs](http://www.biogems.info/#bio-ngs)
+* [bio-bio-ucsc-api](http://www.biogems.info/#bio-ucsc-api)
+* [bio-qtlHD](http://www.biogems.info/#bio-qtlHD)
 
 Note: this software is under active development! See also the [design
 doc](https://github.com/pjotrp/bioruby-rdf/blob/master/doc/design.md).
@@ -16,7 +22,7 @@ doc](https://github.com/pjotrp/bioruby-rdf/blob/master/doc/design.md).
 ## Usage
 
 ```ruby
-    require 'bio-rdf
+    require 'bio-rdf'
 ```
 
 The API doc is online. For more code examples see the test files in
