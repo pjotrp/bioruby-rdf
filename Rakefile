@@ -17,10 +17,10 @@ Jeweler::Tasks.new do |gem|
   gem.name = "bio-rdf"
   gem.homepage = "http://github.com/pjotrp/bioruby-rdf"
   gem.license = "MIT"
-  gem.summary = %Q{TODO: one-line summary of your gem}
-  gem.description = %Q{TODO: longer description of your gem}
+  gem.summary = %Q{Bioinformatics triple-store support}
+  gem.description = %Q{Store relationships in a triple-store, such as gene enrichment and QTL, and use this information for inference and causality}
   gem.email = "pjotr.public01@thebird.nl"
-  gem.authors = ["Pjotr Prins"]
+  gem.authors = ["Pjotr Prins", "Anurag Priyam"]
   # dependencies defined in Gemfile
 end
 Jeweler::RubygemsDotOrgTasks.new
