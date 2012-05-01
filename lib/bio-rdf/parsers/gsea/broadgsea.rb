@@ -1,6 +1,7 @@
 module BioRdf
   module Parsers
     module BroadGSEA
+
       # Parses a 3 line CLS record (see features for an example)
       class ParseClsRecord
         attr_reader :classnames, :classes
@@ -13,6 +14,7 @@ module BioRdf
           @classes = lines[2].split(/\s+/)
         end
       end
+
       # Parses a single line result lazily (see features for an example)
       #
       # GS SIZE SOURCE ES NES NOM-p-val FDR-q-val FWER-p-val Tag% Gene% Signal FDR_(median) glob.p.val
@@ -48,8 +50,9 @@ module BioRdf
           @nominal_p_value ||= @fields[5].to_f
         end
         # FDR q-value: False discovery rate; that is, the estimated probability
-        # that the normalized enrichment score represents a false positive
-        # finding.
+        # that the normalized enrichment score (NES) represents a false
+        # positive finding. For example, an FDR of 25% indicates that the
+        # result is likely to be valid 3 out of 4 times.
         def fdr_q_value
           @fdr_q_value ||= @fields[6].to_f
         end
@@ -72,6 +75,7 @@ module BioRdf
           @global_p_value ||= @fields[12].to_f
         end
       end
+
       class ParseResultFile
         include Enumerable
         def initialize filename
@@ -86,6 +90,13 @@ module BioRdf
           @list.each do | rec |
             yield rec
           end
+        end
+      end
+
+      module Parser
+
+        def do_parse dir, &block
+
         end
       end
     end

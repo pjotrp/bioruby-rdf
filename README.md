@@ -6,7 +6,21 @@ Library and tools for using a triple-store with biological data.  It
 includes tools for storing parsed data into a triple store. The name
 includes RDF, the XML representation of triples, but that really is
 too a narrow view of the purpose of this biogem. The alternative names
-(bio-semweb and bio-triplestore) even look worse.
+(bio-semweb and bio-triplestore) looked even worse.
+
+Every data-type has a Parser module. This parser module controls the
+parsing flow. The actual parsing is handled by lower level routines,
+which may even reside in other libraries, such as BioRuby. The basic
+flow is 
+
+  input -> parse -> output
+
+The *input* can be anything, from directories, files to web based
+resources.
+
+The *output* of the parser should be in some form of triple format,
+though simple tab delimited tables can also be supported (depending on
+the parser).
 
 The first functionality includes parsing the results of gene set
 enrichment analysis
@@ -34,7 +48,13 @@ tool](http://www.broadinstitute.org/gsea/index.jsp) produces two
 result files for every two biological states. We wrote a parser
 for the summary files, which outputs either a single table of results
 (based on a cut-off value). This table can be converted into a
-triple-store.
+triple-store. 
+
+To create a tab delimited file from a GSEA result, where FDR < 0.25
+
+```bash
+  bio-gem gsea --tabulate directory --filter "rec.fdr&lt;0.25" > results.txt
+```
 
 ## Installation
 

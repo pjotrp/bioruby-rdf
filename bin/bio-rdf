@@ -4,7 +4,24 @@
 # Author:: Pjotr Prins
 # Copyright:: 2012
 
- USAGE = "Describe bio-rdf"
+rootpath = File.dirname(File.dirname(__FILE__))
+$: << File.join(rootpath,'lib')
+
+version = File.new(File.join(rootpath,'VERSION')).read.chomp
+
+print "bio-rdf #{version} by Pjotr Prins (c) 2012\n"
+
+USAGE = <<EOP
+
+  Usage: bio-rdf command [options]
+
+  Valid commands reflect parsers and are:
+
+    gsea : Gene set enrichment analysis
+
+  For more information on a command use the --help switch
+
+EOP
 
 if ARGV.size == 0
   print USAGE
@@ -14,9 +31,10 @@ require 'bio-rdf'
 require 'optparse'
 
 # Uncomment when using the bio-logger 
-# require 'bio-logger'
-# Bio::Log::CLI.logger('stderr')
-# Bio::Log::CLI.trace('info')
+require 'bio-logger'
+
+Bio::Log::CLI.logger('stderr')
+Bio::Log::CLI.trace('info')
 
 options = {:example_switch=>false,:show_help=>false}
 opts = OptionParser.new do |o|
@@ -63,6 +81,11 @@ end
 
 begin
   opts.parse!(ARGV)
+
+  if options[:show_help]
+    print USAGE
+    exit 0
+  end
 
   # Uncomment the following when using the bio-logger 
   # Bio::Log::CLI.configure('bio-rdf')
