@@ -1,16 +1,16 @@
 Given /^I have a Broad GSEA results file which contains the line$/ do |string|
+  @rec = BioRdf::Parsers::BroadGSEA::ParseResultRecord.new(buf)
+end
+
+Then /^I should be able to fetch all values as a list$/ do
+  @rec.to_list = []
+end
+
+Then /^I should be able to fetch all other values \(lazily\), where$/ do
   pending # express the regexp above with the code you wish you had
 end
 
 Then /^I should be able to the name of the geneset BIOCARTA_RACCYCD_PATHWAY$/ do
-  pending # express the regexp above with the code you wish you had
-end
-
-Then /^I should be able to fetch all values as a list$/ do
-  pending # express the regexp above with the code you wish you had
-end
-
-Then /^I should be able to fetch all other values \(lazily\), where$/ do
   pending # express the regexp above with the code you wish you had
 end
 
