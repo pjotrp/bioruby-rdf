@@ -18,7 +18,7 @@ module BioRdf
       # GS SIZE SOURCE ES NES NOM-p-val FDR-q-val FWER-p-val Tag% Gene% Signal FDR_(median) glob.p.val
       class ParseResultRecord
         def initialize string
-          @fields = string.split(/\t/)
+          @fields = string.strip.split(/\t/)
         end
         def to_list
           @fields
@@ -70,6 +70,22 @@ module BioRdf
         end
         def global_p_value
           @global_p_value ||= @fields[12].to_f
+        end
+      end
+      class ParseResultFile
+        include Enumerable
+        def initialize filename
+          @list = []
+          f = File.open(filename)
+          f.gets # skip header
+          f.each_line do | line |
+            @list << ParseResultRecord.new(line)
+          end
+        end
+        def each
+          @list.each do | rec |
+            yield rec
+          end
         end
       end
     end

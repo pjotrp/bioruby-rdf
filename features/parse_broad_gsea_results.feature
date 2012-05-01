@@ -23,3 +23,8 @@ BIOCARTA_RACCYCD_PATHWAY        25      http://www.broadinstitute.org/gsea/msigd
     And FDR is 1
     And global p-value is 0.633
     And Median FDR is 1
+
+  Scenario: Parse a Broad GSEA results file and filter results
+    Given I have a Broad GSEA results file with multiple lines
+    Then I should be able to return all records with an FDR of less than 0.25
+

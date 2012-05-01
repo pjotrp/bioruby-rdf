@@ -45,3 +45,15 @@ Then /^Median FDR is (\d+)$/ do |arg1|
   @rec.median_fdr.should == (arg1).to_f
 end
 
+# --- multi line parsing
+
+Given /^I have a Broad GSEA results file with multiple lines$/ do
+  @gsea_results = BioRdf::Parsers::BroadGSEA::ParseResultFile.new("./test/data/parsers/gsea/Run1_C2.SUMMARY.RESULTS.REPORT.0.txt")
+end
+
+Then /^I should be able to return all records with an FDR of less than (\d+)\.(\d+)$/ do |arg1, arg2|
+  recs = @gsea_results.find_all { | rec | rec.fdr_q_value < 0.85 }
+  recs.size.should == 70
+end
+
+
