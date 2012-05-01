@@ -36,8 +36,6 @@ for the summary files, which outputs either a single table of results
 (based on a cut-off value). This table can be converted into a
 triple-store.
 
-
-
 ## Installation
 
 ```sh
