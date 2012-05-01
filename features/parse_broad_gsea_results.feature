@@ -16,10 +16,10 @@ BIOCARTA_RACCYCD_PATHWAY        25      http://www.broadinstitute.org/gsea/msigd
     Then I should be able to the name of the geneset BIOCARTA_RACCYCD_PATHWAY
     And I should be able to fetch all values as a list
     And I should be able to fetch all other values (lazily), where
+    And I should be able to fetch the source
     And ES is 0.55588
     And NES is 1.7947
     And p-value is 0.004149
     And FDR is 1
-    And q-value is 0.647
     And global p-value is 0.633
     And Median FDR is 1
