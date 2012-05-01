@@ -29,12 +29,20 @@ end
 
 require 'bio-rdf'
 require 'optparse'
+require 'ostruct'
 
 # Uncomment when using the bio-logger 
 require 'bio-logger'
 
 Bio::Log::CLI.logger('stderr')
 Bio::Log::CLI.trace('info')
+
+case ARGV[0]
+  when 'gsea'
+    ARGV.shift
+    BioRdf::Parsers::BroadGSEA::Parser::handle_options
+    exit 0
+end
 
 options = {:example_switch=>false,:show_help=>false}
 opts = OptionParser.new do |o|

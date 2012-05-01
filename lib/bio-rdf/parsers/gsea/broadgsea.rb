@@ -95,8 +95,65 @@ module BioRdf
 
       module Parser
 
-        def do_parse dir, &block
+        def Parser::handle_options 
+          options = OpenStruct.new()
+          
+          opts = OptionParser.new() do |o|
+            o.banner = "Usage: #{File.basename($0)} gsea [options] dir"
 
+            o.on_tail("-h", "--help", "Show help and examples") {
+              print(o)
+              exit()
+            }
+            o.on("-e filter","--exec filter",String, "Execute filter") do |s|
+              options.exec = s
+            end
+
+            o.on("--tabulate","Output tab delimited table") do
+              options.output = :tabulate
+            end
+
+          end
+          opts.parse!(ARGV)
+          dir = ARGV[0]
+          if dir and File.directory?(dir)
+            do_parse(dir, options.exec, options.output)
+          else
+            raise "you should supply a GSEA directory!" 
+          end
+        end
+
+        require 'bio-logger'
+        include Bio::Log
+
+        def Parser::do_parse input, filter, output
+          log = LoggerPlus.new 'gsea'
+          log.level = INFO
+          log.outputters = Outputter.stderr
+          log.warn("Fetching "+input)
+          print "Marker\tGenotype\tGS\tSIZE\tSOURCE\tES\tNES\tNOM p-val\tFDR q-val\tFWER p-val\tTag \%\tGene \%\tSignal\tFDR (median)\tglob.p.val\n"
+          Dir.foreach(input) do |entry| # two step search, because of many dirs
+            next if entry == '.' or entry == '..'
+            log.info("Parsing directory "+entry)
+            resultfilenames = File.join(input,entry,"*SUMMARY.RESULTS.REPORT.[01].txt")
+            clsfilename = File.join(input,entry,"cls")
+            # log.info(resultfilenames)
+            Dir.glob(resultfilenames) do |fn|
+              genotype = "A"
+              genotype = "B" if fn =~ /1.txt/
+              marker = "unknown"
+              # fetch marker name
+              if File.exist?(clsfilename)
+                cls = BioRdf::Parsers::BroadGSEA::ParseClsRecord.new(File.read(clsfilename))
+                marker = cls.classnames[0]
+              end
+              gsea_results = BioRdf::Parsers::BroadGSEA::ParseResultFile.new(fn)
+              recs = gsea_results.find_all { | rec | rec.fdr_q_value <= 0.25 }
+              recs.each do | rec |
+                print "#{marker}\t#{genotype}\t"+rec.to_list.join("\t"),"\n"
+              end
+            end
+          end
         end
       end
     end

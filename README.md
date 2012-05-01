@@ -53,7 +53,7 @@ triple-store.
 To create a tab delimited file from a GSEA result, where FDR < 0.25
 
 ```bash
-  bio-gem gsea --tabulate directory --filter "rec.fdr&lt;0.25" > results.txt
+  bio-rdf gsea --tabulate --exec "rec.fdr <= 0.25" ./gsea/output/ > results.txt
 ```
 
 ## Installation
