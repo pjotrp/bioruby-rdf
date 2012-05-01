@@ -29,33 +29,36 @@ module BioRdf
         def source
           @fields[2]
         end
+        # ES: Enrichment score for the gene set; that is, the degree to which
+        # this gene set is overrepresented at the top or bottom of the ranked
+        # list of genes in the expression dataset.
         def es
           @es ||= @fields[3].to_f
-        end
+        end 
+        # NES: Normalized enrichment score; that is, the enrichment score for
+        # the gene set after it has been normalized across analyzed gene sets.
         def nes
           @nes ||= @fields[4].to_f
         end
-        # NOM p-value
-        # Nominal p value; that is, the statistical significance of the
-        # enrichment score. The nominal p value is not adjusted for gene set
-        # size or multiple hypothesis testing; therefore, it is of limited use
-        # in comparing gene sets.
+        # NOM p-value: Nominal p value; that is, the statistical significance
+        # of the enrichment score. The nominal p value is not adjusted for gene
+        # set size or multiple hypothesis testing; therefore, it is of limited
+        # use in comparing gene sets.
         def nominal_p_value
           @nominal_p_value ||= @fields[5].to_f
         end
-        # FDR q-value
-        # False discovery rate; that is, the estimated probability that the
-        # normalized enrichment score represents a false positive finding.
+        # FDR q-value: False discovery rate; that is, the estimated probability
+        # that the normalized enrichment score represents a false positive
+        # finding.
         def fdr_q_value
           @fdr_q_value ||= @fields[6].to_f
         end
         alias :fdr :fdr_q_value
 
-        # FWER p-value
-        # Familywise-error rate; that is, a more conservatively estimated
-        # probability that the normalized enrichment score represents a false
-        # positive finding. Because the goal of GSEA is to generate hypotheses,
-        # the GSEA team recommends focusing on the FDR statistic.
+        # FWER p-value: Familywise-error rate; that is, a more conservatively
+        # estimated probability that the normalized enrichment score represents
+        # a false positive finding. Because the goal of GSEA is to generate
+        # hypotheses, the GSEA team recommends focusing on the FDR statistic.
         def fwer_p_value
           @fwer_p_value ||= @fields[7].to_f
         end
