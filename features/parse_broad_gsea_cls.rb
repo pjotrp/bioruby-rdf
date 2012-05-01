@@ -7,6 +7,7 @@ Then /^I should fetch the phenotype names RS(\d+) and RS(\d+)_(\d+)$/ do |arg1, 
 end
 
 Then /^I should be able to fetch the classes into an array$/ do
-  @rec.classes.should == ['0','0']
+  @rec.classes.should == 
+  ["0", "0", "0", "1", "1", "0", "1", "0", "0", "1", "0", "1", "0", "1", "1", "1", "0", "1", "1", "1", "1", "1", "0", "0", "1", "0"]
 end
 
