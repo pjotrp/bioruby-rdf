@@ -135,9 +135,12 @@ module BioRdf
           Dir.foreach(input) do |entry| # two step search, because of many dirs
             next if entry == '.' or entry == '..'
             log.info("Parsing directory "+entry)
-            resultfilenames = File.join(input,entry,"*SUMMARY.RESULTS.REPORT.[01].txt")
-            clsfilename = File.join(input,entry,"cls")
+            clsfilename = File.join(input,entry,"*cls")
+            clsfilename = Dir.glob(clsfilename)
+            raise "We need one cls file: #{clsfilename}" if clsfilename.size != 1
+            clsfilename = clsfilename[0]
             # log.info(resultfilenames)
+            resultfilenames = File.join(input,entry,"*SUMMARY.RESULTS.REPORT.[01].txt")
             Dir.glob(resultfilenames) do |fn|
               genotype = "A"
               genotype = "B" if fn =~ /1.txt/
