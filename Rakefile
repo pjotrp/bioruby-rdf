@@ -20,7 +20,7 @@ Jeweler::Tasks.new do |gem|
   gem.summary = %Q{Bioinformatics triple-store support}
   gem.description = %Q{Store relationships in a triple-store, such as gene enrichment and QTL, and use this information for inference and causality}
   gem.email = "pjotr.public01@thebird.nl"
-  gem.authors = ["Pjotr Prins", "Anurag Priyam"]
+  gem.authors = ["Pjotr Prins"]
   # dependencies defined in Gemfile
 end
 Jeweler::RubygemsDotOrgTasks.new
