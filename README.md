@@ -4,21 +4,21 @@
 
 Library and tools for using a triple-store with biological data.  It
 includes tools for storing parsed data into a triple store. The name
-includes RDF, the XML representation of triples, but that really is
-too a narrow view of the purpose of this biogem. The alternative names
-(bio-semweb and bio-triplestore) looked even worse.
+includes RDF, but that really is too a narrow view of the purpose of
+this biogem, unfortunately alternative names (bio-semweb and
+bio-triplestore) look even worse.
 
-Every data-type has a Parser module. This parser module controls the
-parsing flow. The actual parsing is handled by lower level routines,
-which may even reside in other libraries, such as BioRuby. The basic
-flow is 
+First there are the parsers.  Every (native) data-type has a parser
+module. This parser module controls the parsing flow. The actual
+parsing is handled by lower level routines, which may even reside in
+other libraries, such as BioRuby. The basic flow is 
 
-  input -> parse -> output
+  input -> parser -> output
 
 The *input* can be anything, from directories, files to web based
 resources.
 
-The *output* of the parser should be in some form of triple format,
+The *output* of the parser should be in some form of RDF triple format,
 though simple tab delimited tables can also be supported (depending on
 the parser).
 
@@ -34,7 +34,8 @@ browsing, visualisation and QTL mapping.  E.g.
 * [bio-bio-ucsc-api](http://www.biogems.info/#bio-ucsc-api)
 * [bio-qtlHD](http://www.biogems.info/#bio-qtlHD)
 
-Note: this software is under active development! See also the [design
+Note: this software is under active development and will grow
+significantly over time! See also the [design
 doc](https://github.com/pjotrp/bioruby-rdf/blob/master/doc/design.md).
 
 ## Examples
