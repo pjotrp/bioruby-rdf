@@ -99,7 +99,7 @@ module BioRdf
           options = OpenStruct.new()
           
           opts = OptionParser.new() do |o|
-            o.banner = "Usage: #{File.basename($0)} gsea [options] dir"
+            o.banner = "Usage: #{File.basename($0)} gsea [options] path(s)"
 
             o.on_tail("-h", "--help", "Show help and examples") {
               print(o)
@@ -117,9 +117,11 @@ module BioRdf
           opts.parse!(ARGV)
           dir = ARGV[0]
           if dir and File.directory?(dir)
-            do_parse(dir, options.exec, options.output)
+            ARGV.each do | path |
+              do_parse(path, options.exec, options.output)
+            end
           else
-            raise "you should supply a GSEA directory!" 
+            raise "you should supply a valid GSEA directory!" 
           end
         end
 
