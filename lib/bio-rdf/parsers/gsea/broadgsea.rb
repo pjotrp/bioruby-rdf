@@ -95,7 +95,11 @@ module BioRdf
 
       module Parser
 
+        require 'bio-logger'
+        include Bio::Log
+
         def Parser::handle_options 
+          log = LoggerPlus.new 'gsea'
           options = OpenStruct.new()
           
           opts = OptionParser.new() do |o|
@@ -107,6 +111,7 @@ module BioRdf
             }
             o.on("-e filter","--exec filter",String, "Execute filter") do |s|
               options.exec = s
+              log.warn("--exec option is not yet implemented")
             end
 
             o.on("--tabulate","Output tab delimited table") do
@@ -124,9 +129,6 @@ module BioRdf
             raise "you should supply a valid GSEA directory!" 
           end
         end
-
-        require 'bio-logger'
-        include Bio::Log
 
         def Parser::do_parse input, filter, output
           log = LoggerPlus.new 'gsea'
