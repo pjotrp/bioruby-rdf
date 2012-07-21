@@ -17,6 +17,7 @@ Feature: Convert genotype table to RDF
     When I load the genotype table
     Then I should turn it into RDF so it contains
         """
+        [:rs13475701 :id "rs13475701"; :Chromosome 1 ; :Pos 0 ; :AXB1 "AA"].
         """
     When I store the RDF in a triple store
     And query the genotype of strain AXB4 at marker rs8237062 to be BB with 
@@ -31,5 +32,9 @@ Feature: Convert genotype table to RDF
         """
         SELECT Chromosome,Pos WHERE { ?s ?p ?o } 
         """
-
-
+    When I add that AXB1 is a genotype with
+        """
+        :AXB1 a :genotype
+        :AXB2 a :genotype
+        """
+    Then I can directly query for the genotypes
