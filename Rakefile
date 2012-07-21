@@ -32,6 +32,12 @@ Jeweler::RubygemsDotOrgTasks.new
 #   test.verbose = true
 # end
 
+require 'cucumber/rake/task'
+Cucumber::Rake::Task.new do |features|
+end
+
+task :test => [ :cucumber ]
+
 task :default => :test
 
 require 'rdoc/task'
