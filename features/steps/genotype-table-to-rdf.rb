@@ -27,3 +27,15 @@ When /^query marker rs(\d+) to be at location (\d+)\.(\d+) of chromosome (\d+) w
 end
 
 
+Then /^I should turn it into RDF so it contains$/ do |string|
+  pending # express the regexp above with the code you wish you had
+end
+
+When /^I add that AXB(\d+) is a genotype with$/ do |arg1, string|
+  pending # express the regexp above with the code you wish you had
+end
+
+Then /^I can directly query for the genotypes$/ do
+  pending # express the regexp above with the code you wish you had
+end
+
