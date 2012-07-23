@@ -7,7 +7,11 @@ rescue Bundler::BundlerError => e
   exit e.status_code
 end
 
-$LOAD_PATH.unshift(File.dirname(__FILE__) + '/../../lib')
+rootdir = File.dirname(__FILE__) + '/../..'
+$LOAD_PATH.unshift(rootdir+'/lib',rootdir+'/../bioruby-table/lib')
+
+p $:
+
 require 'bio-rdf'
 
 require 'rspec/expectations'

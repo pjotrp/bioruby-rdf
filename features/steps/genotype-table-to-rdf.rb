@@ -1,5 +1,5 @@
 Given /^a comma separated table$/ do |string|
-  pending # express the regexp above with the code you wish you had
+  @table = BioTable::TableLoader::load(lambda { string.each_line { |line| yield line.strip }})
 end
 
 When /^I load the genotype table$/ do
