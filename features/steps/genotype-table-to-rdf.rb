@@ -21,6 +21,7 @@ Then /^I should turn it into RDF so it contains for the table header$/ do |strin
         print s if rdf.index(s) == nil
         rdf.index(s).should_not be_nil
       end
+      @rdf_header = rdf
     end
     break
   end
@@ -40,14 +41,33 @@ Then /^and it contains for the rows$/ do |string|
   #   print l
   # end
   string.split(/\n/).each do |s|
-    print s if rdf.index(s) == nil
+    s = s.strip
+    if rdf.index(s) == nil
+      print "EXPECTED: <",s,">\n"
+      print "FOUND:    <",rdf.join("\n"),">\n"
+    end
     rdf.index(s).should_not be_nil
   end
+  @rdf_table = rdf
 end
 
 
 When /^I store the RDF in a triple store$/ do
-  pending # express the regexp above with the code you wish you had
+  # db = BioRdf::RestAPI("http://localhost:8000/")
+  # dp.put(@rdf_header)
+  f = File.new("file.rdf","w")
+
+  f.print "
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix : <http://biobeat.org/rdf/biotable/#ns>  .
+"  
+  f.print(@rdf_header.join("\n"))
+  f.print(@rdf_table.join("\n"))
+  f.close
+  # rapper -i turtle file.rdf (raptor-utils)
+  # https://github.com/moustaki/4store-ruby/blob/master/lib/four_store/store.rb
+  # curl -T file.rdf -H 'Content-Type: application/x-turtle'  http://localhost:8000/data/genotype.rdf
+  # sparql-query http://localhost:8000/sparql/ 'SELECT * WHERE { ?s ?p ?o } LIMIT 10'
 end
 
 When /^query the genotype of strain AXB(\d+) at marker rs(\d+) to be BB with$/ do |arg1, arg2, string|
