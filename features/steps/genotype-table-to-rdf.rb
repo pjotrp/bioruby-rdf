@@ -1,4 +1,5 @@
 require 'bio-table/rdf'
+require 'four_store/store'
 
 Given /^a comma separated table$/ do |string|
   @lines = string.split(/\n/)
@@ -70,24 +71,34 @@ When /^I store the RDF in a triple store$/ do
   # https://github.com/moustaki/4store-ruby/blob/master/lib/four_store/store.rb
 end
 
-When /^query the genotype of strain AXB(\d+) at marker rs(\d+) to be BB with$/ do |arg1, arg2, string|
+When /^query marker "([^"]*)" to be at location "([^"]*)" of chromosome "([^"]*)" with$/ do |arg1, arg2, arg3, string|
+  @store = FourStore::Store.new 'http://localhost:8000/sparql/'
+  @prefix = """
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> 
+PREFIX : <http://biobeat.org/rdf/biotable/#ns> 
+"""
+
+  response = @store.select(@prefix+string)
+  response.size.should == 1
+end
+
+When /^query the genotype of strain "([^"]*)" at marker "([^"]*)" to be "([^"]*)" with$/ do |arg1, arg2, arg3, string|
+  response = @store.select(@prefix+string)
+  response[0]["genotype"].should == "BB"
+end
+
+When /^query the genotype of strain "([^"]*)" to be "([^"]*)" with$/ do |arg1, arg2, string|
+  response = @store.select(@prefix+string)
+  p response
+  response.map { |e| e["genotype"] }.should == ['AA','AA','AA','AA']
+end
+
+When /^I add that 'AXB(\d+)' is a genotype with$/ do |arg1, string|
   pending # express the regexp above with the code you wish you had
 end
 
-When /^query the genotype of strain AXB(\d+) to be "([^"]*)" with$/ do |arg1, arg2, string|
+Then /^I can directly query for the genotypes with$/ do
   pending # express the regexp above with the code you wish you had
 end
 
-When /^query marker rs(\d+) to be at location (\d+)\.(\d+) of chromosome (\d+) with$/ do |arg1, arg2, arg3, arg4, string|
-  pending # express the regexp above with the code you wish you had
-end
-
-
-When /^I add that AXB(\d+) is a genotype with$/ do |arg1, string|
-  pending # express the regexp above with the code you wish you had
-end
-
-Then /^I can directly query for the genotypes$/ do
-  pending # express the regexp above with the code you wish you had
-end
 

@@ -24,21 +24,29 @@ Feature: Convert genotype table to RDF
         :rs13475701 rdf:label "rs13475701" ; a :colname ; ; :Id "rs13475701" ; :Chromosome "1" ; :Pos "0" ; :AXB1 "AA" ; :AXB2 "BB" ; :AXB4 "AA" ; :AXB5 "BB" ; :AXB6 "BB" ; :AXB10 "AA" ; :AXB12 "BB" ; :AXB13 "BB" ; :AXB15 "BB" ; :AXB19 "AA" ; :AXB23 "AA" ; :AXB24 "AA" ; :BXA1 "AA" ; :BXA2 "AA" ; :BXA4 "AA" ; :BXA7 "AA" ; :BXA8 "AA" ; :BXA11 "BB" ; :BXA12 "AA" ; :BXA13 "AA" ; :BXA14 "AA" ; :BXA16 "AA" ; :BXA24 "AA" ; :BXA25 "BB" ; :BXA26 "AA" .
         """
     When I store the RDF in a triple store
-    And query the genotype of strain AXB4 at marker rs8237062 to be BB with 
+    And query marker "rs8237062" to be at location "87.334" of chromosome "1" with
         """
-        SELECT genotype WHERE { ?s ?p ?o } 
+SELECT ?marker WHERE { 
+  ?marker :Chromosome "1". 
+  ?marker :Pos "87.334" 
+} LIMIT 1000
         """
-    And query the genotype of strain AXB1 to be "AA,AA,AA,AA" with
+    And query the genotype of strain "AXB4" at marker "rs8237062" to be "BB" with 
         """
-        SELECT genotype WHERE { ?s ?p ?o } 
+        SELECT ?genotype WHERE { 
+          ?marker :Id "rs8237062".
+          ?marker :AXB4 ?genotype.
+        } 
         """
-    And query marker rs8237062 to be at location 87.334 of chromosome 1 with
+    And query the genotype of strain "AXB1" to be "AA,AA,AA,AA" with
         """
-        SELECT Chromosome,Pos WHERE { ?s ?p ?o } 
+        SELECT ?genotype WHERE { 
+          ?marker :AXB1 ?genotype.
+        } 
         """
-    When I add that AXB1 is a genotype with
+    When I add that 'AXB1' is a genotype with
         """
         :AXB1 a :genotype
         :AXB2 a :genotype
         """
-    Then I can directly query for the genotypes
+    Then I can directly query for the genotypes with
