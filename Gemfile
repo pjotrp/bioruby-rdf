@@ -6,6 +6,7 @@ gem "bio-logger"
 gem "rest-client"
 gem "bio-table"
 gem "rest-client"
+gem "ppe-4store-ruby"
 
 # Add dependencies to develop your gem here.
 # Include everything needed to run rake, tests, features, etc.

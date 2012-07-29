@@ -65,9 +65,9 @@ When /^I store the RDF in a triple store$/ do
   f.print(@rdf_table.join("\n"))
   f.close
   # rapper -i turtle file.rdf (raptor-utils)
-  # https://github.com/moustaki/4store-ruby/blob/master/lib/four_store/store.rb
-  # curl -T file.rdf -H 'Content-Type: application/x-turtle'  http://localhost:8000/data/genotype.rdf
+  print `curl -T file.rdf -H 'Content-Type: application/x-turtle'  http://localhost:8000/data/genotype.rdf`
   # sparql-query http://localhost:8000/sparql/ 'SELECT * WHERE { ?s ?p ?o } LIMIT 10'
+  # https://github.com/moustaki/4store-ruby/blob/master/lib/four_store/store.rb
 end
 
 When /^query the genotype of strain AXB(\d+) at marker rs(\d+) to be BB with$/ do |arg1, arg2, string|
