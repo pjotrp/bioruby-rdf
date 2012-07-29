@@ -26,10 +26,10 @@ Feature: Convert genotype table to RDF
     When I store the RDF in a triple store
     And query marker "rs8237062" to be at location "87.334" of chromosome "1" with
         """
-SELECT ?marker WHERE { 
-  ?marker :Chromosome "1". 
-  ?marker :Pos "87.334" 
-} LIMIT 1000
+        SELECT ?marker WHERE { 
+          ?marker :Chromosome "1". 
+          ?marker :Pos "87.334" 
+        } LIMIT 1000
         """
     And query the genotype of strain "AXB4" at marker "rs8237062" to be "BB" with 
         """
