@@ -93,12 +93,19 @@ When /^query the genotype of strain "([^"]*)" to be "([^"]*)" with$/ do |arg1, a
   response.map { |e| e["genotype"] }.should == ['AA','AA','AA','AA']
 end
 
-When /^I add that 'AXB(\d+)' is a genotype with$/ do |arg1, string|
-  pending # express the regexp above with the code you wish you had
+When /^I add to the store that 'AXB(\d+)' is a genotype with$/ do |arg1, string|
+  # response = @store.delete('data/genotype.rdf')
+  # puts response
+  response = @store.add('data/genotype.rdf', "
+<http://biobeat.org/rdf/biotable/#nsAXB1> rdf:type <http://biobeat.org/rdf/biotable/#nsgenotype>.
+")
+  puts response
 end
 
-Then /^I can directly query for the genotypes with$/ do
-  pending # express the regexp above with the code you wish you had
+Then /^I can directly query for the genotypes with$/ do |string|
+  response = @store.select(@prefix+string)
+  p response
+  response.size.should > 0
 end
 
 

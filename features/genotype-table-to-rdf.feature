@@ -44,9 +44,13 @@ SELECT ?marker WHERE {
           ?marker :AXB1 ?genotype.
         } 
         """
-    When I add that 'AXB1' is a genotype with
+    When I add to the store that 'AXB1' is a genotype with
         """
-        :AXB1 a :genotype
-        :AXB2 a :genotype
+        :AXB1 a :genotype .
         """
     Then I can directly query for the genotypes with
+        """
+        SELECT * WHERE { 
+          ?genotype a :genotype
+        } 
+        """
