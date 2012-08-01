@@ -15,11 +15,13 @@ When /^I load the genotype table$/ do
 end
 
 Then /^I should turn it into RDF so it contains for the table header$/ do |string|
-  BioTable::TableLoader.emit(@lines,in_format: :csv).each_with_index do |row, i|
-    if i==0
+  BioTable::TableLoader.emit(@lines,in_format: :csv).each do |row, type|
+    if type == :header
       rdf = BioTable::RDF.header(row)
       string.split(/\n/).each do |s|
-        print s if rdf.index(s) == nil
+        s = s.strip
+
+        print s," in ",rdf.join(' ') if rdf.index(s) == nil
         rdf.index(s).should_not be_nil
       end
       @rdf_header = rdf
@@ -31,8 +33,8 @@ end
 Then /^and it contains for the rows$/ do |string|
   header = nil
   rdf = []
-  BioTable::TableLoader.emit(@lines,in_format: :csv).each_with_index do |row, i|
-    if i==0
+  BioTable::TableLoader.emit(@lines,in_format: :csv).each do |row, type|
+    if type == :header
       header = row
     else
       rdf << BioTable::RDF.row(row,header)
