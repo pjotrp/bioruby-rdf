@@ -13,11 +13,12 @@ $stderr.print "bio-rdf #{version} by Pjotr Prins (c) 2012\n"
 
 USAGE = <<EOP
 
-  Usage: bio-rdf command [options]
+  Usage: bio-rdf command [--tabulate] [options]
 
-  Valid commands reflect parsers and are:
+  Valid commands reflect parser/outputters and are:
 
-    gsea : Gene set enrichment analysis
+    gsea   : Gene set enrichment analysis
+    pubmed : PubMed
 
   For more information on a command use the --help switch
 
@@ -37,27 +38,27 @@ require 'bio-logger'
 Bio::Log::CLI.logger('stderr')
 Bio::Log::CLI.trace('info')
 
+options = {:example_switch=>false,:show_help=>false}
+
 case ARGV[0]
   when 'gsea'
     ARGV.shift
     BioRdf::Parsers::BroadGSEA::Parser::handle_options
     exit 0
+  when 'pubmed'
+    ARGV.shift
+    BioRdf::Parsers::PubMed::Parser::handle_options
+    exit 0
 end
 
-options = {:example_switch=>false,:show_help=>false}
 opts = OptionParser.new do |o|
-  o.banner = "Usage: #{File.basename($0)} [options] reponame\ne.g. #{File.basename($0)} the-perfect-gem"
+  o.banner = "Usage: #{File.basename($0)} command [options]"
 
-  o.on('--example_parameter [EXAMPLE_PARAMETER]', 'TODO: put a description for the PARAMETER') do |example_parameter|
-    # TODO: your logic here, below an example
-    options[:example_parameter] = 'this is a parameter'
-  end
-  
-  o.separator ""
-  o.on("--switch-example", 'TODO: put a description for the SWITCH') do
-    # TODO: your logic here, below an example
-    self[:example_switch] = true
-  end
+  # o.separator "---"
+  # o.on("--tabulate", 'TODO: put a description for the SWITCH') do
+  #   # TODO: your logic here, below an example
+  #   self[:example_switch] = true
+  # end
 
   # Uncomment the following when using the bio-logger 
   # o.separator ""
@@ -92,14 +93,13 @@ begin
 
   if options[:show_help]
     print USAGE
+    print opts
     exit 0
   end
 
   # Uncomment the following when using the bio-logger 
   # Bio::Log::CLI.configure('bio-rdf')
 
-  # TODO: your code here
-  # use options for your logic
 rescue OptionParser::InvalidOption => e
   options[:invalid_argument] = e.message
 end

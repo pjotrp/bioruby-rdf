@@ -4,7 +4,7 @@ source "http://rubygems.org"
 #   gem "activesupport", ">= 2.3.5"
 gem "bio-logger"
 gem "rest-client"
-gem "bio-table"
+gem "bio-table", ">= 0.0.4"
 gem "rest-client"
 gem "ppe-4store-ruby"
 

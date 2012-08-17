@@ -2,11 +2,11 @@
 
 [![Build Status](https://secure.travis-ci.org/pjotrp/bioruby-rdf.png)](http://travis-ci.org/pjotrp/bioruby-rdf)
 
-Library and tools for using a triple-store with biological data.  It
-includes tools for storing parsed data into a triple store. The name
-includes RDF, but that really is too a narrow view of the purpose of
-this biogem, unfortunately alternative names (bio-semweb and
-bio-triplestore) look even worse.
+Library and tools for using an RDF triple-store with biological data.
+It includes tools for storing parsed data into a triple store. The
+name includes RDF, but that really is too a narrow view of the purpose
+of this tool, unfortunately alternative names (bio-semweb and
+bio-triplestore) are even worse.
 
 First there are the parsers.  Every (native) data-type has a parser
 module. This parser module controls the parsing flow. The actual
@@ -20,12 +20,19 @@ resources.
 
 The *output* of the parser should be in some form of RDF triple format,
 though simple tab delimited tables can also be supported (depending on
-the parser).
+the parser/outputter).
 
-The first functionality includes parsing the results of gene set
-enrichment analysis
-([GSEA](http://www.broadinstitute.org/gsea/index.jsp)) into triples
-(more below). 
+Functionality:
+
+* [PubMed:Entrez](http://www.ncbi.nlm.nih.gov/sites/gquery) to table and RDF
+* [GSEA](http://www.broadinstitute.org/gsea/index.jsp), gene set enrichment analysis, to table
+
+(more information below) 
+
+Note that any table file can be turned into RDF using the bio-table rubygem,
+which is automatically installed by bio-rdf. E.v.
+
+  bio-table --format rdf table.csv
 
 This project is linked with next generation sequencing, genome
 browsing, visualisation and QTL mapping.  E.g.
@@ -39,6 +46,18 @@ significantly over time! See also the [design
 doc](https://github.com/pjotrp/bioruby-rdf/blob/master/doc/design.md).
 
 ## Examples
+
+### Pubmed:Entrez (NCBI Pubmed)
+
+PubMed comprises more than 22 million citations for biomedical
+literature from MEDLINE, life science journals, and online books.
+
+bio-rdf uses the BioRuby PubMed module to fetch Pubmed records and
+writes them to a tab delimited output with
+
+```bash
+  bio-rdf pubmed --tabulate --search "Prins [au] BioGem"
+```
 
 ### Gene set enrichment analysis (GSEA)
 
