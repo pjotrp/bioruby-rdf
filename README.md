@@ -59,6 +59,20 @@ writes them to a tab delimited output with
   bio-rdf pubmed --tabulate --search "Prins [au] BioGem"
 ```
 
+prints 
+
+"pubmed","authors","title","journal","year","volume","issue","pages","doi","url"
+"Sharing programming resources between Bio* projects through remote procedure call and native call stack strategies.","Methods Mol Biol","2012","856","","513-527","10.1007/978-1-61779-585-5_21","http://www.ncbi.nlm.nih.gov/pubmed/22399473"
+
+You can reformat the author list output with 
+
+```bash
+  bio-rdf pubmed --tabulate --search 'Pjotr Prins [au] Bio' --format-author "surname+' '+initials.join('')" --format-authors-join ', '
+```
+
+which produces "Prins P, Goto N, Yates A, Gautier L, Willis S, Fields C, Katayama T" rather than
+the default.
+
 ### Gene set enrichment analysis (GSEA)
 
 GSEA is a computational method that determines whether an a priori
