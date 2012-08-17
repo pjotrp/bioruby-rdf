@@ -41,6 +41,12 @@ module BioRdf
             o.on("--format-authors-join layout",String,"Format the author field (default \"#{options.authors_join}\"") do | layout |
               options.authors_join = layout
             end
+            o.on("--pubmed-citations","Fetch the number of Pubmed citations for each entry") do
+              options.pubmed_citations = true
+            end
+            o.on("--scholar-citations","Fetch the number of Google Scholar citations for each entry") do
+              options.scholar_citations = true
+            end
           end
           opts.parse!(ARGV)
           $stderr.print options
@@ -49,12 +55,15 @@ module BioRdf
             'maxdate' => '2015/01/01',
             'retmax' => 1000,
           }
-          pubmed_default = %w{pubmed authors title journal year volume issue pages doi url}
+          pubmed_default = %w{pubmed authors title journal year volume issue pages doi url medline}
+          header = pubmed_default.dup
+          header << 'pubmed cited' if options.pubmed_citations
+          header << 'scholar cited' if options.scholar_citations
 
           Bio::NCBI.default_email = "bioruby@bioruby.org"
           entries = Bio::PubMed.esearch(options.search, pubmed_opts)
 
-          print '"',pubmed_default.join('","'),"\"\n"
+          print '"',header.join('","'),"\"\n"
           Bio::PubMed.efetch(entries).each do |entry|
             medline = Bio::MEDLINE.new(entry)
             reference = medline.reference
@@ -64,10 +73,6 @@ module BioRdf
                 formatted_authors = reference.authors.map do | author |
                   surname,first = author.split(/,\s+/,2)
                   initials = first.split(/\.\s*/)
-                  # p [surname,initials,options.author_layout]
-                  # res = eval("surname+', '+initials.join(\". \")+'.'")
-                  # p res
-                  # res
                   eval(options.author_layout)
                 end
                 formatted_authors.join(options.authors_join)
@@ -81,11 +86,34 @@ module BioRdf
                 eval("reference.#{section}") 
               end
             }
+            if options.pubmed_citations
+              $stderr.print "Fetching citations for ",reference.pubmed,' ',reference.title,"\n"
+              res = `lynx --dump "http://www.ncbi.nlm.nih.gov/pubmed/#{reference.pubmed}"`
+              res =~ /Cited by( over)? (\d+)/
+              content << $2
+            end
+            if options.scholar_citations
+              searchfor = reference.doi
+              searchfor = reference.authors[0] + ' ' + reference.title.chop if searchfor==nil or searchfor == ''
+              scholar="lynx --dump \"http://scholar.google.com/scholar?q=#{searchfor}\""
+              res = `#{scholar}`
+              inpaper=false
+              cited = nil
+              title = reference.title.chop[0..30]
+              res.each_line do | s |
+                if !inpaper
+                  inpaper = true if s =~ /#{title}/
+                end
+                if inpaper and s =~ /Cited by (\d+)/
+                  cited = $1
+                  break
+                end
+              end
+              content << cited
+            end
             print '"',content.join('","'),"\"\n"
           end
-          
         end
-
       end
     end
   end
