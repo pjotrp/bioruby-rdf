@@ -96,6 +96,20 @@ To create a tab delimited file from a GSEA result, where FDR < 0.25
     gem install bio-rdf
 ```
 
+In principle you can use bio-rdf with *any* RDF triple store.
+
+To run the tests, however, you'll also need to install the
+[4store](http://4store.org/) RDF triple
+store, which supports Linux and OS X only. E.g. on Debian/Ubuntu
+
+```sh 
+    apt-get install 4store    
+    rake  # run the tests
+```
+
+you may need to add the user to the fourstore group and create the
+/var/lib/4store/ directory with the appropriate permissions.
+
 ## Usage
 
 ```ruby
