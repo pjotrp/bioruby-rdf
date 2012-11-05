@@ -1,18 +1,23 @@
-# R/Bioconductor
+# R/Bioconductor (semantic web mashups)
 
 [R/Bioconductor](http://www.bioconductor.org/) contains a lot of modules with
 annotation data. Here we explore how to get this annotation data into a triple
-store.As a first step, we get the Arabidobsis Affymetrix microarray probe
-information into an RDF triple-store. In the second step we link the matching
-TAIR CDS sequences against the probe. In the final step we automate this
-by using an R script from the bio-rdf command.
+store. In the first exercise, we locate Affy probe to gene ID mapping
+information, and get the matching nucleotide sequences via a shared TAIR ID.
+
+In the final step we automate this by using an R script from the bio-rdf
+command and output the mapped probes to a regular table. The bio-table gem can
+turn this information into RDF.
+
+This exercise, by Pjotr Prins, was started at the Semantic Web Biohackathon 2012, Toyama,
+Japan, as part of the Bio* work group.
 
 ## Fetching Arabidopsis probe information using ath1121501.db
 
 The ath1121501.db package contains Affymetrix
 Arabidopsis ATH1 Genome Array annotation data (chip ath1121501).
 
-In R install this package with
+In R install the Arabidobsis Affymetrix package with
 
 ```R
     source("http://bioconductor.org/biocLite.R")
@@ -20,8 +25,8 @@ In R install this package with
 ```
 
 With the data on the system, start to explore with the '??package' command.
-Some interesting information for exploring R data can be found on
-http://www.win-vector.com/blog/2009/09/survive-r/.
+Some interesting information for exploring R data can be found 
+[here](http://www.win-vector.com/blog/2009/09/survive-r/).
 
 ```R
     ??ath1121501
@@ -34,17 +39,20 @@ http://www.win-vector.com/blog/2009/09/survive-r/.
       ...
 ```
 
-to inspect an entry
+We are interested in finding mapped gene names. 
+Inspect an entry
 
 ```R
     ?ath1121501.db::ath1121501GENENAME
 ```
 
-and find the element
+Load the element, and explore using class, names, attributes and str
 
 ```R
     library(ath1121501.db)
-    x <- ath1121501GENENAME
+    x <- ath1121501.db::ath1121501GENENAME
+    dim(x)
+    [1] 30166     2
     class(x)
       [1] "ProbeAnnDbBimap"
       attr(,"package")
@@ -128,7 +136,13 @@ and find the element
         ..@ objName   : chr "GENENAME"
         ..@ objTarget : chr "chip ath1121501"
 
-    model = unclass(ath1121501GENENAME)
+```
+
+Sometimes it is useful to further explore by unclass, which removes print() and summary() methods
+
+```R
+    # was model = unclass(ath1121501GENENAME)
+    model = unclass(ath1121501.db::ath1121501GENENAME)
 
     str(model)
       Formal class 'S4' [package ""] with 0 slots
@@ -147,7 +161,11 @@ and find the element
       [1] "GENENAME"
       attr(,"objTarget")
       [1] "chip ath1121501"
+```
 
+We noticed the model has keys. Print the keys
+
+```R
     keys(x) 
       [22797] "AFFX-r2-Bs-phe-M_at"     "AFFX-r2-Bs-thr-3_s_at"  
       [22799] "AFFX-r2-Bs-thr-5_s_at"   "AFFX-r2-Bs-thr-M_s_at"  
@@ -155,8 +173,17 @@ and find the element
       [22803] "AFFX-r2-Ec-bioB-M_at"    "AFFX-r2-Ec-bioC-3_at"   
       [22805] "AFFX-r2-Ec-bioC-5_at"    "AFFX-r2-Ec-bioD-3_at"   
       [22807] "AFFX-r2-Ec-bioD-5_at"    "AFFX-r2-P1-cre-3_at"    
-            
+```
 
+Locating methods for a class, does not help here
+
+```R
+    methods(x) 
+```
+
+According to the manual, we can find the keys that have been mapped to IDs with
+
+```R
     mapped_probes <- mappedkeys(x)      
     xx <- as.list(x[mapped_probes])
     if(length(xx) > 0) {
@@ -172,25 +199,84 @@ and find the element
     > xx[[1]]
       [1] "encodes a plant b subunit of mitochondrial ATP synthase based on structural similarity and the presence in the F(0) complex."
     
-    
-    x <- ath1121501SYMBOL
-    # Get the probe identifiers that are mapped to a gene symbol
-    mapped_probes <- mappedkeys(x)
 ```
-    # Convert to a list
-    xx <- as.list(x[mapped_probes])
-    if(length(xx) > 0) {
-    # Get the SYMBOL for the first five probes
-    xx[1:5]
-    # Get the first one
-    xx[[1]]
-    } 
 
+Convert key to a useful ID
+
+```R
+    symbols = ath1121501.db::ath1121501SYMBOL
+    dim(symbols)
+    [1] 17186     2
+    # Get the probe identifiers that are mapped to a gene symbol
+    mapped_probes <- mappedkeys(symbols)
+    # Convert to a list
+    xx <- as.list(symbols[mapped_probes])
+      if(length(xx) > 0) {
+      # Get the SYMBOL for the first five probes
+      xx[1:5]
+      # Get the first one
+      xx[[1]]
+    } 
+    [1] "ORF25"
+    
     > xx[200]
     $`245228_at`
     [1] "COBL2"
+```
 
-Multiple IDs are possible.
-Which can be used with Entrez, and probably Bio2RDF.  Similarly you can fetch
+Multiple IDs are possible per probe, and not all probes have an ID.
+These IDs can be used with Entrez, and probably Bio2RDF.  Similarly you can fetch
 pubmed IDs.
+
+In the case of Arabidobsis, the gene symbols are availabel in the TAIR files, e.g.
+
+```sh
+  grep COBL2 *
+    gene_aliases.20120207.txt:AT3G29810     COBL2   COBRA-like protein 2 precursor
+    TAIR10_cdna_20101214_updated:>AT3G29810.1 | Symbols: COBL2 | COBRA-like protein 2 precursor | chr3:11728113-11730239 FORWARD LENGTH=1506
+    TAIR10_cds_20101214_updated:>AT3G29810.1 | Symbols: COBL2 | COBRA-like protein 2 precursor | chr3:11728212-11730158 FORWARD LENGTH=1326
+```
+
+Note that many entries have no symbol, and some entries have multiple symbols, e.g.
+
+```sh
+    >AT1G15960.1 | Symbols: NRAMP6, ATNRAMP6 | NRAMP metal ion transporter 6 | chr1:5482202-5485066 REVERSE LENGTH=1584
+    >AT1G14980.1 | Symbols: CPN10 | chaperonin 10 | chr1:5165930-5166654 REVERSE LENGTH=297
+    >AT1G14910.1 | Symbols:  | ENTH/ANTH/VHS superfamily protein | chr1:5139928-5143571 REVERSE LENGTH=2079
+```
+
+So, one route to getting from Affymetrix probes to sequence information, is to
+use the SYMBOLS information. Perhaps a better way is to use the AGI locus id, which is the
+first identifier styled T1G15960.1 (the dot 1 is splicing variant 1 - out of 1).
+
+```R
+    agi = ath1121501.db::ath1121501ACCNUM
+    dim(agi)
+    [1] 21148     2
+    # Get the probe identifiers that are mapped to an AGI
+    mapped_probes <- mappedkeys(agi)
+    # Convert to a list
+    xx <- as.list(agi[mapped_probes])
+    if(length(xx) > 0) {
+      # Get the SYMBOL for the first five probes
+      xx[1:5]
+      # Get the first one
+      xx[[1]]
+    } 
+    [1] "ATMG00640"
+    xx[200]
+    $`245129_at`
+      [1] "AT2G45350"
+```
+
+At least we get more mappings this way (21148)!
+
+Output to table
+
+```R
+  sink("ath1121501-probe2agi.tab")
+  cat("affy\tagi\n")
+  for (n in names(xx)) { cat(n,"\t"); cat(xx[[n]],sep="\n") }
+  sink()
+```
 
