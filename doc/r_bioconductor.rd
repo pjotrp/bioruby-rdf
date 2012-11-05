@@ -1,11 +1,15 @@
 # R/Bioconductor
 
 [R/Bioconductor](http://www.bioconductor.org/) contains a lot of modules with
-annotation data. We would like to get this information into an RDF triple-store.
+annotation data. Here we explore how to get this annotation data into a triple
+store.As a first step, we get the Arabidobsis Affymetrix microarray probe
+information into an RDF triple-store. In the second step we link the matching
+TAIR CDS sequences against the probe. In the final step we automate this
+by using an R script from the bio-rdf command.
 
-## Arabidopsis probe information
+## Fetching Arabidopsis probe information using ath1121501.db
 
-For example the ath1121501.db package contains Affymetrix
+The ath1121501.db package contains Affymetrix
 Arabidopsis ATH1 Genome Array annotation data (chip ath1121501).
 
 In R install this package with
@@ -15,8 +19,9 @@ In R install this package with
     biocLite("ath1121501.db")
 ```
 
-Now with the data on the system, start to explore with the '??package'
-command. Some interesting information can be found on http://www.win-vector.com/blog/2009/09/survive-r/.
+With the data on the system, start to explore with the '??package' command.
+Some interesting information for exploring R data can be found on
+http://www.win-vector.com/blog/2009/09/survive-r/.
 
 ```R
     ??ath1121501
@@ -128,7 +133,6 @@ and find the element
     str(model)
       Formal class 'S4' [package ""] with 0 slots
       list()
-
 
     # print model
     model
