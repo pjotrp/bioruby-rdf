@@ -102,7 +102,12 @@ module BioRdf
               title = reference.title.chop[0..30]
               res.each_line do | s |
                 if !inpaper
-                  inpaper = true if s =~ /#{title}/
+                  begin
+                    inpaper = true if s =~ /#{title}/
+                  rescue RegexpError
+                    $stderr.print "WARNING: regex problem with '#{title}'"
+                    break
+                  end
                 end
                 if inpaper and s =~ /Cited by (\d+)/
                   cited = $1
