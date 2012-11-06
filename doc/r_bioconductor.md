@@ -278,5 +278,45 @@ Output to table
   cat("affy\tagi\n")
   for (n in names(xx)) { cat(n,"\t"); cat(xx[[n]],sep="\n") }
   sink()
+    affy    agi
+    244901_at       ATMG00640
+    244902_at       ATMG00650
+    244903_at       ATMG00660
+    244904_at       ATMG00670
+    244905_at       ATMG00680
+    244906_at       ATMG00690
+    244907_at       ATMG00710
+    244908_at       ATMG00720
+    (...)
 ```
+
+We set out to match gene sequences against each probe. Download the TAIR CDS fasta file, which
+contains records, such as
+
+```
+    >AT1G51370.2 | Symbols:  | F-box/RNI-like/FBD-like domains-containing protein | chr1:19045615-19046748 FORWARD LENGTH=1041
+    ATGGTGGGTGGCAAGAAGAAAACCAAGATATGTGACAAAGTGTCACATGAGGAAGATAGGATAAGCCAGTTACCGGAACC
+    TTTGATATCTGAAATACTTTTTCATCTTTCTACCAAGGACTCTGTCAGAACAAGCGCTTTGTCTACCAAATGGAGATATC
+    TTTGGCAATCGGTTCCTGGATTGGACTTAGACCCCTACGCATCCTCAAATACCAATACAATTGTGAGTTTTGTTGAAAGT
+```
+
+Also turn this into a table using my [bigbio](https://github.com/pjotrp/bigbio) biogem, with a 
+short script:
+
+```ruby
+  #! /usr/bin/env ruby
+  $: << "/home/wrk/izip/git/opensource/ruby/bigbio/lib/"
+
+  require 'bigbio'
+
+  i = 1
+  print "num\tid\tseq\n"
+  FastaReader.new(ARGV[0]).each do | rec |
+    if rec.id =~ /(AT\w+)/
+      print i,"\t",$1,"\t",rec.seq,"\n"
+      i += 1
+    end
+  end
+```
+
 
