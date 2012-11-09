@@ -90,6 +90,18 @@ To create a tab delimited file from a GSEA result, where FDR < 0.25
   bio-rdf gsea --tabulate --exec "rec.fdr <= 0.25" ./gsea/output/ > results.txt
 ```
 
+### Mapping Affymetrix probes to sequence information, through R/Bioconductor
+
+[R/Bioconductor](http://www.bioconductor.org/) contains a lot of
+modules with
+annotation data. This 
+[document](https://github.com/pjotrp/bioruby-rdf/blob/master/doc/r_biocondutor.md).
+explores getting annotation data into a triple
+store. E.g., the first exercise matches Arabidipsis Affy probe to gene ID mapping
+information, and fetches the matching nucleotide sequences via a shared TAIR ID.
+
+See [document](https://github.com/pjotrp/bioruby-rdf/blob/master/doc/r_biocondutor.md).
+
 ## Installation
 
 ```sh

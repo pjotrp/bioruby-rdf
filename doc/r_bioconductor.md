@@ -305,7 +305,6 @@ short script:
 
 ```ruby
   #! /usr/bin/env ruby
-  $: << "/home/wrk/izip/git/opensource/ruby/bigbio/lib/"
 
   require 'bigbio'
 
@@ -319,4 +318,11 @@ short script:
   end
 ```
 
+writes
 
+```sh
+num     id      seq
+1       AT1G51370       ATGGTGGGTGGCAAGAAGAAAACCAAGATATGTGACAAAGTGTCAC...
+2       AT1G50920       ATGGTTCAATATAATTTCAAGAGGATCACAGTTGTTCCCAATGGGA...
+(etc)
+```
