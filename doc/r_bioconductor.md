@@ -309,9 +309,9 @@ short script:
   require 'bigbio'
 
   i = 1
-  print "num\tid\tseq\n"
+  print "num\tagi\tseq\n"
   FastaReader.new(ARGV[0]).each do | rec |
-    if rec.id =~ /(AT\w+)/
+    if rec.id =~ /(AT\w+)\.1$/   # only take the first splice variant, if there are more
       print i,"\t",$1,"\t",rec.seq,"\n"
       i += 1
     end
@@ -321,8 +321,19 @@ short script:
 writes
 
 ```sh
-num     id      seq
+num     agi       seq
 1       AT1G51370       ATGGTGGGTGGCAAGAAGAAAACCAAGATATGTGACAAAGTGTCAC...
 2       AT1G50920       ATGGTTCAATATAATTTCAAGAGGATCACAGTTGTTCCCAATGGGA...
 (etc)
 ```
+
+Both tables can be turned into RDF using bioruby-table, e.g.
+
+```sh
+bio-table --format rdf ath1121501-probe2agi.tab > ath1121501-probe2agi.rdf
+```
+
+And sunk into a triple store for matching! 
+
+Note: for quick matching you could also have used the bio-table --merge command.
+
