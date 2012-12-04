@@ -231,7 +231,7 @@ Multiple IDs are possible per probe, and not all probes have an ID.
 These IDs can be used with Entrez, and probably Bio2RDF.  Similarly you can fetch
 pubmed IDs.
 
-In the case of Arabidobsis, the gene symbols are availabel in the TAIR files, e.g.
+In the case of Arabidobsis, the gene symbols are available in the TAIR files, e.g.
 
 ```sh
   grep COBL2 *
@@ -340,3 +340,124 @@ And sunk into a triple store for matching!
 
 Note: for quick matching you could also have used the bio-table --merge command.
 
+## Fetching Yeast probe information using yeast2.db
+
+The yeast2.db package contains Affymetrix Yeast Genome 2.0 Array
+annotation data (chip yeast2).
+
+In R install it with
+
+```R
+    source("http://bioconductor.org/biocLite.R")
+    biocLite("yeast2.db")
+```
+
+Explore with above strategies:
+
+```R
+    ??yeast2
+      yeast2.db::yeast2GENENAME
+                        Map between Manufacturer IDs and Genes
+      yeast2.db::yeast2GO     Map between Manufacturer IDs and Gene Ontology
+                        (GO)
+      ...
+```
+
+Further 
+
+```R
+    library(yeast2.db)
+    x <- yeast2.db::yeast2GENENAME
+```
+
+Inspect
+
+````R
+    dim(x)
+      [1] 4878    2
+    str(x)
+    (...)
+    keys(x)[0:10]
+      [1] "1769308_at"   "1769309_at"   "1769310_at"   "1769311_at"   "1769312_at"  
+      [6] "1769313_at"   "1769314_at"   "1769315_at"   "1769316_s_at" "1769317_at"  
+
+    mapped_probes <- mappedkeys(x)      
+    xx <- as.list(x[mapped_probes])
+    if(length(xx) > 0) {
+      # Get the GENENAME for the first five probes
+      xx[1:5]
+      # Get the first one
+      xx[[1]]
+    }
+      $`1769308_at`
+        [1] "FOX2"
+```
+ 
+Download the cDNA data from, for example, 
+
+    http://www.ensembl.org/info/data/ftp/index.html
+
+Which contains FASTA descriptors 
+
+    >YIL168W cdna:pseudogene chromosome:EF4:IX:29032:29415:1 gene:YIL168W gene_biotype:pseudogene transcript_biotype:pseudogene
+    >YAR061W cdna:pseudogene chromosome:EF4:I:218140:218343:1 gene:YAR061W gene_biotype:pseudogene transcript_biotype:pseudogene
+
+In this case we want the ENSEMBL identifiers
+
+```R
+    ids = yeast2.db::yeast2ENSEMBL
+    mapped_probes <- mappedkeys(ids)
+    # Convert to a list
+    xx <- as.list(ids[mapped_probes])
+    sink("yeast2-probe2ensembl.tab")
+    cat("affy\tagi\n")
+    for (n in names(xx)) { cat(n,"\t"); cat(xx[[n]][1],sep="\n") }
+    sink()
+```  
+
+Note we only print one gene when probes map to multiple genes:
+
+```R
+    > xx[["1779786_s_at"]]
+      [1] "YKR059W" "YJL138C"
+    > xx[["1779786_s_at"]][1]
+      [1] "YKR059W"
+```
+
+You could also take all cDNAs which map once with
+
+```R
+    sink("yeast2-probe2ensembl.tab")
+    for (n in names(xx)) { if (length(xx[[n]])==1) { cat(n,"\t"); cat(xx[[n]][1],sep="\n") }}
+    sink()
+```
+
+Convert the sequence FASTA data to table (again)
+
+```ruby
+  #! /usr/bin/env ruby
+
+  require 'bigbio'
+
+  i = 1
+  print "num\tid\tseq\n"
+  FastaReader.new(ARGV[0]).each do | rec |
+    print i,"\t",rec.id,"\t",rec.seq,"\n"
+    i += 1
+  end
+```
+
+Writes
+
+```
+    num     id      seq
+    1       YHR055C ATGTTCAGCGAATTAATTAACTTCCAAAATGAAGG...
+    2       YPR161C ATGAGTGATAATGGTTCCCCCGCGGTTCTTCCAAA...
+    ...
+```
+
+And sink the tables to RDF (again), e.g.
+
+```sh
+  bio-table --format rdf yeast2-probe2ensembl.tab > yeast2-probe2ensembl.rdf
+```
