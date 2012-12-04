@@ -1,11 +1,14 @@
 # R/Bioconductor (semantic web mashups)
 
 [R/Bioconductor](http://www.bioconductor.org/) contains a lot of modules with
-annotation data. Here we explore how to get this annotation data into a triple
-store. In the first exercise, we locate Affy probe to gene ID mapping
-information, and get the matching nucleotide sequences via a shared TAIR ID.
+annotation data. Here we explore how to get this annotation data into
+a triple store. In the first exercise, we locate Affy probe
+information to gene ID mapping information for _Arabidopsis thaliana_, and get
+the matching nucleotide sequences via a shared TAIR ID. Next we do a
+similar exercise for _Saccharomyces cerevisiae_ (yeast).
 
-In the final step we automate this by using an R script from the bio-rdf
+In the final step we automate the exercise by using an R script from the
+bio-rdf
 command and output the mapped probes to a regular table. The bio-table gem can
 turn this information into RDF.
 
