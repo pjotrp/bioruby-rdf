@@ -461,3 +461,152 @@ And sink the tables to RDF (again), e.g.
 ```sh
   bio-table --format rdf yeast2-probe2ensembl.tab > yeast2-probe2ensembl.rdf
 ```
+
+## E.coli Affymetrix annotation 
+
+The Bioconductor [ecoli2](http://www.bioconductor.org/packages/release/data/annotation/html/ecoli2.db.html) package contains a mapping of Affymetrix 2.0 microarrays. NCBI GEO contains 
+about one thousand arrays to use.
+
+In R install it with
+
+```R
+    source("http://bioconductor.org/biocLite.R")
+    biocLite("ecoli2.db")
+```
+
+Explore with above strategies:
+
+```R
+    ??ecoli2
+      ecoli2.db::ecoli2ACCNUM Map Manufacturer identifiers to Accession
+                              Numbers
+      ecoli2.db::ecoli2ALIAS2PROBE
+                              Map between Common Gene Symbol Identifiers and
+                              Manufacturer Identifiers
+      ecoli2.db::ecoli2.db    Bioconductor annotation data package
+      ...
+```
+
+Further 
+
+```R
+    library(ecoli2.db)
+    x <- ecoli2.db::ecoli2GENENAME
+```
+
+Inspect
+
+````R
+    dim(x)
+      [1] 4319    2
+    str(x)
+    (...)
+    keys(x)[0:10]
+       [1] "1759068_at"   "1759069_at"   "1759070_s_at" "1759071_s_at" "1759072_s_at"
+       [6] "1759073_at"   "1759074_at"   "1759075_at"   "1759076_s_at" "1759077_s_at"
+          
+    mapped_probes <- mappedkeys(x)      
+    xx <- as.list(x[mapped_probes])
+    if(length(xx) > 0) {
+      # Get the GENENAME for the first five probes
+      xx[1:5]
+      # Get the first one
+      xx[[1]]
+    }
+    [1] "methylated adenine and cytosine restriction protein"
+```
+ 
+Download the cDNA data from, for example, 
+
+  http://www.ncbi.nlm.nih.gov/nuccore/CP001637.1?report=fasta&log$=seqview&format=text
+  http://ecoliwiki.net/colipedia/index.php/Sequenced_E._coli_Genomes
+  ftp://ftp.ncbi.nih.gov/genomes/Bacteria/Escherichia_coli_K_12_substr__DH10B_uid58979/NC_010473.ffn
+
+Many bacterial genomes
+
+  ftp://ftp.ncbi.nih.gov/genomes/Bacteria/
+
+Containing FASTA descriptors 
+
+  >gi|170079663|ref|NC_010473.1|:190-255 Escherichia coli str. K-12 substr. DH10B chromosome, complete genome
+  >gi|170079663|ref|NC_010473.1|:337-2799 Escherichia coli str. K-12 substr. DH10B chromosome, complete genome
+  >gi|170079663|ref|NC_010473.1|:2801-3733 Escherichia coli str. K-12 substr. DH10B chromosome, complete genome
+
+Unfortunately not so handy to map these... But ENSEMBL has them too!
+
+  http://bacteria.ensembl.org/info/data/ftp/index.html
+
+In this case we want the ENTREZ identifiers (standard for E.coli)
+
+```R
+    ids = ecoli2.db::ecoli2ENTREZID
+    mapped_probes <- mappedkeys(ids)
+    # Convert to a list
+    xx <- as.list(ids[mapped_probes])
+    sink("ecoli2-probe2entrez.tab")
+    cat("affy\tid\n")
+    for (n in names(xx)) { cat(n,"\t"); cat(xx[[n]][1],sep="\n") }
+    sink()
+```  
+
+```R
+  library(biomaRt)
+  listMarts()
+  mart=useMart("bacteria_mart_16")
+  listDatasets(mart)
+  listDatasets(mart)[34,]
+       dataset                                  description         version
+       34 esc_18_gene Escherichia coli K12 genes (EB 1 e_coli_k12) EB 1 e_coli_k12
+  ecoli <- useDataset("esc_18_gene",mart=mart)
+  ecoli<- useDataset("esc_18_gene", useMart("ensembl"))
+
+
+  ensembl_genes<- c("ENSBTAG00000026199", "ENSBTAG00000014685") ## etc...
+
+  getBM(
+    filters= "ensembl_gene_id", 
+    attributes= c("ensembl_gene_id", "external_gene_id", "entrezgene", "description"),
+    values= ensembl_genes,
+    mart= mart)
+
+       ensembl_gene_id external_gene_id entrezgene                                                                                                           description
+  1 ENSBTAG00000014685       HPRT_BOVIN     613512 Hypoxanthine-guanine phosphoribosyltransferase (HGPRTase)(HGPRT)(EC 2.4.2.8) [Source:UniProtKB/Swiss-Prot;Acc:Q3SZ18]
+  2 ENSBTAG00000014685       HPRT_BOVIN     510369 Hypoxanthine-guanine phosphoribosyltransferase (HGPRTase)(HGPRT)(EC 2.4.2.8) [Source:UniProtKB/Swiss-Prot;Acc:Q3SZ18]
+  3 ENSBTAG00000014685       HPRT_BOVIN     281229 Hypoxanthine-guanine phosphoribosyltransferase (HGPRTase)(HGPRT)(EC 2.4.2.8) [Source:UniProtKB/Swiss-Prot;Acc:Q3SZ18]
+  4 ENSBTAG00000014685       HPRT_BOVIN         NA Hypoxanthine-guanine phosphoribosyltransferase (HGPRTase)(HGPRT)(EC 2.4.2.8) [Source:UniProtKB/Swiss-Prot;Acc:Q3SZ18]
+  5 ENSBTAG00000026199     Q862P9_BOVIN     280979                                                Bos taurus actin, beta (ACTB), mRNA. [Source:RefSeq DNA;Acc:NM_173979]
+  >
+```
+
+But the quicker route is through [http://www.biomart.org/biomart/martview?VIRTUALSCHEMANAME=default&ATTRIBUTES=hsapiens_gene_ensembl.default.feature_page.ensembl_gene_id|hsapiens_gene_ensembl.default.feature_page.ensembl_transcript_id|hsapiens_gene_ensembl.default.feature_page.embl|hsapiens_gene_ensembl.default.feature_page.affy_hg_u133a&FILTERS=hsapiens_gene_ensembl.default.filters.with_affy_hg_u133a.only&VISIBLEPANEL=resultspanel BioMart] website.
+
+Convert the sequence FASTA data to table (again)
+
+```ruby
+  #! /usr/bin/env ruby
+
+  require 'bigbio'
+
+  i = 1
+  print "num\tid\tseq\n"
+  FastaReader.new(ARGV[0]).each do | rec |
+    print i,"\t",rec.id,"\t",rec.seq,"\n"
+    i += 1
+  end
+```
+
+Writes
+
+```
+    num     id      seq
+    1       YHR055C ATGTTCAGCGAATTAATTAACTTCCAAAATGAAGG...
+    2       YPR161C ATGAGTGATAATGGTTCCCCCGCGGTTCTTCCAAA...
+    ...
+```
+
+And sink the tables to RDF (again), e.g.
+
+```sh
+  bio-table --format rdf ecoli2-probe2ensembl.tab > ecoli2-probe2ensembl.rdf
+```
+
