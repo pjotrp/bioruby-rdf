@@ -20,17 +20,23 @@ as an example, but alternatives should work fine - RDF and SPARQL
 should not care about underlying storage. Install 4store, on
 Debian/Mint/Ubuntu:
 
+```sh
   apt-get install 4-store
+```
 
 Create a storage container (as root)
 
+```sh
   4s-backend-setup mouse
+```
 
 by default the storage is in /var/lib/4store/mouse. Start the backend
 and webserver
 
+```sh
   4s-backend mouse
   4s-httpd -p 8000 mouse
+```
 
 You should be able to open URL http://localhost:8000/status/.
 
