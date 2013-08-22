@@ -116,11 +116,22 @@ store, which supports Linux and OS X only. E.g. on Debian/Ubuntu
 
 ```sh 
     apt-get install 4store    
-    rake  # run the tests
+    bundle exec rake  # run the tests
 ```
 
 you may need to add the user to the fourstore group and create the
-/var/lib/4store/ directory with the appropriate permissions.
+/var/lib/4store/ directory with the appropriate permissions. E.g.
+
+```sh
+    mkdir /var/lib/4store/
+    chown fourstore.fourstore -R /var/lib/4store/
+    4s-backend-setup reference
+    /etc/init.d/4store start
+    4s-backend reference
+    4s-httpd -p 8080 reference
+    bundle exec rake
+```
+    
 
 ## Usage
 
