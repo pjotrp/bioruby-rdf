@@ -123,15 +123,45 @@ you may need to add the user to the fourstore group and create the
 /var/lib/4store/ directory with the appropriate permissions. E.g.
 
 ```sh
+    # as root
     mkdir /var/lib/4store/
     chown fourstore.fourstore -R /var/lib/4store/
     4s-backend-setup reference
     /etc/init.d/4store start
     4s-backend reference
     4s-httpd -p 8080 reference
+```
+
+this should work
+
+```sh
+    # as user (if added to the fourstore group)
     bundle exec rake
 ```
-    
+
+Also visit http://localhost:8080/status/
+
+Command line SPARQL queries can be done with
+[sparql-query](https://github.com/pjotrp/sparql-query), which has 
+the advantage of generating readable (non-XML) output. To install 
+sparql-query, fetch the git repository and
+
+```sh
+    apt-get install libglib2.0-dev libcurl4-openssl-dev libxml2-dev
+    make
+```
+
+Example:
+
+```sh
+./sparql-query http://localhost:8080/sparql/ 'SELECT * WHERE { ?s ?p ?o } LIMIT 10'
+  .--------------.
+  | ?s | ?p | ?o |
+  |----+----+----|
+  '--------------'
+```
+
+Empty if it is emty :). Note the final slash on the URL.
 
 ## Usage
 
