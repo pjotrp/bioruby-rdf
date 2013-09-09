@@ -161,7 +161,7 @@ Example:
   '--------------'
 ```
 
-Empty if it is emty :). Note the final slash on the URL.
+Empty result, if it is empty :). Note the final slash on the URL.
 
 ## Usage
 
