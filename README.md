@@ -116,6 +116,8 @@ See [document](https://github.com/pjotrp/bioruby-rdf/blob/master/doc/r_biocondut
 
 Research oriented RDF parsers (aka one-offs) are included in
 [extra](https://github.com/pjotrp/bioruby-rdf/tree/master/lib/bio-rdf/extra).
+The documentation can be found in 
+[doc](https://github.com/pjotrp/bioruby-rdf/tree/master/doc/extra).
 
 ## Installation
 
