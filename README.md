@@ -22,15 +22,15 @@ The *output* of the parser should be in some form of RDF triple format,
 though simple tab delimited tables can also be supported (depending on
 the parser/outputter).
 
-Functionality:
+Existing functionality:
 
 * [PubMed:Entrez](http://www.ncbi.nlm.nih.gov/sites/gquery) to table and RDF
-* [GSEA](http://www.broadinstitute.org/gsea/index.jsp), gene set enrichment analysis, to table
+* [GSEA](http://www.broadinstitute.org/gsea/index.jsp), gene set enrichment analysis, to table and RDF
 
-(more information below) 
+more information on that below.
 
 Note that any table file can be turned into RDF using the bio-table rubygem,
-which is automatically installed by bio-rdf. E.v.
+which is automatically installed by bio-rdf. Example:
 
   bio-table --format rdf table.csv
 
@@ -45,7 +45,11 @@ Note: this software is under active development and will grow
 significantly over time! See also the [design
 doc](https://github.com/pjotrp/bioruby-rdf/blob/master/doc/design.md).
 
-## Examples
+## Functionality
+
+Existing bio-rdf parsers are listed on
+[github](https://github.com/pjotrp/bioruby-rdf/tree/master/lib/bio-rdf/parsers).
+Here we describe the important ones:
 
 ### Pubmed:Entrez (NCBI Pubmed)
 
@@ -71,7 +75,10 @@ You can reformat the author list output with
 ```
 
 which produces "Prins P, Goto N, Yates A, Gautier L, Willis S, Fields C, Katayama T" rather than
-the default.
+the default. 
+
+You can convert the tabular format to RDF by using the included
+bioruby-table tool.
 
 ### Gene set enrichment analysis (GSEA)
 
@@ -90,6 +97,9 @@ To create a tab delimited file from a GSEA result, where FDR < 0.25
   bio-rdf gsea --tabulate --exec "rec.fdr <= 0.25" ./gsea/output/ > results.txt
 ```
 
+You can convert the tabular format to RDF by using the included
+bioruby-table tool.
+
 ### Mapping Affymetrix probes to sequence information, through R/Bioconductor
 
 [R/Bioconductor](http://www.bioconductor.org/) contains a lot of
@@ -102,6 +112,11 @@ information, and fetches the matching nucleotide sequences via a shared TAIR ID.
 
 See [document](https://github.com/pjotrp/bioruby-rdf/blob/master/doc/r_biocondutor.md).
 
+### More examples
+
+Research oriented RDF parsers (aka one-offs) are included in
+[extra](https://github.com/pjotrp/bioruby-rdf/tree/master/lib/bio-rdf/extra).
+
 ## Installation
 
 ```sh
@@ -110,29 +125,31 @@ See [document](https://github.com/pjotrp/bioruby-rdf/blob/master/doc/r_biocondut
 
 In principle you can use bio-rdf with *any* RDF triple store.
 
-To run the tests, however, you'll also need to install the
+To run the tests, however, you'll also need to install and run the 
 [4store](http://4store.org/) RDF triple
 store, which supports Linux and OS X only. E.g. on Debian/Ubuntu
 
 ```sh 
     apt-get install 4store    
-    bundle exec rake  # run the tests
 ```
 
 you may need to add the user to the fourstore group and create the
 /var/lib/4store/ directory with the appropriate permissions. E.g.
 
 ```sh
+    dbname=biorubyrdftest
     # as root
     mkdir /var/lib/4store/
+    mkdir /var/lib/4store/$dbname
     chown fourstore.fourstore -R /var/lib/4store/
-    4s-backend-setup reference
-    /etc/init.d/4store start
-    4s-backend reference
-    4s-httpd -p 8080 reference
+    chmod g+rw -R /var/lib/4store/
+    # as normal user (this is what the test system does)
+    4s-backend-setup $dbname
+    4s-backend $dbname
+    4s-httpd -p 8000 $dbname
 ```
 
-this should work
+now this should work
 
 ```sh
     # as user (if added to the fourstore group)
