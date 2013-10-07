@@ -6,8 +6,8 @@ Given /^I have a digest file with name 'Ce_CDS' and contains$/ do |string|
 end
 
 Then /^I should fetch the cluster names 'cluster(\d+)' and 'cluster(\d+)'$/ do |arg1, arg2|
-  assert_not_nil(@recs['cluster00399'])
-  assert_not_nil(@recs['cluster00400'])
+  @recs['cluster00399'].should_not == nil
+  @recs['cluster00400'].should_not == nil
 end
 
 Then /^for cluster (\d+)$/ do |arg1|
