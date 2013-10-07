@@ -1,13 +1,13 @@
 require 'bio-rdf/extra/gwp'
 
 Given /^I have a digest file with name 'Ce_CDS' and contains$/ do |string|
-  
   @recs = BioRdf::Parsers::Extra::GWP::parse_digest(string)
   p @recs
 end
 
 Then /^I should fetch the cluster names 'cluster(\d+)' and 'cluster(\d+)'$/ do |arg1, arg2|
-  pending # express the regexp above with the code you wish you had
+  assert_not_nil(@recs['cluster00399'])
+  assert_not_nil(@recs['cluster00400'])
 end
 
 Then /^for cluster (\d+)$/ do |arg1|
