@@ -1,0 +1,100 @@
+cluster00001/results7-8.txt M7-8  -1496.3  -1496.3     -0.0
+cluster00002/results7-8.txt M7-8  -8327.9  -8324.8      6.2
+cluster00003/results7-8.txt M7-8  -1797.4  -1797.4     -0.0
+cluster00004/results7-8.txt M7-8  -1089.7  -1089.7     -0.0
+cluster00005/results7-8.txt M7-8  -1164.7  -1164.7     -0.0
+cluster00006/results7-8.txt M7-8  -1167.1  -1167.1      0.0
+cluster00007/results7-8.txt M7-8   -959.9   -959.9     -0.0
+cluster00008/results7-8.txt M7-8  -2310.2  -2310.2     -0.0
+cluster00009/results7-8.txt M7-8  -7755.4  -7755.4      0.0
+cluster00010/results7-8.txt M7-8  -4924.0  -4918.0     11.9 ++   1 sites (1207 AA)
+cluster00011/results7-8.txt M7-8  -5819.4  -5812.4     14.0 ++   3 sites (375 AA)
+cluster00012/results7-8.txt M7-8 -14241.6 -14238.5      6.3
+cluster00013/results7-8.txt M7-8  -7751.4  -7751.4     -0.0
+cluster00014/results7-8.txt M7-8  -2303.3  -2303.3     -0.0
+cluster00015/results7-8.txt M7-8 -11980.6 -11974.4     12.4 ++   6 sites (3011 AA)
+cluster00016/results7-8.txt M7-8  -2048.9  -2048.6      0.6
+cluster00017/results7-8.txt M7-8  -5501.9  -5501.9     -0.0
+cluster00018/results7-8.txt M7-8 -10578.0 -10578.0     -0.0
+cluster00019/results7-8.txt M7-8  -9598.6  -9583.8     29.5
+cluster00020/results7-8.txt M7-8  -6460.6  -6460.6      0.0
+cluster00021/results7-8.txt M7-8  -7934.6  -7933.3      2.6
+cluster00022/results7-8.txt M7-8  -1729.1  -1729.1      0.0
+cluster00023/results7*.txt 
+cluster00024/results7-8.txt M7-8   -246.5   -246.5     -0.0
+cluster00025/results7-8.txt M7-8   -472.5   -472.5      0.0
+cluster00026/results7-8.txt M7-8   -983.4   -983.4     -0.0
+cluster00027/results7-8.txt M7-8   -797.4   -797.1      0.6
+cluster00028/results7-8.txt M7-8  -7545.8  -7545.8      0.0
+cluster00029/results7-8.txt M7-8  -6753.9  -6753.9     -0.0
+cluster00030/results7-8.txt M7-8  -6358.3  -6358.3     -0.0
+cluster00031/results7-8.txt M7-8  -5333.8  -5333.8     -0.0
+cluster00032/results7-8.txt M7-8  -6411.2  -6411.2     -0.0
+cluster00033/results7-8.txt M7-8  -5200.2  -5193.3     13.7 ++   1 sites (1288 AA)
+cluster00034/results7-8.txt M7-8  -4576.2  -4576.2      0.0
+cluster00035/results7-8.txt M7-8  -4683.6  -4683.6     -0.0
+cluster00036/results7-8.txt M7-8  -4905.7  -4905.3      0.8
+cluster00037/results7-8.txt M7-8  -4112.8  -4112.8      0.0
+cluster00038/results7-8.txt M7-8  -3833.9  -3820.2     27.2 ++  18 sites (790 AA)
+cluster00039/results7-8.txt M7-8  -2442.0  -2442.0      0.0
+cluster00040/results7-8.txt M7-8  -2653.0  -2653.0      0.0
+cluster00041/results7-8.txt M7-8  -2601.2  -2601.2      0.0
+cluster00042/results7-8.txt M7-8  -2678.3  -2671.3     14.2 ++   4 sites (375 AA)
+cluster00043/results7-8.txt M7-8  -2766.3  -2762.2      8.2
+cluster00044/results7-8.txt M7-8  -4274.4  -4273.4      2.0
+cluster00045/results7-8.txt M7-8  -2083.3  -2081.4      3.7
+cluster00046/results7-8.txt M7-8  -3449.7  -3446.8      5.9
+cluster00047/results7*.txt 
+cluster00048/results7-8.txt M7-8  -8248.8  -8248.8      0.0
+cluster00049/results7-8.txt M7-8  -7260.0  -7260.0      0.1
+cluster00050/results7-8.txt M7-8  -7510.2  -7510.2      0.0
+cluster00051/results7-8.txt M7-8  -5456.4  -5456.4      0.0
+cluster00052/results7-8.txt M7-8  -8889.9  -8888.5      2.7
+cluster00053/results7-8.txt M7-8  -3375.0  -3375.0     -0.0
+cluster00054/results7-8.txt M7-8  -4476.6  -4471.8      9.6 ++  35 sites (728 AA)
+cluster00055/results7-8.txt M7-8  -2233.2  -2233.2     -0.0
+cluster00056/results7-8.txt M7-8  -3308.3  -3308.2      0.2
+cluster00057/results7-8.txt M7-8  -2400.6  -2400.6     -0.0
+cluster00058/results7-8.txt M7-8  -3282.5  -3261.4     42.3 ++  21 sites (307 AA)
+cluster00059/results7-8.txt M7-8  -2227.8  -2227.3      1.1
+cluster00060/results7-8.txt M7-8   -997.2   -995.9      2.6
+cluster00061/results7-8.txt M7-8 -10122.7 -10122.7     -0.0
+cluster00062/results7-8.txt M7-8  -8330.7  -8330.7     -0.0
+cluster00063/results7-8.txt M7-8  -5848.2  -5848.2      0.0
+cluster00064/results7-8.txt M7-8  -5015.6  -5009.3     12.6 ++   1 sites (1248 AA)
+cluster00065/results7-8.txt M7-8  -5089.6  -5089.6     -0.0
+cluster00066/results7-8.txt M7-8  -4062.5  -4062.5     -0.0
+cluster00067/results7-8.txt M7-8  -4285.0  -4281.2      7.6
+cluster00068/results7-8.txt M7-8  -4532.4  -4532.4     -0.0
+cluster00069/results7-8.txt M7-8  -4693.4  -4693.4      0.0
+cluster00070/results7-8.txt M7-8  -4279.4  -4279.4     -0.0
+cluster00071/results7-8.txt M7-8  -3599.6  -3599.6      0.0
+cluster00072/results7-8.txt M7-8  -4843.4  -4843.4     -0.0
+cluster00073/results7-8.txt M7-8  -3472.3  -3472.3     -0.0
+cluster00074/results7-8.txt M7-8  -3906.0  -3906.0      0.0
+cluster00075/results7-8.txt M7-8  -3189.9  -3189.9     -0.0
+cluster00076/results7-8.txt M7-8  -3288.5  -3288.5      0.0
+cluster00077/results7-8.txt M7-8  -6229.3  -6228.9      0.8
+cluster00078/results7-8.txt M7-8  -3342.5  -3342.5      0.0
+cluster00079/results7-8.txt M7-8  -3052.9  -3052.9     -0.0
+cluster00080/results7-8.txt M7-8  -2665.8  -2665.8      0.0
+cluster00081/results7-8.txt M7-8  -2404.3  -2404.3      0.0
+cluster00082/results7-8.txt M7-8  -2386.1  -2385.7      0.7
+cluster00083/results7-8.txt M7-8  -2682.6  -2682.6     -0.0
+cluster00084/results7-8.txt M7-8  -3392.8  -3392.6      0.4
+cluster00085/results7-8.txt M7-8  -6201.3  -6201.3      0.0
+cluster00086/results7-8.txt M7-8  -2246.6  -2246.6     -0.0
+cluster00087/results7-8.txt M7-8  -2314.2  -2297.3     33.7
+cluster00088/results7-8.txt M7-8  -5982.9  -5982.6      0.5
+cluster00089/results7-8.txt M7-8  -3950.8  -3948.2      5.1
+cluster00090/results7-8.txt M7-8  -1960.0  -1960.0      0.0
+cluster00091/results7-8.txt M7-8  -1874.0  -1874.0      0.0
+cluster00092/results7-8.txt M7-8  -4222.4  -4222.4     -0.0
+cluster00093/results7-8.txt M7-8  -3340.7  -3340.7      0.1
+cluster00094/results7-8.txt M7-8  -2414.5  -2413.1      2.8
+cluster00095/results7-8.txt M7-8  -4601.6  -4597.0      9.2 ++   2 sites (425 AA)
+cluster00096/results7-8.txt M7-8  -2086.5  -2086.5      0.0
+cluster00097/results7-8.txt M7-8  -4776.6  -4776.6     -0.0
+cluster00098/results7-8.txt M7-8  -3965.1  -3965.1     -0.0
+cluster00099/results7-8.txt M7-8  -1025.9  -1025.9      0.0
+cluster00100/results7-8.txt M7-8  -1199.6  -1196.3      6.5

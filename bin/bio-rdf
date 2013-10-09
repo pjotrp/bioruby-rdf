@@ -2,14 +2,13 @@
 #
 # BioRuby bio-rdf Plugin BioRdf
 # Author:: Pjotr Prins
-# Copyright:: 2012
 
 rootpath = File.dirname(File.dirname(__FILE__))
 $: << File.join(rootpath,'lib')
 
 version = File.new(File.join(rootpath,'VERSION')).read.chomp
 
-$stderr.print "bio-rdf #{version} by Pjotr Prins (c) 2012\n"
+$stderr.print "bio-rdf #{version} by Pjotr Prins (c) 2012,2013\n"
 
 USAGE = <<EOP
 
@@ -19,6 +18,7 @@ USAGE = <<EOP
 
     gsea   : Gene set enrichment analysis
     pubmed : PubMed
+    extra  : Extra specialised parsers/outputters
 
   For more information on a command use the --help switch
 
@@ -48,6 +48,11 @@ case ARGV[0]
   when 'pubmed'
     ARGV.shift
     BioRdf::Parsers::PubMed::Parser::handle_options
+    exit 0
+  when 'extra'
+    ARGV.shift
+    require 'bio-rdf/extra/parsers'
+    BioRdf::Extra::Parsers::handle_options
     exit 0
 end
 
