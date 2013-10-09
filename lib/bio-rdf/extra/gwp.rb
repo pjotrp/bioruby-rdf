@@ -1,6 +1,6 @@
 module BioRdf
-  module Parsers
-    module Extra
+  module Extra
+    module Parsers
       module GWP
         def GWP::parse_digest(name,buf)
           species,type = name.split(/_/)
@@ -18,6 +18,11 @@ module BioRdf
             r[:seq_size] = a[8][1..-1].to_i if a[8] 
           end
           recs
+        end
+
+        module Digest
+          def Digest::do_parse(buf)
+          end
         end
       end
     end

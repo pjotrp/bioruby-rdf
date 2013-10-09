@@ -11,9 +11,13 @@ module BioRdf
             print(o)
             exit()
           }
-          # o.on("-e filter","--exec filter",String, "Execute filter") do |s|
-          #   options.exec = s
-          # end
+          o.on("--type digest",[:digest], "Parse digest") do |s|
+            if s == :digest
+              options.digest = true 
+              require 'bio-rdf/extra/gwp'
+              options.func = GWP::Digest.method(:do_parse)
+            end
+          end
 
           # o.on("--tabulate","Output tab delimited table") do
           #   options.output = :tabulate
@@ -21,13 +25,9 @@ module BioRdf
 
         end
         opts.parse!(ARGV)
-        dir = ARGV[0]
-        if dir and File.directory?(dir)
-          ARGV.each do | path |
-            do_parse(path, options.exec, options.output)
-          end
-        else
-          raise "you should supply a valid directory!" 
+        p options
+        ARGV.each do | fn |
+          options.func.call(fn)
         end
       end
 
