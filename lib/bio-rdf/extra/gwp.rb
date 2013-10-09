@@ -16,12 +16,14 @@ module BioRdf
             r[:is_pos_sel] = (a[5] == '++')
             r[:sites] = a[6].to_i
             r[:seq_size] = a[8][1..-1].to_i if a[8] 
+            r[:original] = buf.strip
           end
           recs
         end
 
         module Digest
-          def Digest::do_parse(buf)
+          def Digest::do_parse(name,line)
+            GWP::parse_digest(name,line)
           end
         end
       end

@@ -11,8 +11,12 @@ module BioRdf
             print(o)
             exit()
           }
+          o.on("--name name",String,"Set name") do |n|
+            options.name = n
+          end
           o.on("--type digest",[:digest], "Parse digest") do |s|
             if s == :digest
+              # ./bin/bio-rdf extra gwp --type digest --name Ce_CDS test/data/parsers/extra/gwp/digest.txt
               options.digest = true 
               require 'bio-rdf/extra/gwp'
               options.func = GWP::Digest.method(:do_parse)
@@ -24,10 +28,16 @@ module BioRdf
           # end
 
         end
+        ARGV.shift
         opts.parse!(ARGV)
         p options
         ARGV.each do | fn |
-          options.func.call(fn)
+          File.open(fn).each do | line |
+            rec = options.func.call(options.name,line)
+            rec.each { | k,v |
+              print BioRdf::Writers::Turtle::rdfize(v)
+            }
+          end
         end
       end
 

@@ -15,18 +15,19 @@ HEAD
       end
 
       def Turtle::rdfize attrib
-        ':' + attrib[:id] + ' rdf:label "' + attrib[:id] + "\" ," +
+        res = ':' + attrib[:id] + ' rdf:label "' + attrib[:id] + "\" ,"
+        res += 
         """
 a :cds ,
 a :family ,
-:species \"#{attrib[:species]}\" ,
 :model :#{attrib[:model]} ,
-:lnL #{attrib[:lnL]} ,
-:sites #{attrib[:sites]} ,
-:seq_size #{attrib[:seq_size]} .
-"""
+:lnL #{attrib[:lnL]} ,"""
+        res += "\n:is_pos_sel #{attrib[:is_pos_sel]} ," if attrib[:is_pos_sel]
+        res += "\n:sites #{attrib[:sites]} ," if attrib[:sites] and attrib[:sites]>0
+        res += "\n:seq_size #{attrib[:seq_size]} ," if attrib[:seq_size] and attrib[:seq_size] > 0
+        res += "\n:species \"#{attrib[:species]}\" .\n\n"
 
-
+        res
       end
     end
   end
