@@ -1,9 +1,9 @@
+@gwp
 
 Feature: Parse GWP files
 
   GWP generates a range of files which we parse and turn into RDF
 
-  @gwp
   Scenario: Parse digest 
     Given I have a digest file with name 'Ce_CDS' and contains
     """
@@ -23,7 +23,6 @@ cluster00400/results7-8.txt M7-8   -857.0   -850.8     12.4 ++   6 sites (206 AA
     a :cds ,
     a :family ,
     :species "Ce" ,
-    :cluster "cluster00400"
     :model :M78 ,
     :lnL 12.4 ,
     :sites 6 ,

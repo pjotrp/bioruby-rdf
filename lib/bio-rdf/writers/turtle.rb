@@ -19,6 +19,7 @@ HEAD
         """
 a :cds ,
 a :family ,
+:species \"#{attrib[:species]}\" ,
 :model :#{attrib[:model]} ,
 :lnL #{attrib[:lnL]} ,
 :sites #{attrib[:sites]} ,
