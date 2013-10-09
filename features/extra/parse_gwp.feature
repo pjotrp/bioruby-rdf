@@ -18,15 +18,16 @@ cluster00400/results7-8.txt M7-8   -857.0   -850.8     12.4 ++   6 sites (206 AA
     And I should be able to fetch sequence size as 206
     And I should be able to assert it is positively selected for 6 sites
     And I should be able to output RDF
-    """
-species: Ce
-    genome: CDS
-      family: cluster00400
-         M78: true
-           delta: 12.4
-           sites: 6
-           size: 206
-    """
+      """
+:Ce_CDS_cluster00400 rdf:label "Ce_CDS_cluster00400" ,
+    a :cds ,
+    a :family ,
+    :model :M78 ,
+    :lnL 12.4 ,
+    :sites 6 ,
+    :seq_size 206 .
+
+"""
 
   Scenario: Parse BLAST results
     

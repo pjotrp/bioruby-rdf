@@ -1,7 +1,7 @@
 require 'bio-rdf/extra/gwp'
 
 Given /^I have a digest file with name 'Ce_CDS' and contains$/ do |string|
-  @recs = BioRdf::Parsers::Extra::GWP::parse_digest(string)
+  @recs = BioRdf::Parsers::Extra::GWP::parse_digest('Ce_CDS',string)
   p @recs
 end
 
@@ -11,27 +11,27 @@ Then /^I should fetch the cluster names 'cluster(\d+)' and 'cluster(\d+)'$/ do |
 end
 
 Then /^for cluster (\d+)$/ do |arg1|
-  pending # express the regexp above with the code you wish you had
 end
 
 Then /^I should be able to fetch the model 'M(\d+)\-(\d+)'$/ do |arg1, arg2|
-  pending # express the regexp above with the code you wish you had
+  @recs['cluster00400'][:model].should == 'M78'
 end
 
 Then /^I should be able to fetch the lnL '(\d+)\.(\d+)'$/ do |arg1, arg2|
-  pending # express the regexp above with the code you wish you had
+  @recs['cluster00400'][:lnL].should == 12.4
 end
 
 Then /^I should be able to fetch sequence size as (\d+)$/ do |arg1|
-  pending # express the regexp above with the code you wish you had
+  @recs['cluster00400'][:seq_size].should == 206
 end
 
 Then /^I should be able to assert it is positively selected for (\d+) sites$/ do |arg1|
-  pending # express the regexp above with the code you wish you had
+  @recs['cluster00400'][:is_pos_sel].should == true
+  @recs['cluster00400'][:sites].should == 6
 end
 
 Then /^I should be able to output RDF$/ do |string|
-  pending # express the regexp above with the code you wish you had
+  BioRdf::Writers::Turtle::rdfize(@recs['cluster00400']).should == string
 end
 
 Given /^I have a textual BLAST result with name 'Ce_CDS' in 'cluster(\d+)'  which contains$/ do |arg1, string|

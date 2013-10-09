@@ -7,6 +7,8 @@ gem "rest-client"
 gem "bio-table", ">= 0.0.4"
 gem "rest-client"
 gem "ppe-4store-ruby"
+gem "rdf"
+gem "rdf-turtle"
 
 # Add dependencies to develop your gem here.
 # Include everything needed to run rake, tests, features, etc.
