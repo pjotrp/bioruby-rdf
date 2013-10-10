@@ -35,23 +35,24 @@ Then /^I should be able to output RDF$/ do |string|
 end
 
 Given /^I have a textual BLAST result with name 'Ce_CDS' in 'cluster(\d+)'  which contains$/ do |arg1, string|
-  @recs = BioRdf::Parsers::Extra::GWP::Blast::parse('Ce_CDS',string)
+  string.gsub!(/\\t/,"\t")
+  @recs = BioRdf::Extra::Parsers::GWP::Blast::parse('Ce_CDS',string)
   p @recs
 end
 
 Then /^I should be able fetch the Species name 'Caenorhabditis elegans'$/ do
-  pending # express the regexp above with the code you wish you had
+  @recs[0][:homolog_species].should == 'Caenorhabditis elegans'
 end
 
 Then /^I should be able fetch the gene name 'NP_(\d+)'$/ do |arg1|
-  pending # express the regexp above with the code you wish you had
+  @recs[0][:homolog_gene].should == 'NP_'+arg1.to_s 
 end
 
 Then /^I should be able fetch the description 'Protein CDC\-(\d+)'$/ do |arg1|
-  pending # express the regexp above with the code you wish you had
+  @recs[0][:descr].should == 'Protein CDC-26, isoform c  > Protein CDC-26, isoform c' 
 end
 
 Then /^I should be able fetch the E\-value (\d+)\.(\d+)e\-(\d+)$/ do |arg1, arg2, arg3|
-  pending # express the regexp above with the code you wish you had
+  @recs[0][:e_value].should == 1.76535e-89
 end
 
