@@ -14,21 +14,27 @@ HEAD
         HEADER
       end
 
-      def Turtle::rdfize attrib
-        res = ':' + attrib[:id] + ' rdf:label "' + attrib[:id] + "\" ,"
-        res += 
-        """
+      module Digest
+        def Digest::to_rdf attrib
+          res = ':' + attrib[:id] + ' rdf:label "' + attrib[:id] + "\" ,"
+          res += 
+          """
 a :cds ,
 a :family ,
 :model :#{attrib[:model]} ,
 :lnL #{attrib[:lnL]} ,"""
-        res += "\n:is_pos_sel #{attrib[:is_pos_sel]} ," if attrib[:is_pos_sel]
-        res += "\n:sites #{attrib[:sites]} ," if attrib[:sites] and attrib[:sites]>0
-        res += "\n:seq_size #{attrib[:seq_size]} ," if attrib[:seq_size] and attrib[:seq_size] > 0
-        res += "\n:species \"#{attrib[:species]}\" .\n"
+          res += "\n:is_pos_sel #{attrib[:is_pos_sel]} ," if attrib[:is_pos_sel]
+          res += "\n:sites #{attrib[:sites]} ," if attrib[:sites] and attrib[:sites]>0
+          res += "\n:seq_size #{attrib[:seq_size]} ," if attrib[:seq_size] and attrib[:seq_size] > 0
+          res += "\n:species \"#{attrib[:species]}\" .\n"
 
-        res
+          res
+        end
       end
+
+      def Turtle::to_rdf attrib
+      end
+
     end
   end
 end
