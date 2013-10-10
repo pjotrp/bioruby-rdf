@@ -1,7 +1,7 @@
 require 'bio-rdf/extra/gwp'
 
 Given /^I have a digest file with name 'Ce_CDS' and contains$/ do |string|
-  @recs = BioRdf::Parsers::Extra::GWP::parse_digest('Ce_CDS',string)
+  @recs = BioRdf::Extra::Parsers::GWP::parse_digest('Ce_CDS',string)
   p @recs
 end
 
@@ -35,7 +35,8 @@ Then /^I should be able to output RDF$/ do |string|
 end
 
 Given /^I have a textual BLAST result with name 'Ce_CDS' in 'cluster(\d+)'  which contains$/ do |arg1, string|
-  pending # express the regexp above with the code you wish you had
+  @recs = BioRdf::Parsers::Extra::GWP::parse_blast('Ce_CDS',string)
+  p @recs
 end
 
 Then /^I should be able fetch the Species name 'Caenorhabditis elegans'$/ do

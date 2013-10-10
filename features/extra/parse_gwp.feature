@@ -4,6 +4,7 @@ Feature: Parse GWP files
 
   GWP generates a range of files which we parse and turn into RDF
 
+  @gwp1
   Scenario: Parse digest 
     Given I have a digest file with name 'Ce_CDS' and contains
     """
@@ -22,14 +23,16 @@ cluster00400/results7-8.txt M7-8   -857.0   -850.8     12.4 ++   6 sites (206 AA
 :Ce_CDS_cluster00400 rdf:label "Ce_CDS_cluster00400" ,
     a :cds ,
     a :family ,
-    :species "Ce" ,
     :model :M78 ,
     :lnL 12.4 ,
+    :is_pos_sel true ,
     :sites 6 ,
-    :seq_size 206 .
+    :seq_size 206 ,
+    :species "Ce" .
 
 """
 
+  @gwp2
   Scenario: Parse BLAST results
     
     BLAST XML results are turned into a textual format

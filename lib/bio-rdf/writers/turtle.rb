@@ -25,7 +25,7 @@ a :family ,
         res += "\n:is_pos_sel #{attrib[:is_pos_sel]} ," if attrib[:is_pos_sel]
         res += "\n:sites #{attrib[:sites]} ," if attrib[:sites] and attrib[:sites]>0
         res += "\n:seq_size #{attrib[:seq_size]} ," if attrib[:seq_size] and attrib[:seq_size] > 0
-        res += "\n:species \"#{attrib[:species]}\" .\n\n"
+        res += "\n:species \"#{attrib[:species]}\" .\n"
 
         res
       end
