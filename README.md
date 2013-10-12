@@ -2,13 +2,19 @@
 
 [![Build Status](https://secure.travis-ci.org/pjotrp/bioruby-rdf.png)](http://travis-ci.org/pjotrp/bioruby-rdf)
 
-Library and tools for using an RDF triple-store with biological data.
-It includes tools for storing parsed data into a triple store. The
-name includes RDF, but that really is too a narrow view of the purpose
-of this tool, unfortunately alternative names (bio-semweb and
-bio-triplestore) are even worse.
+Library and tools for using an RDF triple-store with biological data.  To work
+with RDF it is often necessary to parse some (tabular) data and output RDF.
+This repository contains a collection of functions to parse files and generate
+RDF, allowing one to store data into a triple store. The name includes RDF, but
+that really is too a narrow view of the purpose of this tool, unfortunately
+alternative names (bio-semweb and bio-triplestore) are even worse, so we'll
+stick to bio-rdf.
 
-First there are the parsers.  Every (native) data-type has a parser
+At this point this library is very much a work in progress. Together with the
+[https://github.com/wstrinz/publisci](publisci) module by Will Strinz, we hope
+to get to a unified approach for data parsing and RDF output.
+
+Here, first there are the parsers.  Every (native) data-type has a parser
 module. This parser module controls the parsing flow. The actual
 parsing is handled by lower level routines, which may even reside in
 other libraries, such as BioRuby. The basic flow is 
