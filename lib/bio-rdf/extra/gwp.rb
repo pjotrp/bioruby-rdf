@@ -36,6 +36,7 @@ module BioRdf
               gene = a[1]
               r = {}
               r[:id] = name + '_' + gene
+              r['a'] = :blast_match
               r[:species] = species
               r[:homolog_species] = a[0]
               r[:homolog_gene] = gene
