@@ -45,12 +45,12 @@ Caenorhabditis elegans\tNP_001251447\tProtein CDC-26, isoform c  > Protein CDC-2
     Then I should be able fetch the gene name 'NP_001251447'
     Then I should be able fetch the description 'Protein CDC-262'
     Then I should be able fetch the E-value 1.76535e-89
-    And I should be able to output RDF
+    And I should be able to output BLAST RDF
       """
 :Ce_CDS_cluster00400_NP_001251447 rdf:label "NP_001251447" ,
     a :homolog ,
     :family Ce_CDS_cluster00400,
-    :model :M78 ,
+    :blast :M78 ,
     :lnL 12.4 ,
     :sites 6 ,
     :seq_size 206 .

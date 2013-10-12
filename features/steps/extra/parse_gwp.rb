@@ -37,7 +37,6 @@ end
 Given /^I have a textual BLAST result with name 'Ce_CDS' in 'cluster(\d+)'  which contains$/ do |arg1, string|
   string.gsub!(/\\t/,"\t")
   @recs = BioRdf::Extra::Parsers::GWP::Blast::parse('Ce_CDS',string)
-  p @recs
 end
 
 Then /^I should be able fetch the Species name 'Caenorhabditis elegans'$/ do
@@ -55,4 +54,9 @@ end
 Then /^I should be able fetch the E\-value (\d+)\.(\d+)e\-(\d+)$/ do |arg1, arg2, arg3|
   @recs[0][:e_value].should == 1.76535e-89
 end
+
+Then /^I should be able to output BLAST RDF$/ do |string|
+  BioRdf::Writers::Turtle::Blast::to_rdf(@recs[0]).should == string
+end
+
 

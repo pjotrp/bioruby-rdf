@@ -32,7 +32,12 @@ a :family ,
         end
       end
 
-      def Turtle::to_rdf attrib
+      module Blast
+        def Blast::to_rdf attrib
+          """
+#{attrib[:id]}
+"""
+        end
       end
 
     end
