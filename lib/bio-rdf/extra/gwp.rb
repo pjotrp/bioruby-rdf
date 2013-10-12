@@ -3,7 +3,7 @@ module BioRdf
     module Parsers
       module GWP
         module Digest
-          def Digest::parse(name,buf)
+          def Digest::parse(name,cluster,buf)
             raise "Missing name!" if name.nil?
             species,type = name.split(/_/)
             lines = buf.split(/\n/).map { |s| 
@@ -29,6 +29,8 @@ module BioRdf
 
         module Blast
           def Blast::parse(name,cluster,buf)
+            raise "Missing name!" if name.nil?
+            raise "Missing cluster name!" if cluster.nil?
             # Caenorhabditis elegans\tNP_001251447\tProtein CDC-26, isoform c  > Protein CDC-26, isoform c\tgi|392887062|ref|NP_001251447.1|\t1.76535e-89
             # p buf
             species,type = name.split(/_/)

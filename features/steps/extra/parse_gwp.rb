@@ -1,7 +1,7 @@
 require 'bio-rdf/extra/gwp'
 
 Given /^I have a digest file with name 'Ce_CDS' and contains$/ do |string|
-  @recs = BioRdf::Extra::Parsers::GWP::Digest::parse('Ce_CDS',string)
+  @recs = BioRdf::Extra::Parsers::GWP::Digest::parse('Ce_CDS',nil,string)
   # p @recs
 end
 
