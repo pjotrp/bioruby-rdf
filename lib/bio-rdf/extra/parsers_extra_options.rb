@@ -3,7 +3,7 @@ module BioRdf
     module Parsers
       def Parsers::handle_options 
         $stderr.print "Entering extra mode\n"
-        p ARGV
+        # p ARGV
         options = OpenStruct.new()
         
         opts = OptionParser.new() do |o|
@@ -46,7 +46,16 @@ OPTIONS
         end
         opts.parse!(ARGV)
         command = ARGV.shift
-        p options
+        # p options
+        print <<HEADER
+# RDF output by bio-rdf https://github.com/pjotrp/bioruby-rdf
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix hgnc: <http://identifiers.org/hgnc.symbol/> .
+@prefix ncbigene: <https://www.google.nl/search?q=ncbi+gene+alias+> .
+@prefix : <http://biobeat.org/rdf/ns#>  .
+HEADER
+        
         ARGV.each do | fn |
           File.open(fn).each do | line |
             rec = options.func.call(options.name,options.cluster,line)

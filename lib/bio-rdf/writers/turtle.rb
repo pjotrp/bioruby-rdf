@@ -33,7 +33,7 @@ HEAD
         id = h[:id]
         h.each do | k,v |
           if k != :id
-            rdf += id + ' '
+            rdf += ':'+id + ' '
             if k.kind_of? String
               rdf += k
             elsif k.kind_of? Symbol
@@ -50,7 +50,7 @@ HEAD
             end
             rdf += " .\n"
           else
-            rdf += id + ' rdf:label "' + id + "\" .\n"
+            rdf += ':'+id + ' rdf:label "' + id + "\" .\n"
           end
         end
         rdf

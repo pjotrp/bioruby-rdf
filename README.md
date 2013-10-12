@@ -158,6 +158,12 @@ now this should work
     bundle exec rake
 ```
 
+To test for valid Turtle RDF rapper may help:
+
+```sh
+    rapper -i turtle file.rdf
+```
+    
 Also visit http://localhost:8080/status/
 
 Command line SPARQL queries can be done with

@@ -19,7 +19,7 @@ module BioRdf
               r[:model] = 'M78' if a[1] =~ /7/ 
               r[:species] = species
               r[:lnL] = a[4].to_f
-              r[:is_pos_sel] = true if (a[5] == '++')
+              r[:is_pos_sel] = (a[5] == '++')
               r[:sites] = a[6].to_i if a[6]
               r[:seq_size] = a[8][1..-1].to_i if a[8] 
             end
@@ -41,7 +41,7 @@ module BioRdf
               clusterid = name + '_' + cluster
               gene = a[1]
               r = {}
-              r[:id] = name + '_' + gene
+              r[:id] = name + '_' + cluster + '_' + gene
               r[:cluster] = clusterid.to_sym
               r['a'] = :blast_match
               r[:species] = species
