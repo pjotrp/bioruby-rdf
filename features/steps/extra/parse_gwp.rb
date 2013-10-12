@@ -2,7 +2,7 @@ require 'bio-rdf/extra/gwp'
 
 Given /^I have a digest file with name 'Ce_CDS' and contains$/ do |string|
   @recs = BioRdf::Extra::Parsers::GWP::Digest::parse('Ce_CDS',string)
-  p @recs
+  # p @recs
 end
 
 Then /^I should fetch the cluster names 'cluster(\d+)' and 'cluster(\d+)'$/ do |arg1, arg2|
@@ -11,6 +11,10 @@ Then /^I should fetch the cluster names 'cluster(\d+)' and 'cluster(\d+)'$/ do |
 end
 
 Then /^for cluster (\d+)$/ do |arg1|
+end
+
+Then /^I should be able fetch the cluster :Ce_CDS_cluster(\d+)$/ do |arg1|
+  @recs['cluster00400'][:cluster].should == :Ce_CDS_cluster00400
 end
 
 Then /^I should be able to fetch the model 'M(\d+)\-(\d+)'$/ do |arg1, arg2|
@@ -36,7 +40,11 @@ end
 
 Given /^I have a textual BLAST result with name 'Ce_CDS' in 'cluster(\d+)'  which contains$/ do |arg1, string|
   string.gsub!(/\\t/,"\t")
-  @recs = BioRdf::Extra::Parsers::GWP::Blast::parse('Ce_CDS',string)
+  @recs = BioRdf::Extra::Parsers::GWP::Blast::parse('Ce_CDS','cluster00400',string)
+end
+
+Then /^I should be able fetch the BLAST cluster :Ce_CDS_cluster(\d+)$/ do |arg1|
+  @recs[0][:cluster].should == :Ce_CDS_cluster00400
 end
 
 Then /^I should be able fetch the Species name 'Caenorhabditis elegans'$/ do

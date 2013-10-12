@@ -29,7 +29,7 @@ HEAD
       end
 
       def Turtle::hash_to_rdf(h)
-        p h
+        # p h
         rdf = ""
         id = h[:id]
         h.each do | k,v |
