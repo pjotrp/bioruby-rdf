@@ -1,0 +1,3 @@
+Ce_CDS	B0511.9c	cluster00400 	lcl|B0511.9c	2.24621e-92
+Ce_CDS	B0511.9a	cluster00400 	lcl|B0511.9a	1.63811e-89
+Ce_CDS	B0511.9b	cluster00400 	lcl|B0511.9b	4.50753e-86
