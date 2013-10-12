@@ -4,8 +4,11 @@ module BioRdf
       module GWP
         module Digest
           def Digest::parse(name,buf)
+            raise "Missing name!" if name.nil?
             species,type = name.split(/_/)
-            lines = buf.split(/\n/).map { |s| s.split(/\s+/) }
+            lines = buf.split(/\n/).map { |s| 
+              s.split(/\s+/) 
+            }
             recs = {}
             lines.each do | a |
               cluster = /(cluster\d+)/.match(a[0])[1]
