@@ -15,8 +15,8 @@ module BioRdf
 
 Examples:
 
-    bio-rdf extra gwp --type digest --name Ce_CDS test/data/parsers/extra/gwp/digest.txt 
-    bio-rdf extra gwp --type blast --name Ce_CDS test/data/parsers/extra/gwp/digest.txt 
+    ./bin/bio-rdf extra gwp --type digest --name Ce_CDS test/data/parsers/extra/gwp/digest.txt 
+    ./bin/bio-rdf extra gwp --name Ce_CDS --type blast --cluster cluster00400 test/data/parsers/extra/gwp/nrBLAST.txt
 OPTIONS
             exit()
           }
