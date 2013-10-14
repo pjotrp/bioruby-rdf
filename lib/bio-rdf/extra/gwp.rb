@@ -47,7 +47,9 @@ module BioRdf
               r['a'] = :blast_match
               r[:species] = species
               r[:source] = type
-              r[:homolog_species] = a[0]
+              hfull = a[0]
+              r[:homolog_species] = hfull.split.map { |w| w[0] }.join('')
+              r[:homolog_species_full] = hfull
               r[:homolog_gene] = gene
               r[:descr] = a[2]
               r[:e_value] = a[4].to_f

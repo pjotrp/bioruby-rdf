@@ -1,5 +1,7 @@
 # Count all clusters under positive selection
 #
+# ~/opt/bin/sparql-query http://localhost:8000/sparql/ -p < sparql/extra/gwp/count_pos_sel.rq
+#
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 prefix dc: <http://purl.org/dc/elements/1.1/>
@@ -7,10 +9,14 @@ prefix hgnc: <http://identifiers.org/hgnc.symbol/>
 prefix doi: <http://dx.doi.org/>
 prefix : <http://biobeat.org/rdf/ns#> 
 
-SELECT ?name ?sites WHERE 
+SELECT ?species ?source (COUNT(?name) AS ?num) WHERE 
+# SELECT ?name ?source ?sites WHERE 
 { 
   ?id :is_pos_sel true .
   ?id rdf:label ?name .
   ?id :sites ?sites .
+  ?id :species ?species .
+  ?id :source ?source .
 }
-ORDER by ?name 
+GROUP by ?species ?source
+ORDER by ?species ?source

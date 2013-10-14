@@ -47,8 +47,9 @@ Then /^I should be able fetch the BLAST cluster :Ce_CDS_cluster(\d+)$/ do |arg1|
   @recs[0][:cluster].should == :Ce_CDS_cluster00400
 end
 
-Then /^I should be able fetch the Species name 'Caenorhabditis elegans'$/ do
-  @recs[0][:homolog_species].should == 'Caenorhabditis elegans'
+Then /^I should be able fetch the Species name 'Ce'$/ do
+  @recs[0][:homolog_species].should == 'Ce'
+  @recs[0][:homolog_species_full].should == 'Caenorhabditis elegans'
 end
 
 Then /^I should be able fetch the gene name 'NP_(\d+)'$/ do |arg1|

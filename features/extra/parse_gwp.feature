@@ -42,7 +42,7 @@ cluster00400/results7-8.txt M7-8   -857.0   -850.8     12.4 ++   6 sites (206 AA
     """
 Caenorhabditis elegans\tNP_001251447\tProtein CDC-26, isoform c  > Protein CDC-26, isoform c\tgi|392887062|ref|NP_001251447.1|\t1.76535e-89
     """
-    Then I should be able fetch the Species name 'Caenorhabditis elegans'
+    Then I should be able fetch the Species name 'Ce'
     Then I should be able fetch the gene name 'NP_001251447'
     Then I should be able fetch the BLAST cluster :Ce_CDS_cluster00400
     Then I should be able fetch the description 'Protein CDC-262'
@@ -54,7 +54,8 @@ Caenorhabditis elegans\tNP_001251447\tProtein CDC-26, isoform c  > Protein CDC-2
 :Ce_CDS_cluster00400_NP_001251447 a :blast_match .
 :Ce_CDS_cluster00400_NP_001251447 :species "Ce" .
 :Ce_CDS_cluster00400_NP_001251447 :source "CDS" .
-:Ce_CDS_cluster00400_NP_001251447 :homolog_species "Caenorhabditis elegans" .
+:Ce_CDS_cluster00400_NP_001251447 :homolog_species "Ce" .
+:Ce_CDS_cluster00400_NP_001251447 :homolog_species_full "Caenorhabditis elegans" .
 :Ce_CDS_cluster00400_NP_001251447 :homolog_gene "NP_001251447" .
 :Ce_CDS_cluster00400_NP_001251447 :descr "Protein CDC-26, isoform c  > Protein CDC-26, isoform c" .
 :Ce_CDS_cluster00400_NP_001251447 :e_value 1.76535e-89 .
