@@ -25,6 +25,7 @@ cluster00400/results7-8.txt M7-8   -857.0   -850.8     12.4 ++   6 sites (206 AA
 :Ce_CDS_cluster00400 :cluster :Ce_CDS_cluster00400 .
 :Ce_CDS_cluster00400 :model "M78" .
 :Ce_CDS_cluster00400 :species "Ce" .
+:Ce_CDS_cluster00400 :source "CDS" .
 :Ce_CDS_cluster00400 :lnL 12.4 .
 :Ce_CDS_cluster00400 :is_pos_sel true .
 :Ce_CDS_cluster00400 :sites 6 .
@@ -52,6 +53,7 @@ Caenorhabditis elegans\tNP_001251447\tProtein CDC-26, isoform c  > Protein CDC-2
 :Ce_CDS_cluster00400_NP_001251447 :cluster :Ce_CDS_cluster00400 .
 :Ce_CDS_cluster00400_NP_001251447 a :blast_match .
 :Ce_CDS_cluster00400_NP_001251447 :species "Ce" .
+:Ce_CDS_cluster00400_NP_001251447 :source "CDS" .
 :Ce_CDS_cluster00400_NP_001251447 :homolog_species "Caenorhabditis elegans" .
 :Ce_CDS_cluster00400_NP_001251447 :homolog_gene "NP_001251447" .
 :Ce_CDS_cluster00400_NP_001251447 :descr "Protein CDC-26, isoform c  > Protein CDC-26, isoform c" .

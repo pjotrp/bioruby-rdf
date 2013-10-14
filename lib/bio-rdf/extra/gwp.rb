@@ -18,6 +18,7 @@ module BioRdf
               r[:cluster] = clusterid.to_sym
               r[:model] = 'M78' if a[1] =~ /7/ 
               r[:species] = species
+              r[:source] = type
               r[:lnL] = a[4].to_f
               r[:is_pos_sel] = (a[5] == '++')
               r[:sites] = a[6].to_i if a[6]
@@ -45,6 +46,7 @@ module BioRdf
               r[:cluster] = clusterid.to_sym
               r['a'] = :blast_match
               r[:species] = species
+              r[:source] = type
               r[:homolog_species] = a[0]
               r[:homolog_gene] = gene
               r[:descr] = a[2]
