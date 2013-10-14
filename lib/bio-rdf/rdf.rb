@@ -1,15 +1,32 @@
 module BioRdf
 
-
   module RDF
 
     def RDF::valid_uri? uri
       uri =~ /^([!#$&-;=?_a-z~]|%[0-9a-f]{2})+$/i
     end
 
+    def RDF::escape_string_literal(literal)
+      s = literal.to_s
+      # Put a slash before every double quote if there is no such slash already
+      s = s.gsub(/(?<!\\)"/,'\"')
+      s
+    end
+
+    def RDF::stringify_literal(literal)
+      RDF::escape_string_literal(literal.to_s)
+    end
+
+    def RDF::quoted_stringify_literal(literal)
+      '"' + stringify_literal(literal) + '"'
+    end
   end
 
   module Turtle
+
+    def Turtle::stringify_literal(literal)
+      RDF::stringify_literal(literal)
+    end
 
     def Turtle::identifier(id)
       raise "Illegal identifier #{id}" if id != Turtle::mangle_identifier(id)

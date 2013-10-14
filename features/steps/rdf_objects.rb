@@ -1,3 +1,15 @@
+When /^I create a string literal$/ do
+end
+
+Then /^I should escape quotes as in$/ do |table|
+  # table is a Cucumber::Ast::Table
+  table.raw.each do | row |
+    print row
+    BioRdf::Turtle::stringify_literal(row[0]).should == row[1]  
+  end
+end
+
+
 Given /^an RDF container$/ do
 end
 

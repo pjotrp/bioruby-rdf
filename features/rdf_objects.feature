@@ -10,7 +10,9 @@ Feature: Support RDF objects and validators
 
     Given an RDF container
     When I create a string literal
-    Then I should escape
+    Then I should escape quotes as in
+    | a " double quote  | a \" double quote |
+    | a \" double quote | a \" double quote |
 
   Scenario: Create a Turtle RDF URI
 
