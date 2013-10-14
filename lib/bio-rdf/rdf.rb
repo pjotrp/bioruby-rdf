@@ -47,7 +47,9 @@ module BioRdf
 
     # Replace letters/symbols that are not allowed in a Turtle identifier
     # (short hand URI). This should be the definite mangler and replace the 
-    # ones in bioruby-table and bio-exominer.
+    # ones in bioruby-table and bio-exominer. Manglers are useful when using
+    # data from other sources and trying to transform them into simple RDF 
+    # identifiers.
 
     def Turtle::mangle_identifier(s)
       id = s.strip.gsub(/[^[:print:]]/, '').gsub(/[#)(,]/,"").gsub(/[%]/,"perc").gsub(/(\s|\.|\$|\/|\\)+/,"_")
