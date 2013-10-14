@@ -4,11 +4,21 @@ end
 Then /^I should escape quotes as in$/ do |table|
   # table is a Cucumber::Ast::Table
   table.raw.each do | row |
-    print row
     BioRdf::Turtle::stringify_literal(row[0]).should == row[1]  
   end
 end
 
+Then /^I should escape single slashes as in 'a \\ slash'$/ do
+  # puts 'a \ slash'
+  # puts 'a \\ slash'
+  # puts 'a \\\\ slash'
+  BioRdf::Turtle::stringify_literal('a \\ slash').should == 'a \\\\ slash'
+  BioRdf::Turtle::stringify_literal('a \\\\ slash').should == 'a \\\\ slash'
+end
+
+Then /^I should escape special characters as defined in http:/ do 
+  pending # express the regexp above with the code you wish you had
+end
 
 Given /^an RDF container$/ do
 end

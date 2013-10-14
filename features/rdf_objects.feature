@@ -13,6 +13,8 @@ Feature: Support RDF objects and validators
     Then I should escape quotes as in
     | a " double quote  | a \" double quote |
     | a \" double quote | a \" double quote |
+    Then I should escape single slashes as in 'a \ slash'
+    Then I should escape special characters as defined in http://www.w3.org/TeamSubmission/turtle/
 
   Scenario: Create a Turtle RDF URI
 

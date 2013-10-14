@@ -38,7 +38,7 @@ require 'bio-logger'
 Bio::Log::CLI.logger('stderr')
 Bio::Log::CLI.trace('info')
 
-options = {:example_switch=>false,:show_help=>false}
+options = {:example_switch=>false,:show_help=>false,:version=>version}
 
 case ARGV[0]
   when 'gsea'
@@ -52,7 +52,7 @@ case ARGV[0]
   when 'extra'
     ARGV.shift
     require 'bio-rdf/extra/parsers_extra_options'
-    BioRdf::Extra::Parsers::handle_options
+    BioRdf::Extra::Parsers::handle_options(options)
     exit 0
 end
 

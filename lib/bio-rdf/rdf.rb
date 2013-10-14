@@ -8,6 +8,8 @@ module BioRdf
 
     def RDF::escape_string_literal(literal)
       s = literal.to_s
+      # Put a slash before every slash if there is no such slash already
+      # s = s.gsub(/(?<!\\)[\\]/,"\\\\")
       # Put a slash before every double quote if there is no such slash already
       s = s.gsub(/(?<!\\)"/,'\"')
       s
