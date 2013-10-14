@@ -21,14 +21,14 @@ cluster00400/results7-8.txt M7-8   -857.0   -850.8     12.4 ++   6 sites (206 AA
     And I should be able to assert it is positively selected for 6 sites
     And I should be able to output RDF
       """
-Ce_CDS_cluster00400 rdf:label "Ce_CDS_cluster00400" .
-Ce_CDS_cluster00400 :cluster :Ce_CDS_cluster00400 .
-Ce_CDS_cluster00400 :model "M78" .
-Ce_CDS_cluster00400 :species "Ce" .
-Ce_CDS_cluster00400 :lnL 12.4 .
-Ce_CDS_cluster00400 :is_pos_sel true .
-Ce_CDS_cluster00400 :sites 6 .
-Ce_CDS_cluster00400 :seq_size 206 .
+:Ce_CDS_cluster00400 rdf:label "Ce_CDS_cluster00400" .
+:Ce_CDS_cluster00400 :cluster :Ce_CDS_cluster00400 .
+:Ce_CDS_cluster00400 :model "M78" .
+:Ce_CDS_cluster00400 :species "Ce" .
+:Ce_CDS_cluster00400 :lnL 12.4 .
+:Ce_CDS_cluster00400 :is_pos_sel true .
+:Ce_CDS_cluster00400 :sites 6 .
+:Ce_CDS_cluster00400 :seq_size 206 .
 
 """
 
@@ -48,14 +48,14 @@ Caenorhabditis elegans\tNP_001251447\tProtein CDC-26, isoform c  > Protein CDC-2
     Then I should be able fetch the E-value 1.76535e-89
     And I should be able to output BLAST RDF
       """
-Ce_CDS_NP_001251447 rdf:label "Ce_CDS_NP_001251447" .
-Ce_CDS_NP_001251447 :cluster :Ce_CDS_cluster00400 .
-Ce_CDS_NP_001251447 a :blast_match .
-Ce_CDS_NP_001251447 :species "Ce" .
-Ce_CDS_NP_001251447 :homolog_species "Caenorhabditis elegans" .
-Ce_CDS_NP_001251447 :homolog_gene "NP_001251447" .
-Ce_CDS_NP_001251447 :descr "Protein CDC-26, isoform c  > Protein CDC-26, isoform c" .
-Ce_CDS_NP_001251447 :e_value 1.76535e-89 .
+:Ce_CDS_cluster00400_NP_001251447 rdf:label "Ce_CDS_cluster00400_NP_001251447" .
+:Ce_CDS_cluster00400_NP_001251447 :cluster :Ce_CDS_cluster00400 .
+:Ce_CDS_cluster00400_NP_001251447 a :blast_match .
+:Ce_CDS_cluster00400_NP_001251447 :species "Ce" .
+:Ce_CDS_cluster00400_NP_001251447 :homolog_species "Caenorhabditis elegans" .
+:Ce_CDS_cluster00400_NP_001251447 :homolog_gene "NP_001251447" .
+:Ce_CDS_cluster00400_NP_001251447 :descr "Protein CDC-26, isoform c  > Protein CDC-26, isoform c" .
+:Ce_CDS_cluster00400_NP_001251447 :e_value 1.76535e-89 .
 
 """
 
