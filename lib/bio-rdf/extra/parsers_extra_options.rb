@@ -2,7 +2,7 @@ module BioRdf
   module Extra
     module Parsers
       def Parsers::handle_options(base)
-        $stderr.print "Entering extra mode\n"
+        # $stderr.print "Entering extra mode\n"
         # p ARGV
         options = OpenStruct.new()
         

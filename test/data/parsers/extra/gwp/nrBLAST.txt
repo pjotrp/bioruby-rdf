@@ -2,4 +2,4 @@ Caenorhabditis elegans	NP_001251447	Protein CDC-26, isoform c  > Protein CDC-26,
 Caenorhabditis elegans	NP_740913	Protein CDC-26, isoform a  > Protein CDC-26, isoform a 	gi|392887060|ref|NP_740913.3|	1.28743e-86
 Caenorhabditis elegans	NP_740914	Protein CDC-26, isoform b  > Protein "CDC-26", isoform b 	gi|193202212|ref|NP_740914.2|	3.54257e-83
 Caenorhabditis briggsae	XP_002639731	C. briggsae CBR-CDC-\26 protein gi\|268566471|ref|XP_002639731.1|	1.04394e-37
-Caenorhabditis briggsae	CAP31435	Protein CBR-CDC-26 	gi|309360391|emb|CAP31435.2|	6.93957e-26
+Caenorhabditis briggsae	CAP31435.1	Protein CBR-CDC-26 	gi|309360391|emb|CAP31435.2|	6.93957e-26

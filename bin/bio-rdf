@@ -36,7 +36,7 @@ require 'ostruct'
 require 'bio-logger'
 
 Bio::Log::CLI.logger('stderr')
-Bio::Log::CLI.trace('info')
+Bio::Log::CLI.trace('warn')
 
 options = {:example_switch=>false,:show_help=>false,:version=>version}
 

@@ -57,8 +57,8 @@ module BioRdf
       id = id.gsub(/\|/,'_')
       id = id.gsub(/\-|:/,'_')
       if id != s 
-        logger = Bio::Log::LoggerPlus['bio-rdf']
-        $stderr.print "\nWARNING: Changed identifier <#{s}> to <#{id}>"
+        logger = Bio::Log::LoggerPlus.new 'bio-rdf'
+        logger.warn "\nWARNING: Changed identifier <#{s}> to <#{id}>"
       end
       if not RDF::valid_uri?(id)
         raise "Invalid URI after mangling <#{s}> to <#{id}>!"
