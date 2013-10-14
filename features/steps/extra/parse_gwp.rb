@@ -49,7 +49,7 @@ end
 
 Then /^I should be able fetch the Species name 'Ce'$/ do
   @recs[0][:homolog_species].should == 'Ce'
-  @recs[0][:homolog_species_full].should == 'Caenorhabditis elegans'
+  @recs[0][:homolog_species_full].should == '[Ce_DNA]'
 end
 
 Then /^I should be able fetch the gene name 'NP_(\d+)'$/ do |arg1|
@@ -57,7 +57,7 @@ Then /^I should be able fetch the gene name 'NP_(\d+)'$/ do |arg1|
 end
 
 Then /^I should be able fetch the description 'Protein CDC\-(\d+)'$/ do |arg1|
-  @recs[0][:descr].should == 'Protein CDC-26, isoform c  > Protein CDC-26, isoform c' 
+  @recs[0][:descr].should == "Protein CDC-26, isoform c  > Protein CDC-26, isoform cgi|392887062|ref|NP_001251447.1| [Ce_DNA] Parse"
 end
 
 Then /^I should be able fetch the E\-value (\d+)\.(\d+)e\-(\d+)$/ do |arg1, arg2, arg3|

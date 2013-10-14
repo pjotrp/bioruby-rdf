@@ -40,7 +40,7 @@ cluster00400/results7-8.txt M7-8   -857.0   -850.8     12.4 ++   6 sites (206 AA
 
     Given I have a textual BLAST result with name 'Ce_CDS' in 'cluster00400'  which contains
     """
-Caenorhabditis elegans\tNP_001251447\tProtein CDC-26, isoform c  > Protein CDC-26, isoform c\tgi|392887062|ref|NP_001251447.1|\t1.76535e-89
+Caenorhabditis elegans\tNP_001251447\tProtein CDC-26, isoform c  > Protein CDC-26, isoform cgi|392887062|ref|NP_001251447.1| [Ce_DNA] Parse\t\t1.76535e-89
     """
     Then I should be able fetch the Species name 'Ce'
     Then I should be able fetch the gene name 'NP_001251447'
@@ -55,9 +55,9 @@ Caenorhabditis elegans\tNP_001251447\tProtein CDC-26, isoform c  > Protein CDC-2
 :Ce_CDS_cluster00400_NP_001251447 :species "Ce" .
 :Ce_CDS_cluster00400_NP_001251447 :source "CDS" .
 :Ce_CDS_cluster00400_NP_001251447 :homolog_species "Ce" .
-:Ce_CDS_cluster00400_NP_001251447 :homolog_species_full "Caenorhabditis elegans" .
+:Ce_CDS_cluster00400_NP_001251447 :homolog_species_full "[Ce_DNA]" .
 :Ce_CDS_cluster00400_NP_001251447 :homolog_gene "NP_001251447" .
-:Ce_CDS_cluster00400_NP_001251447 :descr "Protein CDC-26, isoform c  > Protein CDC-26, isoform c" .
+:Ce_CDS_cluster00400_NP_001251447 :descr "Protein CDC-26, isoform c  > Protein CDC-26, isoform cgi|392887062|ref|NP_001251447.1| [Ce_DNA] Parse" .
 :Ce_CDS_cluster00400_NP_001251447 :e_value 1.76535e-89 .
 
 """

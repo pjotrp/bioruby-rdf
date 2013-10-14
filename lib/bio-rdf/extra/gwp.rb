@@ -41,6 +41,8 @@ module BioRdf
             lines.each do | a |
               clusterid = name + '_' + cluster
               gene = a[1]
+              descr = a[2]
+      
               r = {}
               r[:id] = name + '_' + cluster + '_' + gene
               r[:cluster] = clusterid.to_sym
@@ -51,8 +53,14 @@ module BioRdf
               r[:homolog_species] = hfull.split.map { |w| w[0] }.join('')
               r[:homolog_species_full] = hfull
               r[:homolog_gene] = gene
-              r[:descr] = a[2]
+              r[:descr] = descr
               r[:e_value] = a[4].to_f
+              p "HERE",descr
+              if descr =~ /(\[(\S\S)_(DNA|CDS)\])/
+                r[:homolog_species_full] = $1
+                r[:homolog_species] = $2
+              end
+              # override species
               recs << r
             end
             recs
