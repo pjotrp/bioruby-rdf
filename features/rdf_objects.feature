@@ -8,6 +8,10 @@ Feature: Support RDF objects and validators
 
   Scenario: Create a RDF string literal
 
+    Given an RDF container
+    When I create a string literal
+    Then I should escape
+
   Scenario: Create a Turtle RDF URI
 
     Given an RDF container

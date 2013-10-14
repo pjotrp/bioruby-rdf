@@ -30,11 +30,12 @@ HEAD
 
       def Turtle::hash_to_rdf(h)
         rdf = ""
-        id = BioRdf::Turtle::mangle_identifier(h[:id])
+        id = h[:id]
+        turtle_id = BioRdf::Turtle::mangle_identifier(id)
         h.each do | k,v |
           if k != :id
             # Subject (mangled short hand notation)
-            rdf += ':'+id + ' '
+            rdf += ':'+turtle_id + ' '
             # Predicate
             if k.kind_of? String
               rdf += k
@@ -53,7 +54,7 @@ HEAD
             end
             rdf += " .\n"
           else
-            rdf += ':'+id + ' rdf:label "' + id + "\" .\n"
+            rdf += ':'+ turtle_id + ' rdf:label "' + id + "\" .\n"
           end
         end
         rdf
