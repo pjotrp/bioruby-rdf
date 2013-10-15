@@ -52,13 +52,12 @@ Caenorhabditis elegans\tNP_001251447\tProtein CDC-26, isoform c  > Protein CDC-2
 :Ce_CDS_cluster00400_NP_001251447 rdf:label "Ce_CDS_cluster00400_NP_001251447" .
 :Ce_CDS_cluster00400_NP_001251447 :cluster :Ce_CDS_cluster00400 .
 :Ce_CDS_cluster00400_NP_001251447 a :blast_match .
-:Ce_CDS_cluster00400_NP_001251447 :species "Ce" .
-:Ce_CDS_cluster00400_NP_001251447 :source "CDS" .
 :Ce_CDS_cluster00400_NP_001251447 :homolog_species "Ce" .
 :Ce_CDS_cluster00400_NP_001251447 :homolog_species_full "[Ce_DNA]" .
 :Ce_CDS_cluster00400_NP_001251447 :homolog_gene "NP_001251447" .
 :Ce_CDS_cluster00400_NP_001251447 :descr "Protein CDC-26, isoform c  > Protein CDC-26, isoform cgi|392887062|ref|NP_001251447.1| [Ce_DNA] Parse" .
 :Ce_CDS_cluster00400_NP_001251447 :e_value 1.76535e-89 .
+:Ce_CDS_cluster00400_NP_001251447 :homolog_source "DNA" .
 
 """
 

@@ -47,8 +47,8 @@ module BioRdf
               r[:id] = name + '_' + cluster + '_' + gene
               r[:cluster] = clusterid.to_sym
               r['a'] = :blast_match
-              r[:species] = species
-              r[:source] = type
+              # r[:species] = species
+              # r[:source] = type
               hfull = a[0]
               r[:homolog_species] = hfull.split.map { |w| w[0] }.join('')
               r[:homolog_species_full] = hfull
@@ -59,6 +59,7 @@ module BioRdf
               if descr =~ /(\[(\S\S)_(DNA|CDS)\])/
                 r[:homolog_species_full] = $1
                 r[:homolog_species] = $2
+                r[:homolog_source] = $3
               end
               # override species
               recs << r
