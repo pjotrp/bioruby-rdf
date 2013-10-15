@@ -6,6 +6,15 @@
 # ./scripts/sparql.sh sparql/extra/gwp/count_pos_sel_with_species_matches.rq |grep Mi_CDS_cluster00159|wc # should be 58
 # 
 # Expect: | Mi | CDS | Mi | DNA | Mi_CDS_cluster00159_Minc_Contig9_302> (46x)
+#
+# .---------------------------------------------------.
+# | ?species | ?source | ?hspecies | ?hsource | ?fams |
+# |----------+---------+-----------+----------+-------|
+# | Mh       | DNA     | Mi        | DNA      | 13    |
+# | Mi       | DNA     | Mh        | DNA      | 5     |
+# | Mi       | DNA     | Mi        | CDS      | 11    |
+# | Pp       | CDS     | Gp        | DNA      | 14    |
+# '---------------------------------------------------'
 
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
@@ -14,9 +23,8 @@ prefix hgnc: <http://identifiers.org/hgnc.symbol/>
 prefix doi: <http://dx.doi.org/>
 prefix : <http://biobeat.org/rdf/ns#> 
 
-# SELECT ?species ?source (COUNT(?name) AS ?num) WHERE 
-SELECT ?species ?source ?c ?hspecies ?hsource ?seq (COUNT(?cluster) AS ?fams) WHERE 
-# SELECT ?species ?source ?c ?hspecies ?hsource ?seq ?cluster WHERE 
+SELECT ?species ?source ?hspecies ?hsource (COUNT(?cluster) AS ?fams) WHERE 
+# SELECT ?species ?source ?hspecies ?hsource ?cluster WHERE 
 {
   {
     # Find all homolog sequences in cluster
@@ -26,8 +34,6 @@ SELECT ?species ?source ?c ?hspecies ?hsource ?seq (COUNT(?cluster) AS ?fams) WH
     ?seq :homolog_source ?hsource .
     ?seq :cluster ?cluster .
   # Find all families and species under pos sel 
-  }
-  {
     {
       ?fam :clusterid ?cluster .
       ?fam :species ?species .
@@ -35,9 +41,10 @@ SELECT ?species ?source ?c ?hspecies ?hsource ?seq (COUNT(?cluster) AS ?fams) WH
       ?fam :is_pos_sel true .
     }
   }
-  FILTER (!CONTAINS(?hsource,?source)) .
+  # FILTER (CONTAINS(?species,"Mi") && !CONTAINS(?hsource,?source)) .
+  # FILTER (!CONTAINS(?hsource,?source)) .
    # ?fam :clusterid ?c .
-# FILTER (?source != ?hsource && ?hspecies = ?species) .
+  FILTER (?source != ?hsource || ?hspecies != ?species) .
 # FILTER (?hspecies = ?species) .
 
   # OPTIONAL { ?seq :homolog_species_full ?hfull . }
@@ -46,5 +53,5 @@ SELECT ?species ?source ?c ?hspecies ?hsource ?seq (COUNT(?cluster) AS ?fams) WH
   # FILTER (?species = "Mi") .
   # FILTER (?species = "Mi" && ?species = ?hspecies && ?source != ?hsource) .
 }
-# GROUP by ?cluster
+GROUP by ?cluster
 # ORDER by ?species ?source 
