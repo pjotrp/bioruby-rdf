@@ -55,7 +55,7 @@ module BioRdf
               r[:homolog_gene] = gene
               r[:descr] = descr
               r[:e_value] = a[4].to_f
-              p "HERE",descr
+              # p "HERE",descr
               if descr =~ /(\[(\S\S)_(DNA|CDS)\])/
                 r[:homolog_species_full] = $1
                 r[:homolog_species] = $2
