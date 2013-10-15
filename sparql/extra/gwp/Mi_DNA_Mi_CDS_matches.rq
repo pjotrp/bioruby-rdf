@@ -1,0 +1,49 @@
+# List all Mi_DNA clusters that have Mi_CDS matches
+#
+# ./scripts/sparql.sh sparql/extra/gwp/Mi_DNA_Mi_CDS_matches.rq
+# 
+# | Mi       | CDS     | Mi        | DNA      | 65    |
+# 
+# :Mi_CDS_cluster00159_Minc_Contig9_302 rdf:label "Mi_CDS_cluster00159_Minc_Contig9_302" .
+# :Mi_CDS_cluster00159_Minc_Contig9_302 :cluster :Mi_CDS_cluster00159 .
+# :Mi_CDS_cluster00159_Minc_Contig9_302 a :blast_match .
+# :Mi_CDS_cluster00159_Minc_Contig9_302 :homolog_species "Mi" .
+# :Mi_CDS_cluster00159_Minc_Contig9_302 :homolog_species_full "[Mi_DNA]" .
+# :Mi_CDS_cluster00159_Minc_Contig9_302 :homolog_gene "Minc_Contig9_302" .
+# :Mi_CDS_cluster00159_Minc_Contig9_302 :descr " (REVERSE SENSE) 1 103534 cluster00757 [Mi_DNA]" .
+# :Mi_CDS_cluster00159_Minc_Contig9_302 :e_value 3.6509e-10 .
+# :Mi_CDS_cluster00159_Minc_Contig9_302 :homolog_source "DNA" .
+# 
+
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+prefix dc: <http://purl.org/dc/elements/1.1/>
+prefix hgnc: <http://identifiers.org/hgnc.symbol/>
+prefix doi: <http://dx.doi.org/>
+prefix : <http://biobeat.org/rdf/ns#> 
+
+# SELECT ?species ?source ?hspecies ?hsource (COUNT(?cluster) AS ?fams) WHERE 
+SELECT DISTINCT ?species ?source ?hspecies ?hsource ?gene ?cluster ?fam WHERE 
+{
+  {
+    # Find all homolog sequences in cluster
+    # ?seq :cluster :Mi_CDS_cluster00159 .
+    ?seq rdf:label "Mi_CDS_cluster00159_Minc_Contig9_302" .
+    ?seq a :blast_match .
+    ?seq :homolog_species ?hspecies .
+    ?seq :homolog_source ?hsource .
+    ?seq rdf:label ?gene .
+    ?seq :cluster ?cluster .
+    ?seq :homolog_gene "Minc_Contig9_302" .
+    {
+       ?fam :clusterid ?cluster .
+       ?fam :is_pos_sel ?is_pos .
+       ?fam :species ?species .
+       ?fam :source ?source .
+    }
+  }
+  FILTER (CONTAINS(?species,"Mi") && CONTAINS(?hspecies,"Mi") && CONTAINS(?source,"CDS") && CONTAINS(?hsource,"DNA") && ?is_pos) .
+  # FILTER (CONTAINS(?hspecies,"Mi") && CONTAINS(?hsource,"DNA")) .
+}
+# GROUP by ?cluster
+# ORDER by ?species ?source 
