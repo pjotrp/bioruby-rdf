@@ -22,7 +22,7 @@ cluster00400/results7-8.txt M7-8   -857.0   -850.8     12.4 ++   6 sites (206 AA
     And I should be able to output RDF
       """
 :Ce_CDS_cluster00400 rdf:label "Ce_CDS_cluster00400" .
-:Ce_CDS_cluster00400 :cluster :Ce_CDS_cluster00400 .
+:Ce_CDS_cluster00400 :clusterid :Ce_CDS_cluster00400 .
 :Ce_CDS_cluster00400 :model "M78" .
 :Ce_CDS_cluster00400 :species "Ce" .
 :Ce_CDS_cluster00400 :source "CDS" .

@@ -15,7 +15,7 @@ module BioRdf
               clusterid = name + '_' + cluster
               r = recs[cluster] = {}
               r[:id] = name + '_' + cluster
-              r[:cluster] = clusterid.to_sym
+              r[:clusterid] = clusterid.to_sym
               r[:model] = 'M78' if a[1] =~ /7/ 
               r[:species] = species
               r[:source] = type

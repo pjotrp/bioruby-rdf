@@ -17,17 +17,18 @@ prefix : <http://biobeat.org/rdf/ns#>
 SELECT ?species ?source ?hspecies ?hsource ?seq ?cluster WHERE 
 {
   # Find all families and species under pos sel
-  ?fam :cluster :Mi_CDS_cluster00159 .
+  # ?fam :cluster :Mi_CDS_cluster00159 .
 
   ?fam :is_pos_sel true .
   ?fam :species ?species .
   ?fam :source ?source .
   # Match Blast results in same cluster
+  ?seq a :blast_match .
   ?seq :cluster ?fam .
-  # ?seq a :blast_match .
-  ?seq :homolog_species ?hspecies .
+  # ?seq :homolog_species ?hspecies .
+
   # OPTIONAL { ?seq :homolog_species_full ?hfull . }
-  OPTIONAL { ?seq :homolog_source ?hsource . }
+  # OPTIONAL { ?seq :homolog_source ?hsource . }
   # ?seq :descr   ?descr .
   # ?id rdf:label ?name .
   # FILTER (?species = "Mi") .

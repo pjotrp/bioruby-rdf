@@ -14,7 +14,7 @@ Then /^for cluster (\d+)$/ do |arg1|
 end
 
 Then /^I should be able fetch the cluster :Ce_CDS_cluster(\d+)$/ do |arg1|
-  @recs['cluster00400'][:cluster].should == :Ce_CDS_cluster00400
+  @recs['cluster00400'][:clusterid].should == :Ce_CDS_cluster00400
 end
 
 Then /^I should be able to fetch the model 'M(\d+)\-(\d+)'$/ do |arg1, arg2|
