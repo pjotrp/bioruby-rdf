@@ -41,6 +41,7 @@ cluster00400/results7-8.txt M7-8   -857.0   -850.8     12.4 ++   6 sites (206 AA
     Given I have a textual BLAST result with name 'Ce_CDS' in 'cluster00400'  which contains
     """
 Caenorhabditis elegans\tNP_001251447\tProtein CDC-26, isoform c  > Protein CDC-26, isoform cgi|392887062|ref|NP_001251447.1| [Ce_DNA] Parse\t\t1.76535e-89
+Mi_CDS\tMinc19052c\tcluster00230\tlcl|Minc19052c\t3.75732e-28
     """
     Then I should be able fetch the Species name 'Ce'
     Then I should be able fetch the gene name 'NP_001251447'
@@ -60,5 +61,17 @@ Caenorhabditis elegans\tNP_001251447\tProtein CDC-26, isoform c  > Protein CDC-2
 :Ce_CDS_cluster00400_NP_001251447 :homolog_source "DNA" .
 
 """
+    And I should be able to output Mi CDS BLAST RDF
+      """
+:Ce_CDS_cluster00400_Minc19052c rdf:label "Ce_CDS_cluster00400_Minc19052c" .
+:Ce_CDS_cluster00400_Minc19052c :cluster :Ce_CDS_cluster00400 .
+:Ce_CDS_cluster00400_Minc19052c a :blast_match .
+:Ce_CDS_cluster00400_Minc19052c :homolog_species "Mi" .
+:Ce_CDS_cluster00400_Minc19052c :homolog_species_full "Mi_CDS" .
+:Ce_CDS_cluster00400_Minc19052c :homolog_gene "Minc19052c" .
+:Ce_CDS_cluster00400_Minc19052c :descr "cluster00230" .
+:Ce_CDS_cluster00400_Minc19052c :e_value 3.75732e-28 .
+:Ce_CDS_cluster00400_Minc19052c :homolog_source "CDS" .
 
+"""
 

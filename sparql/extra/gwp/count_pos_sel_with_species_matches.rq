@@ -23,12 +23,11 @@ SELECT ?species ?source ?cluster (COUNT(?seq) AS ?num) WHERE
   # Match Blast results in same cluster
   ?seq a :blast_match .
   ?seq :cluster ?cluster .
-  ?seq :species ?species2 .
-  ?seq :source ?source2 .
+  ?seq :homolog_species ?hspecies .
   # ?seq :descr   ?descr .
   # ?id rdf:label ?name .
   # FILTER (?species =  ?species2) .
-  FILTER (?source  != ?source2) .
+  FILTER (?species != ?hspecies) .
 }
 GROUP by ?cluster
-ORDER by ?species ?source 
+# ORDER by ?species ?source 

@@ -68,4 +68,7 @@ Then /^I should be able to output BLAST RDF$/ do |string|
   BioRdf::Writers::Turtle::Blast::to_rdf(@recs[0]).should == string
 end
 
+Then /^I should be able to output Mi CDS BLAST RDF$/ do |string|
+  BioRdf::Writers::Turtle::Blast::to_rdf(@recs[1]).should == string
+end
 
