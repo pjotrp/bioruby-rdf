@@ -35,7 +35,7 @@ SELECT ?species ?source ?c ?hspecies ?hsource ?seq (COUNT(?cluster) AS ?fams) WH
       ?fam :is_pos_sel true .
     }
   }
-  FILTER (CONTAINS(?species,"Mi") && !CONTAINS(?hsource,?source)) .
+  FILTER (!CONTAINS(?hsource,?source)) .
    # ?fam :clusterid ?c .
 # FILTER (?source != ?hsource && ?hspecies = ?species) .
 # FILTER (?hspecies = ?species) .
