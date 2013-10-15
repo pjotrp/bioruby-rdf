@@ -28,7 +28,7 @@ SELECT DISTINCT ?species ?source ?hspecies ?hsource ?gene ?cluster ?fam WHERE
   {
     # Find all homolog sequences in cluster
     # ?seq :cluster :Mi_CDS_cluster00159 .
-    ?seq rdf:label "Mi_CDS_cluster00159_Minc_Contig9_302" .
+    # ?seq rdf:label "Mi_CDS_cluster00159_Minc_Contig9_302" .
     ?seq a :blast_match .
     ?seq :homolog_species ?hspecies .
     ?seq :homolog_source ?hsource .
