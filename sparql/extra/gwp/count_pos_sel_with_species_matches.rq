@@ -5,7 +5,7 @@
 #
 # ./scripts/sparql.sh sparql/extra/gwp/count_pos_sel_with_species_matches.rq |grep Mi_CDS_cluster00159|wc # should be 58
 # 
-# Expect: | Mi | CDS | Mi | DNA | Mi_CDS_cluster00159_Minc_Contig9_302>
+# Expect: | Mi | CDS | Mi | DNA | Mi_CDS_cluster00159_Minc_Contig9_302> (46x)
 
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
@@ -15,21 +15,29 @@ prefix doi: <http://dx.doi.org/>
 prefix : <http://biobeat.org/rdf/ns#> 
 
 # SELECT ?species ?source (COUNT(?name) AS ?num) WHERE 
-# SELECT ?species ?source ?hspecies ?hsource ?cluster (COUNT(?seq) AS ?num) WHERE 
-SELECT DISTINCT ?species ?source ?hspecies ?hsource ?seq ?cluster2 WHERE 
+SELECT ?species ?source ?c ?hspecies ?hsource ?seq (COUNT(?cluster) AS ?fams) WHERE 
+# SELECT ?species ?source ?c ?hspecies ?hsource ?seq ?cluster WHERE 
 {
-  # Find all families and species under pos sel
-    ?fam :is_pos_sel true .
-    ?fam :species ?species .
-    ?fam :source ?source .
-    ?fam :species "Mi" .
-    # ?fam :clusterid ?cluster1 .
-    ?seq :cluster :Mi_CDS_cluster00159 .
+  {
+    # Find all homolog sequences in cluster
+    # ?seq :cluster :Mi_CDS_cluster00159 .
     ?seq a :blast_match .
     ?seq :homolog_species ?hspecies .
     ?seq :homolog_source ?hsource .
-    # ?seq :cluster ?cluster2 .
-FILTER (?source != ?hsource && ?hspecies = ?species) .
+    ?seq :cluster ?cluster .
+  # Find all families and species under pos sel 
+  }
+  {
+    {
+      ?fam :clusterid ?cluster .
+      ?fam :species ?species .
+      ?fam :source ?source .
+      ?fam :is_pos_sel true .
+    }
+  }
+  FILTER (CONTAINS(?species,"Mi") && !CONTAINS(?hsource,?source)) .
+   # ?fam :clusterid ?c .
+# FILTER (?source != ?hsource && ?hspecies = ?species) .
 # FILTER (?hspecies = ?species) .
 
   # OPTIONAL { ?seq :homolog_species_full ?hfull . }
