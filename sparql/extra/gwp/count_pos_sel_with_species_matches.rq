@@ -1,10 +1,17 @@
-# Count all clusters under positive selection that match against
-# same species
+# Count all sequences under positive selection that match
+# against species
 #
 # ./scripts/sparql.sh sparql/extra/gwp/count_pos_sel_with_species_matches.rq |grep Mi_CDS_cluster00159|wc # should be 48
 # 
 # Expect: | Mi | CDS | Mi | DNA | Mi_CDS_cluster00159_Minc_Contig9_302> (46x)
 #
+# | Ts       | DNA     | Ce        | CDS      | <http://biobeat.org/rdf/ns#Ts_DNA_cluster00035> | T21G5.5a                         |
+# | Ts       | DNA     | Ce        | CDS      | <http://biobeat.org/rdf/ns#Ts_DNA_cluster00035> | T21G5.5b                         |
+# | Ts       | DNA     | Ce        | CDS      | <http://biobeat.org/rdf/ns#Ts_DNA_cluster00035> | T21G5.5d                         |
+# | Ts       | DNA     | Mh        | CDS      | <http://biobeat.org/rdf/ns#Ts_DNA_cluster00256> | MhA1_Contig1146.frz3.gene3       |
+# | Ts       | DNA     | Mh        | CDS      | <http://biobeat.org/rdf/ns#Ts_DNA_cluster00256> | MhA1_Contig163.frz3.gene5        |
+# | Ts       | DNA     | Mh        | CDS      | <http://biobeat.org/rdf/ns#Ts_DNA_cluster00256> | MhA1_Contig2314.frz3.gene2       |
+# 
 # .---------------------------------------------------.
 # | ?species | ?source | ?hspecies | ?hsource | ?fams |
 # |----------+---------+-----------+----------+-------|
@@ -21,8 +28,8 @@ prefix hgnc: <http://identifiers.org/hgnc.symbol/>
 prefix doi: <http://dx.doi.org/>
 prefix : <http://biobeat.org/rdf/ns#> 
 
-# SELECT ?species ?source ?hspecies ?hsource (COUNT(?cluster) AS ?fams) WHERE 
-SELECT ?species ?source ?hspecies ?hsource ?cluster ?hgene WHERE 
+SELECT ?species ?source ?hspecies ?hsource ((COUNT(?fam)) AS ?fams) WHERE
+# SELECT ?species ?source ?hspecies ?hsource ?cluster ?hgene WHERE 
 {
   {
     # Find all homolog sequences in cluster
@@ -38,7 +45,8 @@ SELECT ?species ?source ?hspecies ?hsource ?cluster ?hgene WHERE
     ?fam :source ?source .
     ?fam :is_pos_sel true .
   }
-  FILTER (?hsource != ?source) .
+  FILTER (?hsource != ?source || ?species != ?hspecies) .
 }
-# GROUP by ?cluster
-# ORDER by ?species ?source 
+GROUP by ?species ?source ?hspecies ?hsource 
+# ORDER by ?species 
+# ORDER by ?species ?source ?hspecies ?hsource 
