@@ -1,9 +1,7 @@
 # Count all clusters under positive selection that match against
 # same species
 #
-# ~/opt/bin/sparql-query http://localhost:8000/sparql/ -p < sparql/extra/gwp/count_pos_sel_with_species_matches.rq
-#
-# ./scripts/sparql.sh sparql/extra/gwp/count_pos_sel_with_species_matches.rq |grep Mi_CDS_cluster00159|wc # should be 58
+# ./scripts/sparql.sh sparql/extra/gwp/count_pos_sel_with_species_matches.rq |grep Mi_CDS_cluster00159|wc # should be 48
 # 
 # Expect: | Mi | CDS | Mi | DNA | Mi_CDS_cluster00159_Minc_Contig9_302> (46x)
 #
@@ -23,8 +21,8 @@ prefix hgnc: <http://identifiers.org/hgnc.symbol/>
 prefix doi: <http://dx.doi.org/>
 prefix : <http://biobeat.org/rdf/ns#> 
 
-SELECT ?species ?source ?hspecies ?hsource (COUNT(?cluster) AS ?fams) WHERE 
-# SELECT ?species ?source ?hspecies ?hsource ?cluster WHERE 
+# SELECT ?species ?source ?hspecies ?hsource (COUNT(?cluster) AS ?fams) WHERE 
+SELECT ?species ?source ?hspecies ?hsource ?cluster ?hgene WHERE 
 {
   {
     # Find all homolog sequences in cluster
@@ -32,26 +30,15 @@ SELECT ?species ?source ?hspecies ?hsource (COUNT(?cluster) AS ?fams) WHERE
     ?seq a :blast_match .
     ?seq :homolog_species ?hspecies .
     ?seq :homolog_source ?hsource .
+    ?seq :homolog_gene ?hgene .
     ?seq :cluster ?cluster .
-  # Find all families and species under pos sel 
-    {
-      ?fam :clusterid ?cluster .
-      ?fam :species ?species .
-      ?fam :source ?source .
-      ?fam :is_pos_sel true .
-    }
+    # Find all families and species under pos sel 
+    ?fam :clusterid ?cluster .
+    ?fam :species ?species .
+    ?fam :source ?source .
+    ?fam :is_pos_sel true .
   }
-  # FILTER (CONTAINS(?species,"Mi") && !CONTAINS(?hsource,?source)) .
-  # FILTER (!CONTAINS(?hsource,?source)) .
-   # ?fam :clusterid ?c .
-  FILTER (?source != ?hsource || ?hspecies != ?species) .
-# FILTER (?hspecies = ?species) .
-
-  # OPTIONAL { ?seq :homolog_species_full ?hfull . }
-  # ?seq :descr   ?descr .
-  # ?id rdf:label ?name .
-  # FILTER (?species = "Mi") .
-  # FILTER (?species = "Mi" && ?species = ?hspecies && ?source != ?hsource) .
+  FILTER (?hsource != ?source) .
 }
-GROUP by ?cluster
+# GROUP by ?cluster
 # ORDER by ?species ?source 
