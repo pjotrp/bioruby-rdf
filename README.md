@@ -185,14 +185,20 @@ sparql-query, fetch the git repository and
 Example:
 
 ```sh
-./sparql-query http://localhost:8080/sparql/ 'SELECT * WHERE { ?s ?p ?o } LIMIT 10'
+./sparql-query "http://localhost:8080/sparql/" 'SELECT * WHERE { ?s ?p ?o } LIMIT 10'
   .--------------.
   | ?s | ?p | ?o |
   |----+----+----|
   '--------------'
 ```
 
-Empty result, if it is empty :). Note the final slash on the URL.
+Empty result, if it is empty :). Note the final slash on the URL. For
+4store you also may want to disable the 
+the soft-limit, e.g.
+
+```sh
+./sparql-query "http://localhost:8080/sparql/?soft-limit=-1" 'SELECT * WHERE { ?s ?p ?o } LIMIT 10'
+```
 
 ## Usage
 
