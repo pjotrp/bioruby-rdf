@@ -32,6 +32,17 @@ cluster00400/results7-8.txt M7-8   -857.0   -850.8     12.4 ++   6 sites (206 AA
 :Ce_CDS_cluster00400 :seq_size 206 .
 
 """
+    And I should be able to output RDF without pos. sel.
+"""
+:Ce_CDS_cluster00399 rdf:label "Ce_CDS_cluster00399" .
+:Ce_CDS_cluster00399 :clusterid :Ce_CDS_cluster00399 .
+:Ce_CDS_cluster00399 :model "M78" .
+:Ce_CDS_cluster00399 :species "Ce" .
+:Ce_CDS_cluster00399 :source "CDS" .
+:Ce_CDS_cluster00399 :lnL 5.3 .
+:Ce_CDS_cluster00399 :is_pos_sel false .
+
+"""
 
   @gwp2
   Scenario: Parse BLAST results

@@ -38,6 +38,10 @@ Then /^I should be able to output RDF$/ do |string|
   BioRdf::Writers::Turtle::Digest::to_rdf(@recs['cluster00400']).should == string
 end
 
+Then /^I should be able to output RDF without pos\. sel\.$/ do |string|
+  BioRdf::Writers::Turtle::Digest::to_rdf(@recs['cluster00399']).should == string
+end
+
 Given /^I have a textual BLAST result with name 'Ce_CDS' in 'cluster(\d+)'  which contains$/ do |arg1, string|
   string.gsub!(/\\t/,"\t")
   @recs = BioRdf::Extra::Parsers::GWP::Blast::parse('Ce_CDS','cluster00400',string)
