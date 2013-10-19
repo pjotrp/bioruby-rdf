@@ -49,7 +49,7 @@ end
 
 Then /^I should be able fetch the Species name 'Ce'$/ do
   @recs[0][:homolog_species].should == 'Ce'
-  @recs[0][:homolog_species_full].should == '[Ce_DNA]'
+  @recs[0][:homolog_species_full].should == 'Caenorhabditis elegans'
 end
 
 Then /^I should be able fetch the gene name 'NP_(\d+)'$/ do |arg1|
@@ -57,7 +57,7 @@ Then /^I should be able fetch the gene name 'NP_(\d+)'$/ do |arg1|
 end
 
 Then /^I should be able fetch the description 'Protein CDC\-(\d+)'$/ do |arg1|
-  @recs[0][:descr].should == "Protein CDC-26, isoform c  > Protein CDC-26, isoform cgi|392887062|ref|NP_001251447.1| [Ce_DNA] Parse"
+  @recs[0][:descr].should == "Protein CDC-26, isoform c  > Protein CDC-26, isoform cgi|392887062|ref|NP_001251447.1"
 end
 
 Then /^I should be able fetch the E\-value (\d+)\.(\d+)e\-(\d+)$/ do |arg1, arg2, arg3|
@@ -68,7 +68,12 @@ Then /^I should be able to output BLAST RDF$/ do |string|
   BioRdf::Writers::Turtle::Blast::to_rdf(@recs[0]).should == string
 end
 
-Then /^I should be able to output Mi CDS BLAST RDF$/ do |string|
+Then /^I should be able to output BLAST RDF from description$/ do |string|
   BioRdf::Writers::Turtle::Blast::to_rdf(@recs[1]).should == string
 end
+
+Then /^I should be able to output Mi CDS BLAST RDF$/ do |string|
+  BioRdf::Writers::Turtle::Blast::to_rdf(@recs[2]).should == string
+end
+
 

@@ -53,7 +53,11 @@ module BioRdf
               r[:homolog_species] = hfull.split.map { |w| w[0] }.join('')
               r[:homolog_species_full] = hfull
               r[:homolog_gene] = gene
-              r[:descr] = descr
+              if descr =~ /^cluster\d+/
+                r[:homolog_cluster] = (hfull+'_'+descr).to_sym
+              else
+                r[:descr] = descr
+              end
               r[:e_value] = a[4].to_f
               # p "HERE",descr
               if descr =~ /(\[(\S\S)_(DNA|CDS)\])/ or hfull =~ /((\S\S)_(DNA|CDS))/

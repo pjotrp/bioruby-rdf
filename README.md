@@ -172,8 +172,42 @@ To test for valid Turtle RDF rapper may help:
     
 Also visit http://localhost:8080/status/
 
-Command line SPARQL queries can be done with
-[sparql-query](https://github.com/pjotrp/sparql-query), which has 
+Load 4-store with a database through
+
+
+Load with
+
+  rdf=file.rdf
+  rapper -i turtle $rdf
+  uri=http://localhost:8080/data/http://biobeat.org/data/$rdf
+
+  curl -X DELETE $uri
+  curl -T $rdf -H 'Content-Type: application/x-turtle' $uri
+
+Again visit http://localhost:8080/status/
+
+Next
+
+  ~/opt/local/bin/sparql-query --pipe localhost:8000/sparql/ < test_gsea.rq
+
+Convert XML
+
+  xalan -xsl ~/Downloads/sparql-results-csv.xsl -in chr11_pos10.0_fdr0.10.xml
+
+~
+Useful headers
+
+# RDF output by bio-exominer https://github.com/pjotrp/bioruby-exominer
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix hgnc: <http://identifiers.org/hgnc.symbol/> .
+@prefix ncbigene: <https://www.google.nl/search?q=ncbi+gene+alias+> .
+@prefix : <http://biobeat.org/rdf/exominer/ns#>  .
+
+
+
+Command line SPARQL queries can be done with 4s-query and
+[sparql-query](https://github.com/pjotrp/sparql-query). The latter has 
 the advantage of generating readable (non-XML) output. To install 
 sparql-query, fetch the git repository and
 
