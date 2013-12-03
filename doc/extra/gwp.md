@@ -30,5 +30,7 @@ curl -T all.rdf -H 'Content-Type: application/x-turtle'  http://localhost:8000/d
 When pointing the browser at http://localhost:8000/status you should see at least
 X million triples imported.
 
-## Query 
+## Querying GWP RDF
+
+
 
