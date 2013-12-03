@@ -1,6 +1,8 @@
 # Count all sequences under positive selection that match
 # against species
 #
+# Run with
+#
 # ./scripts/sparql.sh sparql/extra/gwp/count_pos_sel_with_species_matches.rq |grep Mi_CDS_cluster00159|wc # should be 48
 # 
 # Expect: | Mi | CDS | Mi | DNA | Mi_CDS_cluster00159_Minc_Contig9_302> (46x)
