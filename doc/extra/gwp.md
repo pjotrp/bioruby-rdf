@@ -12,7 +12,15 @@ files.
 
 We parse this information and store the results in a triple-store to
 ease data exploration. The parsers that are used to generate RDF are stored in
-./lib/bio-rdf/extra/gwp. 
+./lib/bio-rdf/extra/gwp.
+
+The generated RDF can be viewed in the cucumber features, which are listed
+[https://github.com/pjotrp/bioruby-rdf/blob/master/features/extra/parse_gwp.feature](here).
+Essentially all clusters showing evidence of positive selection are listed by
+their cluster identifier. Separately, all genes that are included in some
+cluster and show homology to another cluster are listed by a gene identifier.
+The power of SPARQL allows us to do within species and between species
+comparisons of genes and their (putative) gene families.
 
 ## Loading RDF
 
