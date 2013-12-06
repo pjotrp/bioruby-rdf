@@ -38,7 +38,36 @@ curl -T all.rdf -H 'Content-Type: application/x-turtle'  http://localhost:8000/d
 When pointing the browser at http://localhost:8000/status you should see at least
 X million triples imported.
 
-## Querying GWP RDF
+## Querying GWP RDF with SPARQL
 
+In this section presents SPARQL queries available for the GWP triple store.
+With 4store these queries can be run using the script ./scripts/sparql.sh.
+This script uses sparql-query which has direct tabular output on the terminal.
+Alternatively you could use direct 4store SPARQL queries and transform the
+XML output with XSLT into tabular data or XHTML.
 
+All SPARQL queries are listed in ./sparql/extra/gwp. A query can be run
+with 
 
+```sh
+  ./scripts/sparql.sh query.rq
+```
+
+### Query for clusters under positive selection
+
+In the first query we simply count the number of clusters that show
+evidence of positive selection:
+
+```sparql
+  SELECT ?species ?source (COUNT(?name) AS ?num) WHERE 
+  { 
+    ?cluster :is_pos_sel true .
+    ?cluster :species ?species .
+    ?cluster :source ?source .
+  }
+  GROUP by ?species ?source
+  ORDER by ?species ?source
+```
+
+which picks out all ?cluster identifiers which have :is_pos_sel set
+to true. The full listing is in count_pos_sel.rq.
