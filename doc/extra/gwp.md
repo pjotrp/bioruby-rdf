@@ -55,7 +55,23 @@ with
 
 ### Query for clusters under positive selection
 
-In the first query we simply count the number of clusters that show
+In the first query we simply count the number of clusters and
+group them by species and source (where source may be CDS or EST
+sequences):
+
+```sparql
+  SELECT ?species ?source (COUNT(?cluster) AS ?num) WHERE 
+  { 
+    ?cluster :species ?species .
+    ?cluster :source ?source .
+  }
+  GROUP by ?species ?source
+  ORDER by ?species ?source
+```
+
+The full listing is in count.rq.
+
+Next we count the subset of clusters that show
 evidence of positive selection:
 
 ```sparql
@@ -70,4 +86,5 @@ evidence of positive selection:
 ```
 
 which picks out all ?cluster identifiers which have :is_pos_sel set
-to true. The full listing is in count_pos_sel.rq.
+to true. 
+The full listing is in count_pos_sel.rq.
