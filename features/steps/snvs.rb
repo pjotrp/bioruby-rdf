@@ -9,7 +9,7 @@ end
 
 Then /^using the description in http:\/\/varscan\.sourceforge\.net\/somatic\-calling\.html I should get RDF containing$/ do |string|
   rdf = BioRdf::Writers::Turtle::hash_to_rdf(@rec)
-  # print rdf
+  print rdf
   rdf.strip.should == string.strip
 end
 
