@@ -47,5 +47,34 @@ Feature: Parse single nucleotide variants (SNVs)
 """
     Then using the description in http://gmt.genome.wustl.edu/somatic-sniper/1.0.2/documentation.html I should get RDF containing
 """
-:varscan2_id1_ch17_3655022 :chr 17 .
+:somaticsniper_id1_ch17_63533065 :chr 17 .
+:somaticsniper_id1_ch17_63533065 :pos 63533065 .
+:somaticsniper_id1_ch17_63533065 :ref "C" .
+:somaticsniper_id1_ch17_63533065 :variant "Y" .
+:somaticsniper_id1_ch17_63533065 :normal "C" .
+:somaticsniper_id1_ch17_63533065 :somatic_score 45 .
+:somaticsniper_id1_ch17_63533065 :tumor_consensus_quality 80 .
+:somaticsniper_id1_ch17_63533065 :tumor_variant_quality 95 .
+:somaticsniper_id1_ch17_63533065 :tumor_mean_mapping_quality 37 .
+:somaticsniper_id1_ch17_63533065 :normal_consensus_quality 42 .
+:somaticsniper_id1_ch17_63533065 :normal_variant_quality 0 .
+:somaticsniper_id1_ch17_63533065 :normal_mean_mapping_quality 37 .
+:somaticsniper_id1_ch17_63533065 :depth_in_tumor 12 .
+:somaticsniper_id1_ch17_63533065 :depth_in_normal 5 .
+:somaticsniper_id1_ch17_63533065 :base_quality_reads_supporting_ref_in_tumor 51 .
+:somaticsniper_id1_ch17_63533065 :mapping_quality_reads_supporting_ref_in_tumor 37 .
+:somaticsniper_id1_ch17_63533065 :depth_of_reads_supporting_ref_in_tumor 6 .
+:somaticsniper_id1_ch17_63533065 :base_quality_reads_supporting_variant_in_tumor 60 .
+:somaticsniper_id1_ch17_63533065 :mapping_quality_reads_supporting_variant_in_tumor 37 .
+:somaticsniper_id1_ch17_63533065 :depth_of_reads_supporting_variant_in_tumor 6 .
+:somaticsniper_id1_ch17_63533065 :base_quality_reads_supporting_ref_in_normal 59 .
+:somaticsniper_id1_ch17_63533065 :mapping_quality_reads_supporting_ref_in_normal 37 .
+:somaticsniper_id1_ch17_63533065 :depth_of_reads_supporting_ref_in_normal 5 .
+:somaticsniper_id1_ch17_63533065 :base_quality_reads_supporting_variant_in_normal 0 .
+:somaticsniper_id1_ch17_63533065 :mapping_quality_reads_supporting_variant_in_normal 0 .
+:somaticsniper_id1_ch17_63533065 :depth_of_reads_supporting_variant_in_normal 0 .
+:somaticsniper_id1_ch17_63533065 rdf:label "somaticsniper_id1_ch17_63533065" .
+:somaticsniper_id1_ch17_63533065 :identifier "id1" .
+:somaticsniper_id1_ch17_63533065 :caller :somaticsniper .
+:somaticsniper_id1_ch17_63533065 :type :somatic .
 """
