@@ -31,13 +31,11 @@ module BioRdf
       # Depth of reads supporting variant(s) in normal
       # 17 63533065 C Y C 45  80  95  37  42  0 37  12  5 51  37  6 60  37  6 59  37 5 0 0 0
       FIELDS= { chr: :to_i, pos: :to_i, ref: :to_s, variant: :to_s,normal: :to_s,somatic_score: :to_i,tumor_consensus_quality: :to_i,tumor_variant_quality: :to_i, tumor_mean_mapping_quality: :to_i, normal_consensus_quality: :to_i, normal_variant_quality: :to_i, normal_mean_mapping_quality: :to_i, depth_in_tumor: :to_i, depth_in_normal: :to_i, base_quality_reads_supporting_ref_in_tumor: :to_i, mapping_quality_reads_supporting_ref_in_tumor: :to_i, depth_of_reads_supporting_ref_in_tumor: :to_i,  base_quality_reads_supporting_variant_in_tumor: :to_i, mapping_quality_reads_supporting_variant_in_tumor: :to_i, depth_of_reads_supporting_variant_in_tumor: :to_i,base_quality_reads_supporting_ref_in_normal: :to_i, mapping_quality_reads_supporting_ref_in_normal: :to_i, depth_of_reads_supporting_ref_in_normal: :to_i,base_quality_reads_supporting_variant_in_normal: :to_i, mapping_quality_reads_supporting_variant_in_normal: :to_i, depth_of_reads_supporting_variant_in_normal: :to_i,    }
-      #  [:chr,:pos,:ref,:variant,:ref_reads_in_normal,:variant_reads_in_normal,:variant_frequency_normal,:consensus_genotype_call_in_normal,:ref_reads_in_tumor,:variant_reads_in_tumor,:variant_frequency_tumor,:somatic_status,:type,:p_value_germline,:p_value_somatic,:tumor_reads1_plus,:tumor_reads1_minus,:tumor_reads2_plus,:tumor_reads2_minus,:normal_reads1_plus,:normal_reads1_minus,:normal_reads2_plus,:normal_reads2_minus]
       def SomaticSniper::parse(id,string)
         rec = {}
         values = string.strip.split(/\s+/)
-        p FIELDS
+        # p FIELDS
         FIELDS.keys.zip(values) do |a,b| 
-          p a,b
           rec[a] = b.send(FIELDS[a])
         end
         rec_id = 'somaticsniper_' + id + '_ch' + rec[:chr].to_s + '_' + rec[:pos].to_s
@@ -45,8 +43,6 @@ module BioRdf
         rec[:identifier] = id
         rec[:caller] = :somaticsniper
         rec[:type] = :somatic
-        # INTEGERS.each { |k| rec[k] = rec[k].to_i }
-        # FLOATS.each { |k| rec[k] = rec[k].to_f }
         rec
       end
     end
