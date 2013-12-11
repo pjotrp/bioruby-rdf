@@ -20,6 +20,8 @@ Given /^a textual output from somaticsniper which contains$/ do |string|
   
 end
 
+require 'bio-rdf/parsers/variant_calling/somaticsniper'
+
 Then /^using the description in http:\/\/gmt\.genome\.wustl\.edu\/somatic\-sniper\/(\d+)\.(\d+)\.(\d+)\/documentation\.html I should get RDF containing$/ do |arg1, arg2, arg3, string|
   rdf = BioRdf::Writers::Turtle::hash_to_rdf(@rec2)
   print rdf
