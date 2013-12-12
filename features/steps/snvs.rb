@@ -38,7 +38,7 @@ end
 
 Then /^I should get bamannotate RDF containing$/ do |string|
   rdf = BioRdf::Writers::Turtle::hash_to_rdf(@bamannotate_rec)
-  print rdf
+  # print rdf
   rdf.strip.should == string.strip
 end
 

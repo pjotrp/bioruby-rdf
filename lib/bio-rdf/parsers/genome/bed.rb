@@ -22,20 +22,20 @@ module BioRdf
       # blockSizes - A comma-separated list of the block sizes. The number of items in this list should correspond to blockCount.
       # blockStarts - A comma-separated list of block starts. All of the blockStart positions should be calculated relative to chromStart. The number of items in this list should correspond to blockCount.
       # 
-      FIELDS = { chr: :upcase, pos_start: :to_i, pos_end: :to_i, name: :to_s, score: :to_i, shade: :to_s,
-                 strand: :to_s, thick_start: :to_i, thick_end: :to_i, rgb: :to_s, count: :to_s, block_sizes: :to_s,
+      FIELDS = { chr: :upcase, pos_start: :to_i, pos_end: :to_i, name: :to_s, score: :to_i, 
+                 strand: :to_s, thick_start: :to_i, thick_end: :to_i, rgb: :to_s, count: :to_i, block_sizes: :to_s,
                  block_starts: :to_s }
       def Bed::parse(id,string)
         rec = {}
-        print string
-        values = string.strip.split(/\t/)
-        if values.size != 3 and values.size != 12
-          raise "Size problem (was #{values.size}, expected 3 or 12)"
+        values = string.strip.split(/\s/)
+        if values.size < 3 or values.size > 12
+          raise "Size problem (was #{values.size}, expected between 3 and 12 fields)"
         end
         FIELDS.keys.zip(values) do |a,b| 
-          rec[a] = b.send(fields[a]) if fields[a]
+          rec[a] = b.send(FIELDS[a]) if FIELDS[a]
         end
-        rec_id = 'bed_' + id + '_ch' + rec[:chr] + '_' + rec[:pos_start].to_s + ':' + rec[:pos_end].to_s
+        rec[:chr] = rec[:chr].sub(/^CHR/,"")
+        rec_id = 'bed_' + 'ch' + rec[:chr] + '_' + rec[:pos_start].to_s + '_' + rec[:pos_end].to_s
         rec[:id] = rec_id
         rec[:identifier] = id
         rec[:type] = :bed

@@ -13,8 +13,8 @@ module BioRdf
         aa_change: :to_s, pv_mean: :to_f, cov_mean: :to_f,  gene_name: :to_s,
         vartype: :to_s, in_1: :to_s,  in_2: :to_s,  cov_3: :to_i, cov_4: :to_i,
         pv_3: :to_i,  pv_4: :to_i,  fvc_3: :to_i, fvc_4: :to_i, rvc_3: :to_i,
-        rvc_4: :to_i, po_3: :to_i,  po_4: :to_i, pr_3: :to_i , pr_4: :to_i
-        ,calls_3: :to_s, calls_4: :to_s, ccds_id: :to_s, codon: :to_s, snp_id:
+        rvc_4: :to_i, po_3: :to_i,  po_4: :to_i, pr_3: :to_i , pr_4: :to_i, 
+        calls_3: :to_s, calls_4: :to_s, ccds_id: :to_s, codon: :to_s, snp_id:
         :to_s,  effect: :to_s, hgvs_t: :to_s,  hgvs_c: :to_s,  hgvs_p: :to_s,
         polyphen_s: :to_f,  polyphen_p: :to_f,  sift_s: :to_f,  sift_p: :to_f,
         gerp: :to_f, gerp_region: :to_s, grantham: :to_s,  high_freq: :to_s,
@@ -23,7 +23,7 @@ module BioRdf
       }
       def BamAnnotate::parse(id,string)
         rec = {}
-        print string
+        # print string
         values = string.strip.split(/\t/)
         if values.size == 4
           fields = FIELDS1
@@ -33,7 +33,7 @@ module BioRdf
           p values
           raise "Size problem (was #{values.size}, expected 46)"
         end
-        p fields
+        # p fields
         fields.keys.zip(values) do |a,b| 
           rec[a] = b.send(fields[a]) if fields[a]
         end
