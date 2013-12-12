@@ -78,3 +78,23 @@ Feature: Parse single nucleotide variants (SNVs)
 :somaticsniper_id1_ch17_63533065 :caller :somaticsniper .
 :somaticsniper_id1_ch17_63533065 :type :somatic .
 """
+
+
+  Scenario: Parse the output of bamannotate
+
+    Given a textual output from bamannotate which contains
+"""
+19  55798657  55798658  A/T_dom_BRSK1_pv:31,0
+"""
+    Then I should get bamannotate RDF containing
+"""
+:somaticsniper_id1_ch17_63533065 :chr 17 .
+"""
+    Given a textual output from bamannotate which contains
+"""
+19  55798658  1 A/T K103M 15.50 405.50  BRSK1 snv 0 1 533 278 0 31  0 0 0 86  0 0 100 69  ,=470|.=63  ,=172|.=20|t=8 6 NA  aAg/aTg novel missense_variant  ENST00000585418.1:c.308A>T  NA  ENSP00000467357.1:p.Lys103Met 0.96  probably d amaging 0.02  deleterious 4.290 3.735 95  NA  NA  ENSG00000160469 ENST00000585418 ENSP00000467357 19_60490470 REFSEQ _P= | UNIPROT=Q8TDC3 | REFSEQ_T= | GENE_DESC=BR serine/threonine kinase 1 [Source:HGNC Symbol;Acc:18994] | MIM_DESC= | UNIGENE=Hs.182081 | MIM_ID=
+"""
+    Then I should get bamannotate RDF containing
+"""
+:somaticsniper_id1_ch17_63533065 :chr 17 .
+"""
