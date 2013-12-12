@@ -11,7 +11,7 @@ Feature: Parse single nucleotide variants (SNVs)
 """
     Then using the description in http://varscan.sourceforge.net/somatic-calling.html I should get RDF containing
 """
-:varscan2_id1_ch17_3655022 :chr 17 .
+:varscan2_id1_ch17_3655022 :chr "17" .
 :varscan2_id1_ch17_3655022 :pos 3655022 .
 :varscan2_id1_ch17_3655022 :ref "C" .
 :varscan2_id1_ch17_3655022 :variant "T" .
@@ -47,7 +47,7 @@ Feature: Parse single nucleotide variants (SNVs)
 """
     Then using the description in http://gmt.genome.wustl.edu/somatic-sniper/1.0.2/documentation.html I should get RDF containing
 """
-:somaticsniper_id1_ch17_63533065 :chr 17 .
+:somaticsniper_id1_ch17_63533065 :chr "17" .
 :somaticsniper_id1_ch17_63533065 :pos 63533065 .
 :somaticsniper_id1_ch17_63533065 :ref "C" .
 :somaticsniper_id1_ch17_63533065 :variant "Y" .
@@ -82,17 +82,23 @@ Feature: Parse single nucleotide variants (SNVs)
 
   Scenario: Parse the output of bamannotate
 
-    Given a textual output from bamannotate which contains
+    Given a textual output from bamannotate which contains 
 """
-19  55798657  55798658  A/T_dom_BRSK1_pv:31,0
+19^I55798657^I55798658^IA/T_dom_BRSK1_pv:31,0
 """
     Then I should get bamannotate RDF containing
 """
-:somaticsniper_id1_ch17_63533065 :chr 17 .
+:bamannotate_id1_ch19_55798658 :chr "19" .
+:bamannotate_id1_ch19_55798658 :pos 55798658 .
+:bamannotate_id1_ch19_55798658 :descr "A/T_dom_BRSK1_pv:31,0" .
+:bamannotate_id1_ch19_55798658 rdf:label "bamannotate_id1_ch19_55798658" .
+:bamannotate_id1_ch19_55798658 :identifier "id1" .
+:bamannotate_id1_ch19_55798658 :caller :bamannotate .
+:bamannotate_id1_ch19_55798658 :type :somatic .
 """
-    Given a textual output from bamannotate which contains
+    Given a textual output from bamannotate which contains 
 """
-19  55798658  1 A/T K103M 15.50 405.50  BRSK1 snv 0 1 533 278 0 31  0 0 0 86  0 0 100 69  ,=470|.=63  ,=172|.=20|t=8 6 NA  aAg/aTg novel missense_variant  ENST00000585418.1:c.308A>T  NA  ENSP00000467357.1:p.Lys103Met 0.96  probably d amaging 0.02  deleterious 4.290 3.735 95  NA  NA  ENSG00000160469 ENST00000585418 ENSP00000467357 19_60490470 REFSEQ _P= | UNIPROT=Q8TDC3 | REFSEQ_T= | GENE_DESC=BR serine/threonine kinase 1 [Source:HGNC Symbol;Acc:18994] | MIM_DESC= | UNIGENE=Hs.182081 | MIM_ID=
+19^I55798658^I1^IA/T^IK103M^I15.50^I405.50^IBRSK1^Isnv^I0^I1^I533^I278^I0^I31^I0^I0^I0^I86^I0^I0^I100^I69^I,=470|.=63^I,=172|.=20|t=86^INA^IaAg/aTg^Inovel^Imissense_variant^IENST00000585418.1:c.308A>T^INA^IENSP00000467357.1:p.Lys103Met^I0.96^Iprobably damaging^I0.02^Ideleterious^I4.290^I3.735^I95^INA^INA^IENSG00000160469^IENST00000585418^IENSP00000467357^I19_60490470^IREFSEQ_P= | UNIPROT=Q8TDC3 | REFSEQ_T= | GENE_DESC=BR serine/threonine kinase 1 [Source:HGNCSymbol;Acc:18994] | MIM_DESC= | UNIGENE=Hs.182081 | MIM_ID= 
 """
     Then I should get bamannotate RDF containing
 """

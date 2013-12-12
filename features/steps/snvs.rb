@@ -31,14 +31,15 @@ end
 require 'bio-rdf/parsers/variant_calling/bamannotate'
 
 Given /^a textual output from bamannotate which contains$/ do |string|
-  @bamannotate_rec = BioRdf::Parsers::BamAnnotate.parse("id1",string)
+  @bamannotate_rec = BioRdf::Parsers::BamAnnotate.parse("id1",string.gsub("^I","\t"))
   # p @rec2
-  @bamannotate_rec[:id].should == "bamannotate_id1_ch19_55798657"
+  @bamannotate_rec[:id].should == "bamannotate_id1_ch19_55798658"
 end
 
 Then /^I should get bamannotate RDF containing$/ do |string|
   rdf = BioRdf::Writers::Turtle::hash_to_rdf(@bamannotate_rec)
-  # print rdf
+  print rdf
   rdf.strip.should == string.strip
 end
+
 
