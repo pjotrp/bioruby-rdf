@@ -102,5 +102,54 @@ Feature: Parse single nucleotide variants (SNVs)
 """
     Then I should get bamannotate RDF containing
 """
-:somaticsniper_id1_ch17_63533065 :chr 17 .
+:bamannotate_id1_ch19_55798658 :chr "19" .
+:bamannotate_id1_ch19_55798658 :pos 55798658 .
+:bamannotate_id1_ch19_55798658 :strand 1 .
+:bamannotate_id1_ch19_55798658 :na_change "A/T" .
+:bamannotate_id1_ch19_55798658 :aa_change "K103M" .
+:bamannotate_id1_ch19_55798658 :pv_mean 15.5 .
+:bamannotate_id1_ch19_55798658 :cov_mean 405.5 .
+:bamannotate_id1_ch19_55798658 :gene_name "BRSK1" .
+:bamannotate_id1_ch19_55798658 :vartype "snv" .
+:bamannotate_id1_ch19_55798658 :in_1 "0" .
+:bamannotate_id1_ch19_55798658 :in_2 "1" .
+:bamannotate_id1_ch19_55798658 :cov_3 533 .
+:bamannotate_id1_ch19_55798658 :cov_4 278 .
+:bamannotate_id1_ch19_55798658 :pv_3 0 .
+:bamannotate_id1_ch19_55798658 :pv_4 31 .
+:bamannotate_id1_ch19_55798658 :fvc_3 0 .
+:bamannotate_id1_ch19_55798658 :fvc_4 0 .
+:bamannotate_id1_ch19_55798658 :rvc_3 0 .
+:bamannotate_id1_ch19_55798658 :rvc_4 86 .
+:bamannotate_id1_ch19_55798658 :po_3 0 .
+:bamannotate_id1_ch19_55798658 :po_4 0 .
+:bamannotate_id1_ch19_55798658 :pr_3 100 .
+:bamannotate_id1_ch19_55798658 :pr_4 69 .
+:bamannotate_id1_ch19_55798658 :calls_3 ",=470|.=63" .
+:bamannotate_id1_ch19_55798658 :calls_4 ",=172|.=20|t=86" .
+:bamannotate_id1_ch19_55798658 :ccds_id "NA" .
+:bamannotate_id1_ch19_55798658 :codon "aAg/aTg" .
+:bamannotate_id1_ch19_55798658 :snp_id "novel" .
+:bamannotate_id1_ch19_55798658 :effect "missense_variant" .
+:bamannotate_id1_ch19_55798658 :hgvs_t "ENST00000585418.1:c.308A>T" .
+:bamannotate_id1_ch19_55798658 :hgvs_c "NA" .
+:bamannotate_id1_ch19_55798658 :hgvs_p "ENSP00000467357.1:p.Lys103Met" .
+:bamannotate_id1_ch19_55798658 :polyphen_s 0.96 .
+:bamannotate_id1_ch19_55798658 :polyphen_p 0.0 .
+:bamannotate_id1_ch19_55798658 :sift_s 0.02 .
+:bamannotate_id1_ch19_55798658 :sift_p 0.0 .
+:bamannotate_id1_ch19_55798658 :gerp 4.29 .
+:bamannotate_id1_ch19_55798658 :gerp_region "3.735" .
+:bamannotate_id1_ch19_55798658 :grantham "95" .
+:bamannotate_id1_ch19_55798658 :high_freq "NA" .
+:bamannotate_id1_ch19_55798658 :high_popu "NA" .
+:bamannotate_id1_ch19_55798658 :gene_id "ENSG00000160469" .
+:bamannotate_id1_ch19_55798658 :tran_id "ENST00000585418" .
+:bamannotate_id1_ch19_55798658 :prot_id "ENSP00000467357" .
+:bamannotate_id1_ch19_55798658 :ncbi36_hg18 "19_60490470" .
+:bamannotate_id1_ch19_55798658 :info "REFSEQ_P= | UNIPROT=Q8TDC3 | REFSEQ_T= | GENE_DESC=BR serine/threonine kinase 1 [Source:HGNCSymbol;Acc:18994] | MIM_DESC= | UNIGENE=Hs.182081 | MIM_ID=" .
+:bamannotate_id1_ch19_55798658 rdf:label "bamannotate_id1_ch19_55798658" .
+:bamannotate_id1_ch19_55798658 :identifier "id1" .
+:bamannotate_id1_ch19_55798658 :caller :bamannotate .
+:bamannotate_id1_ch19_55798658 :type :snp .
 """
