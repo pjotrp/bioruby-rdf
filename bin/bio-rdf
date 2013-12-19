@@ -60,6 +60,8 @@ case ARGV[0]
     require 'bio-rdf/extra/parsers_extra_options'
     BioRdf::Extra::Parsers::handle_options(options)
     exit 0
+  else
+    raise "Unknown command"
 end
 
 opts = OptionParser.new do |o|
