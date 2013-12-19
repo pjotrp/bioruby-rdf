@@ -19,7 +19,6 @@ module BioRdf
         fields.keys.zip(values) do |a,b| 
           rec[a] = b.send(fields[a]) if fields[a]
         end
-        p rec
         id = rec[:sample].gsub(/\.bam$/,'')
         rec[:sample] = id
         rec_id = 'codecz_' + id + '_ch' + rec[:chr].to_s + '_' + rec[:start].to_s

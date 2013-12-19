@@ -1,6 +1,7 @@
 require 'bio-rdf/parsers/variant_calling/varscan2'
 require 'bio-rdf/parsers/variant_calling/somaticsniper'
 require 'bio-rdf/parsers/variant_calling/bamannotate'
+require 'bio-rdf/parsers/copy_number/codecz'
 
 module BioRdf
   module Parsers
@@ -18,6 +19,10 @@ module BioRdf
 
       bio-rdf variant --id '/(T[^.]+)/' --caller varscan2 T_F3_20130618.pass
 
+    With Somatic-sniper form the ID from the file name using a regular expression:
+
+      bio-rdf variant --id '/(T[^.]+)/' --caller somaticsniper T_F3_20130618.pass
+
     With BamAnnotate form the ID from the file name using a regular expression:
 
       bio-rdf variant --id '/(T[^.]+)/' --caller bamannotate T_F3_20130618.inheritance.bed
@@ -30,7 +35,7 @@ module BioRdf
           opts = OptionParser.new() do |o|
             o.banner = "Usage: #{File.basename($0)} variant [options] filename(s)"
   
-            o.on("--caller type",[:varscan2,:somaticsniper,:bamannotate],"Use caller [varscan2|somaticsniper|bamannotate]") { | type |
+            o.on("--caller type",[:varscan2,:somaticsniper,:bamannotate,:codecz],"Specify caller [varscan2|somaticsniper|bamannotate|codecz]") { | type |
               options.caller = type
             }
 
@@ -88,6 +93,12 @@ EOH
                   when :bamannotate
                     next if count == 1
                     rec = BioRdf::Parsers::BamAnnotate.parse(id,s)
+                    rdf = BioRdf::Writers::Turtle::hash_to_rdf(rec)
+                    print rdf
+                    print "\n"
+                  when :codecz
+                    next if count == 1
+                    rec = BioRdf::Parsers::CoDeCZ.parse(s)
                     rdf = BioRdf::Writers::Turtle::hash_to_rdf(rec)
                     print rdf
                     print "\n"
