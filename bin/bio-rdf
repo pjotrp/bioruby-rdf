@@ -16,9 +16,10 @@ USAGE = <<EOP
 
   Valid commands reflect parser/outputters and are:
 
-    gsea   : Gene set enrichment analysis
-    pubmed : PubMed
-    extra  : Extra specialised parsers/outputters
+    gsea    : Gene set enrichment analysis
+    pubmed  : PubMed
+    variant : Somatic and copy number scoring (varscan2, somatic sniper etc.)
+    extra   : Extra specialised parsers/outputters
 
   For more information on a command use the --help switch
 
@@ -48,6 +49,11 @@ case ARGV[0]
   when 'pubmed'
     ARGV.shift
     BioRdf::Parsers::PubMed::Parser::handle_options
+    exit 0
+  when 'variant'
+    require 'bio-rdf/parsers/variant_calling/cli'
+    ARGV.shift
+    BioRdf::Parsers::Variant::Cli::handle_options
     exit 0
   when 'extra'
     ARGV.shift

@@ -32,6 +32,7 @@ Existing functionality:
 
 * [PubMed:Entrez](http://www.ncbi.nlm.nih.gov/sites/gquery) to table and RDF
 * [GSEA](http://www.broadinstitute.org/gsea/index.jsp), gene set enrichment analysis, to table and RDF
+* Somatic calling and copy number variation: varscan2, somatic sniper and more
 
 more information on that below.
 
@@ -117,6 +118,12 @@ store. E.g., the first exercise matches Arabidipsis Affy probe to gene ID mappin
 information, and fetches the matching nucleotide sequences via a shared TAIR ID.
 
 See [document](https://github.com/pjotrp/bioruby-rdf/blob/master/doc/r_biocondutor.md).
+
+### Somatic variant calling and copy number variation
+
+```bash
+  bio-rdf variant --help
+```
 
 ### More examples
 
