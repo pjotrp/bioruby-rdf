@@ -2,6 +2,7 @@ require 'bio-rdf/parsers/variant_calling/varscan2'
 require 'bio-rdf/parsers/variant_calling/somaticsniper'
 require 'bio-rdf/parsers/variant_calling/bamannotate'
 require 'bio-rdf/parsers/copy_number/codecz'
+require 'bio-rdf/parsers/genome/bed'
 
 module BioRdf
   module Parsers
@@ -35,7 +36,7 @@ module BioRdf
           opts = OptionParser.new() do |o|
             o.banner = "Usage: #{File.basename($0)} variant [options] filename(s)"
   
-            o.on("--caller type",[:varscan2,:somaticsniper,:bamannotate,:codecz],"Specify caller [varscan2|somaticsniper|bamannotate|codecz]") { | type |
+            o.on("--caller type",[:varscan2,:somaticsniper,:bamannotate,:codecz,:bed],"Specify caller [varscan2|somaticsniper|bamannotate|codecz|bed]") { | type |
               options.caller = type
             }
 
@@ -99,6 +100,11 @@ EOH
                   when :codecz
                     next if count == 1
                     rec = BioRdf::Parsers::CoDeCZ.parse(s)
+                    rdf = BioRdf::Writers::Turtle::hash_to_rdf(rec)
+                    print rdf
+                    print "\n"
+                  when :bed
+                    rec = BioRdf::Parsers::Bed.parse(id,s)
                     rdf = BioRdf::Writers::Turtle::hash_to_rdf(rec)
                     print rdf
                     print "\n"
