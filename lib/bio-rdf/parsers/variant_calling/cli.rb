@@ -48,6 +48,10 @@ module BioRdf
               options.regex = expr
             }
 
+            o.on("--tags tags",String,"Add tags to RDF") { |tags|
+              options.tags = tags
+            }
+
             o.on_tail("-h", "--help", "Show help and examples") {
               options.show_help = true
               print(o)
@@ -78,34 +82,40 @@ EOH
               end
               id = options.id_prefix + '_' + id if options.id_prefix 
 
+              tags = if options.tags 
+                       eval(options.tags)
+                     else
+                       {}
+                     end
+
               File.open(fn).each_line do |s|
                 count += 1
                 case options.caller
                   when :varscan2
                     rec = BioRdf::Parsers::Varscan2::ProcessSomatic.parse(id,s)
-                    rdf = BioRdf::Writers::Turtle::hash_to_rdf(rec)
+                    rdf = BioRdf::Writers::Turtle::hash_to_rdf(rec.merge(tags))
                     print rdf
                     print "\n"
                   when :somaticsniper
                     rec = BioRdf::Parsers::SomaticSniper.parse(id,s)
-                    rdf = BioRdf::Writers::Turtle::hash_to_rdf(rec)
+                    rdf = BioRdf::Writers::Turtle::hash_to_rdf(rec.merge(tags))
                     print rdf
                     print "\n"
                   when :bamannotate
                     next if count == 1
                     rec = BioRdf::Parsers::BamAnnotate.parse(id,s)
-                    rdf = BioRdf::Writers::Turtle::hash_to_rdf(rec)
+                    rdf = BioRdf::Writers::Turtle::hash_to_rdf(rec.merge(tags))
                     print rdf
                     print "\n"
                   when :codecz
                     next if count == 1
                     rec = BioRdf::Parsers::CoDeCZ.parse(s)
-                    rdf = BioRdf::Writers::Turtle::hash_to_rdf(rec)
+                    rdf = BioRdf::Writers::Turtle::hash_to_rdf(rec.merge(tags))
                     print rdf
                     print "\n"
                   when :bed
                     rec = BioRdf::Parsers::Bed.parse(id,s)
-                    rdf = BioRdf::Writers::Turtle::hash_to_rdf(rec)
+                    rdf = BioRdf::Writers::Turtle::hash_to_rdf(rec.merge(tags))
                     print rdf
                     print "\n"
                   else
