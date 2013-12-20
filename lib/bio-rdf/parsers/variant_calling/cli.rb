@@ -97,6 +97,7 @@ EOH
                 count += 1
                 case options.caller
                   when :varscan2
+                    next if s =~ /^chrom/
                     rec = BioRdf::Parsers::Varscan2::ProcessSomatic.parse(full_id,s)
                     rdf = BioRdf::Writers::Turtle::hash_to_rdf(rec.merge(tags))
                     print rdf
