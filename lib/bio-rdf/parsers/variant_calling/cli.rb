@@ -79,8 +79,13 @@ EOH
               if options.regex
                 fn =~ eval(options.regex) 
                 id = $1
+                raise "Regex not working for id #{fn} and "+options.regex if not id
               end
-              id = options.id_prefix + '_' + id if options.id_prefix 
+              full_id = if options.id_prefix 
+                          options.id_prefix + '_' + id 
+                        else
+                          id
+                        end
 
               tags = if options.tags 
                        eval(options.tags)
@@ -92,18 +97,18 @@ EOH
                 count += 1
                 case options.caller
                   when :varscan2
-                    rec = BioRdf::Parsers::Varscan2::ProcessSomatic.parse(id,s)
+                    rec = BioRdf::Parsers::Varscan2::ProcessSomatic.parse(full_id,s)
                     rdf = BioRdf::Writers::Turtle::hash_to_rdf(rec.merge(tags))
                     print rdf
                     print "\n"
                   when :somaticsniper
-                    rec = BioRdf::Parsers::SomaticSniper.parse(id,s)
+                    rec = BioRdf::Parsers::SomaticSniper.parse(full_id,s)
                     rdf = BioRdf::Writers::Turtle::hash_to_rdf(rec.merge(tags))
                     print rdf
                     print "\n"
                   when :bamannotate
                     next if count == 1
-                    rec = BioRdf::Parsers::BamAnnotate.parse(id,s)
+                    rec = BioRdf::Parsers::BamAnnotate.parse(full_id,s)
                     rdf = BioRdf::Writers::Turtle::hash_to_rdf(rec.merge(tags))
                     print rdf
                     print "\n"
@@ -114,7 +119,7 @@ EOH
                     print rdf
                     print "\n"
                   when :bed
-                    rec = BioRdf::Parsers::Bed.parse(id,s)
+                    rec = BioRdf::Parsers::Bed.parse(full_id,s)
                     rdf = BioRdf::Writers::Turtle::hash_to_rdf(rec.merge(tags))
                     print rdf
                     print "\n"
