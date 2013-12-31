@@ -1,0 +1,29 @@
+# List all clusters that have within dataset matches
+#
+# ./scripts/sparql.sh script.rq
+# 
+
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+prefix dc: <http://purl.org/dc/elements/1.1/>
+prefix hgnc: <http://identifiers.org/hgnc.symbol/>
+prefix doi: <http://dx.doi.org/>
+prefix : <http://biobeat.org/rdf/ns#> 
+
+SELECT ?cluster ?homolog_cluster ?hgene WHERE 
+{
+
+  ?cluster
+    :species "Mi" ;
+    :source "CDS" ;
+    :lnL ?lnl .
+  ?hgene
+    a :blast_match ;
+    :cluster ?cluster2 ;
+    :homolog_species_full "Mi_CDS" ;
+    :homolog_cluster ?cluster ;
+    rdf:label ?hname .
+  FILTER (CONTAINS(?hname,"Mi_CDS") && (?cluster != ?cluster2)) . 
+}
+# GROUP by ?cluster
+# ORDER by ?species ?source 

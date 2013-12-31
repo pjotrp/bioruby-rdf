@@ -3,7 +3,7 @@
 ## Introduction
 
 The GWP pipe-line searches evidence of evolutionary positive selection in gene
-families. The tools are run in a pipe-line and the results are in a tree of
+families. The tools are run in a pipeline and the results are in a tree of
 files. 
 
 # GWP RDF
