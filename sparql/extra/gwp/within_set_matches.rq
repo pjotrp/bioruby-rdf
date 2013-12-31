@@ -2,6 +2,7 @@
 #
 # ./scripts/sparql.sh script.rq
 # 
+# Match all within Mi CDS
 
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
@@ -10,7 +11,8 @@ prefix hgnc: <http://identifiers.org/hgnc.symbol/>
 prefix doi: <http://dx.doi.org/>
 prefix : <http://biobeat.org/rdf/ns#> 
 
-SELECT ?cluster ?homolog_cluster ?hgene WHERE 
+# SELECT DISTINCT ?cluster ?cluster2 WHERE 
+SELECT DISTINCT ?cluster WHERE 
 {
 
   ?cluster
@@ -23,7 +25,7 @@ SELECT ?cluster ?homolog_cluster ?hgene WHERE
     :homolog_cluster ?cluster ;  # match all genes in cluster
     :cluster ?cluster2 ;
     rdf:label ?hname .
-  # FILTER (CONTAINS(?hname,"Mi_CDS") && (?cluster != ?cluster2)) . 
+  FILTER (CONTAINS(?hname,"Mi_DNA") && (?cluster != ?cluster2)) . 
 }
 # GROUP by ?cluster
 # ORDER by ?species ?source 
