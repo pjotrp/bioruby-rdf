@@ -16,10 +16,12 @@
 #
 <%
    h=ENV['HASH'].split(',').map{ |s| s.split('=') }.to_h
+   # inputs
    species1 = h['species1']
    source1  = h['source1']
    species2 = h['species2']
    source2  = h['source2']
+   # options
    by_gene  = h['by_gene']
    paired   = h['paired']
 %>
