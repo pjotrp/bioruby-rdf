@@ -2,13 +2,22 @@
 #
 # ./scripts/sparql.sh script.rq
 # 
-# Match all within Mi CDS
+# Example match all within Mi CDS:
+#
+# env HASH="species1=Mi,source1=CDS,species2=Mi,source2=CDS" erb sparql/extra/gwp/within_set_matches.rq |~/opt/bin/sparql-query "http://localhost:8000/sparql/?soft-limit=-1" -p
+#
+
+<%
+   h=ENV['HASH'].split(',').map{ |s| s.split('=') }.to_h
+   species1 = h['species1']
+   source1  = h['source1']
+   species2 = h['species2']
+   source2  = h['source2']
+%>
 
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 prefix dc: <http://purl.org/dc/elements/1.1/>
-prefix hgnc: <http://identifiers.org/hgnc.symbol/>
-prefix doi: <http://dx.doi.org/>
 prefix : <http://biobeat.org/rdf/ns#> 
 
 # SELECT DISTINCT ?cluster ?cluster2 WHERE 
@@ -17,16 +26,16 @@ SELECT ?cluster ?cluster2 ?hgene WHERE
 {
 
   ?cluster
-    :species "Mi" ;
-    :source "CDS" ;
+    :species "<%= species1 %>" ;
+    :source "<%= source1 %>" ;
     :lnL ?lnl .
   ?hgene
     a :blast_match ;
-    :homolog_species_full "Mi_CDS" ;
+    :homolog_species_full "<%= species1+'_'+source1 %>" ;
     :homolog_cluster ?cluster ;  # match all genes in cluster
     :cluster ?cluster2 ;
     rdf:label ?hname .
-  FILTER (CONTAINS(?hname,"Mi_CDS") && (?cluster != ?cluster2)) . 
+  FILTER (CONTAINS(?hname,"<%= species2+'_'+source2 %>") && (?cluster != ?cluster2)) . 
 }
 # GROUP by ?cluster
 # ORDER by ?species ?source 
