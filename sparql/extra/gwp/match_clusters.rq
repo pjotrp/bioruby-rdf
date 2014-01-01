@@ -17,13 +17,14 @@
 <%
    h=ENV['HASH'].split(',').map{ |s| s.split('=') }.to_h
    # inputs
-   species1 = h['species1']
-   source1  = h['source1']
-   species2 = h['species2']
-   source2  = h['source2']
+   species1     = h['species1']
+   source1      = h['source1']
+   species2     = h['species2']
+   source2      = h['source2']
    # options
-   by_gene  = h['by_gene']
-   paired   = h['paired']
+   by_gene      = h['by_gene']
+   paired       = h['paired']
+   is_pos_sel   = h['is_pos_sel']
 %>
 
 <%= File.read(File.dirname(__FILE__)+'/preamble.rq')  %>
@@ -42,6 +43,7 @@
   ?cluster
     :species "<%= species1 %>" ;
     :source "<%= source1 %>" ;
+    <%= print ":is_pos_sel true ;" if is_pos_sel %>
     :lnL ?lnl .
   ?hgene
     a :blast_match ;
