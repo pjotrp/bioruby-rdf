@@ -2,17 +2,26 @@
 #
 # ./scripts/sparql.sh script.rq
 # 
-# Example match all within Mi CDS:
+# List all Mi CDS that have Mi DNA matches
 #
-# env HASH="species1=Mi,source1=CDS,species2=Mi,source2=CDS" erb sparql/extra/gwp/within_set_matches.rq |~/opt/bin/sparql-query "http://localhost:8000/sparql/?soft-limit=-1" -p
+#   env HASH="species1=Mi,source1=CDS,species2=Mi,source2=DNA" erb sparql/extra/gwp/within_set_matches.rq |~/opt/bin/sparql-query "http://localhost:8000/sparql/?soft-limit=-1" -p
 #
-
+# List all Mi CDS with matching DNA matches
+# 
+#   env HASH="paired=1,species1=Mi,source1=CDS,species2=Mi,source2=DNA" erb sparql/extra/gwp/within_set_matches.rq |~/opt/bin/sparql-query "http://localhost:8000/sparql/?soft-limit=-1" -p |sort
+#
+# List all DNA sequences matching Mi CDS
+#
+#   env HASH="by_gene=1,species1=Mi,source1=CDS,species2=Mi,source2=DNA" erb sparql/extra/gwp/within_set_matches.rq |~/opt/bin/sparql-query "http://localhost:8000/sparql/?soft-limit=-1" -p
+#
 <%
    h=ENV['HASH'].split(',').map{ |s| s.split('=') }.to_h
    species1 = h['species1']
    source1  = h['source1']
    species2 = h['species2']
    source2  = h['source2']
+   by_gene  = h['by_gene']
+   paired   = h['paired']
 %>
 
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
@@ -20,9 +29,15 @@ PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 prefix dc: <http://purl.org/dc/elements/1.1/>
 prefix : <http://biobeat.org/rdf/ns#> 
 
-# SELECT DISTINCT ?cluster ?cluster2 WHERE 
-SELECT ?cluster ?cluster2 ?hgene WHERE 
-# SELECT DISTINCT ?cluster WHERE 
+<% if not by_gene %>
+  <% if paired %>
+    SELECT DISTINCT ?cluster ?cluster2 WHERE 
+  <% else %>
+    SELECT DISTINCT ?cluster WHERE 
+  <% end %>
+<% else %>
+  SELECT ?cluster ?cluster2 ?hgene WHERE 
+<% end %>
 {
 
   ?cluster
