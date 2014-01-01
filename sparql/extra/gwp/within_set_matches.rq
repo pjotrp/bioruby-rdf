@@ -24,19 +24,16 @@
    paired   = h['paired']
 %>
 
-PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-prefix dc: <http://purl.org/dc/elements/1.1/>
-prefix : <http://biobeat.org/rdf/ns#> 
+<%= File.read(File.dirname(__FILE__)+'/preamble.rq')  %>
 
 <% if not by_gene %>
   <% if paired %>
-    SELECT DISTINCT ?cluster ?cluster2 WHERE 
+    SELECT DISTINCT ?cluster ?hcluster WHERE 
   <% else %>
     SELECT DISTINCT ?cluster WHERE 
   <% end %>
 <% else %>
-  SELECT ?cluster ?cluster2 ?hgene WHERE 
+  SELECT ?cluster ?hcluster ?hname WHERE 
 <% end %>
 {
 
@@ -46,11 +43,10 @@ prefix : <http://biobeat.org/rdf/ns#>
     :lnL ?lnl .
   ?hgene
     a :blast_match ;
-    :homolog_species_full "<%= species1+'_'+source1 %>" ;
+    :homolog_species "<%= species1 %>" ;
+    :homolog_source "<%= source1 %>" ;
     :homolog_cluster ?cluster ;  # match all genes in cluster
-    :cluster ?cluster2 ;
+    :cluster ?hcluster ;
     rdf:label ?hname .
-  FILTER (CONTAINS(?hname,"<%= species2+'_'+source2 %>") && (?cluster != ?cluster2)) . 
+    FILTER (CONTAINS(?hname,"<%= species2+'_'+source2 %>") && (?cluster != ?hcluster)) . 
 }
-# GROUP by ?cluster
-# ORDER by ?species ?source 
