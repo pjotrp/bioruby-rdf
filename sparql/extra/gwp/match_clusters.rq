@@ -4,15 +4,15 @@
 # 
 # List all Mi CDS that have Mi DNA matches
 #
-#   env HASH="species1=Mi,source1=CDS,species2=Mi,source2=DNA" erb sparql/extra/gwp/within_set_matches.rq |~/opt/bin/sparql-query "http://localhost:8000/sparql/?soft-limit=-1" -p
+#   env HASH="species1=Mi,source1=CDS,species2=Mi,source2=DNA" erb sparql/extra/gwp/match_clusters.rq |~/opt/bin/sparql-query "http://localhost:8000/sparql/?soft-limit=-1" -p
 #
 # List all Mi CDS with matching DNA matches
 # 
-#   env HASH="paired=1,species1=Mi,source1=CDS,species2=Mi,source2=DNA" erb sparql/extra/gwp/within_set_matches.rq |~/opt/bin/sparql-query "http://localhost:8000/sparql/?soft-limit=-1" -p |sort
+#   env HASH="paired=1,species1=Mi,source1=CDS,species2=Mi,source2=DNA" erb sparql/extra/gwp/match_clusters.rq |~/opt/bin/sparql-query "http://localhost:8000/sparql/?soft-limit=-1" -p |sort
 #
 # List all DNA sequences matching Mi CDS
 #
-#   env HASH="by_gene=1,species1=Mi,source1=CDS,species2=Mi,source2=DNA" erb sparql/extra/gwp/within_set_matches.rq |~/opt/bin/sparql-query "http://localhost:8000/sparql/?soft-limit=-1" -p
+#   env HASH="by_gene=1,species1=Mi,source1=CDS,species2=Mi,source2=DNA" erb sparql/extra/gwp/match_clusters.rq |~/opt/bin/sparql-query "http://localhost:8000/sparql/?soft-limit=-1" -p
 #
 <%
    h=ENV['HASH'].split(',').map{ |s| s.split('=') }.to_h
