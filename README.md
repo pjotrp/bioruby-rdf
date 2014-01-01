@@ -5,16 +5,29 @@
 Library and tools for using an RDF triple-store with biological data.  To work
 with RDF it is often necessary to parse some (tabular) data and output RDF.
 This repository contains a collection of functions to parse files and generate
-RDF, allowing one to store data into a triple store. The name includes RDF, but
-that really is too a narrow view of the purpose of this tool, unfortunately
-alternative names (bio-semweb and bio-triplestore) are even worse, so we'll
-stick to bio-rdf.
+RDF, allowing one to store data into a triple store. 
 
-At this point this library is very much a work in progress. Together with the
-[https://github.com/wstrinz/publisci](publisci) module by Will Strinz, we hope
-to get to a unified approach for data parsing and RDF output.
+There are some nuggets of gold to be found in this repository
 
-Here, first there are the parsers.  Every (native) data-type has a parser
+1. Generic data parsers and generic generators that churn out (Turtle) RDF
+2. bioruby-table as a tool for RDF generation from tabular data
+3. Command line SPARQL combined with ERB templating
+
+also
+
+4. Cucumber tests for RDF generation
+
+The name includes RDF, but that really is too a narrow view of the
+purpose of this tool, unfortunately alternative names (bio-semweb and
+bio-triplestore) are even worse, so we'll stick to bio-rdf.
+
+At this point this library is a work in progress. Together with the
+[https://github.com/wstrinz/publisci](publisci) module by Will Strinz,
+we aim to get to a unified approach for data parsing and RDF output.
+
+## Parsers
+
+First there are the parsers.  Every (native) data-type has a parser
 module. This parser module controls the parsing flow. The actual
 parsing is handled by lower level routines, which may even reside in
 other libraries, such as BioRuby. The basic flow is 
@@ -44,15 +57,15 @@ which is automatically installed by bio-rdf. Example:
 This project is linked with next generation sequencing, genome
 browsing, visualisation and QTL mapping.  E.g.
 
+* [biointerchange](https://github.com/BioInterchange/BioInterchange)
 * [bio-ngs](http://www.biogems.info/#bio-ngs)
 * [bio-bio-ucsc-api](http://www.biogems.info/#bio-ucsc-api)
 * [bio-qtlHD](http://www.biogems.info/#bio-qtlHD)
 
-Note: this software is under active development and will grow
-significantly over time! See also the [design
+See also the [design
 doc](https://github.com/pjotrp/bioruby-rdf/blob/master/doc/design.md).
 
-## Functionality
+## Parser functionality
 
 Existing bio-rdf parsers are listed on
 [github](https://github.com/pjotrp/bioruby-rdf/tree/master/lib/bio-rdf/parsers).
@@ -270,5 +283,5 @@ This Biogem is published at [#bio-rdf](http://biogems.info/index.html)
 
 ## Copyright
 
-Copyright (c) 2012 Pjotr Prins. See LICENSE.txt for further details.
+Copyright (c) 2012,2013,2014 Pjotr Prins. See LICENSE.txt for further details.
 
