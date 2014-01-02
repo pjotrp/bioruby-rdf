@@ -42,7 +42,7 @@
   MINUS  { ?hgene :homolog_species "<%= species %>" } .
 
   FILTER (STRSTARTS(?name,"<%= species+'_'+source %>") && !STRSTARTS(?hspecies_full,"<%= species %>"))
-  FILTER (!CONTAINS(?name,"_"+species.upcase+"C"))  # Skip Mi in ESTs using WORMBASE convention
+  FILTER (!CONTAINS(?name,"<%= '_'+species.upcase+'C' %>"))  # Skip Mi in ESTs using WORMBASE convention
 
   <% if species_blast %>
     # Species BLAST
