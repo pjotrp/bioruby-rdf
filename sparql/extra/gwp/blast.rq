@@ -11,6 +11,7 @@
    by_gene       = h['by_gene']       # list all genes
    is_pos_sel    = h['is_pos_sel']    # only include ps
    species_blast = h['species_blast'] # against species db
+   include_dna   = h['include_dna']
 %>
 
 <%= File.read(File.dirname(__FILE__)+'/preamble.rq')  %>
@@ -41,5 +42,19 @@
   MINUS  { ?hgene :homolog_species "<%= species %>" } .
 
   FILTER (STRSTARTS(?name,"<%= species+'_'+source %>") && !STRSTARTS(?hspecies_full,"<%= species %>"))
-  FILTER (!CONTAINS(?hspecies_full,"_DNA") && !CONTAINS(?hspecies_full,"_EST")) . 
+  FILTER (!CONTAINS(?name,"_"+species.upcase+"C"))  # Skip Mi in ESTs using WORMBASE convention
+
+  <% if species_blast %>
+    # Species BLAST
+    <% if include_dna %>
+      # With ORFs
+      FILTER (CONTAINS(?hspecies_full,"_DNA") || CONTAINS(?hspecies_full,"_EST") || CONTAINS(?hspecies_full,"_CDS")) . 
+    <% else %>
+      # Without ORFs
+      FILTER (CONTAINS(?hspecies_full,"_EST") || CONTAINS(?hspecies_full,"_CDS")) . 
+    <% end %>
+  <% else %>
+    # NR BLAST
+    FILTER (!CONTAINS(?hspecies_full,"_DNA") && !CONTAINS(?hspecies_full,"_EST")) . 
+  <% end %>
 }
