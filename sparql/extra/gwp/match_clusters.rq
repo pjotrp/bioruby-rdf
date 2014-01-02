@@ -25,6 +25,7 @@
    by_gene      = h['by_gene']
    paired       = h['paired']
    is_pos_sel   = h['is_pos_sel']
+   is_pos_sel2  = h['is_pos_sel2']
 %>
 
 <%= File.read(File.dirname(__FILE__)+'/preamble.rq')  %>
@@ -43,7 +44,7 @@
   ?cluster
     :species "<%= species1 %>" ;
     :source "<%= source1 %>" ;
-    <%= print ":is_pos_sel true ;" if is_pos_sel %>
+    <%= ':is_pos_sel true ;' if is_pos_sel %>
     :lnL ?lnl .
   ?hgene
     a :blast_match ;
@@ -53,4 +54,5 @@
     :cluster ?hcluster ;
     rdf:label ?hname .
     FILTER (CONTAINS(?hname,"<%= species2+'_'+source2 %>") && (?cluster != ?hcluster)) . 
+  <%= '?hcluster :is_pos_sel true .' if is_pos_sel2 %>
 }
