@@ -10,6 +10,7 @@
    # options
    by_gene       = h['by_gene']       # list all genes
    is_pos_sel    = h['is_pos_sel']    # only include ps
+   is_pos_sel2   = h['is_pos_sel2']
    species_blast = h['species_blast'] # against species db
    include_dna   = h['include_dna']
 %>
@@ -40,6 +41,11 @@
     :homolog_species_full ?hspecies_full .
   <%= '?cluster :is_pos_sel true .' if is_pos_sel %>
   MINUS  { ?hgene :homolog_species "<%= species %>" } .
+  
+  <% if is_pos_sel2 %>
+    ?hgene :homolog_cluster ?hcluster .
+    ?hcluster :is_pos_sel true .
+  <% end %>
 
   FILTER (STRSTARTS(?name,"<%= species+'_'+source %>") && !STRSTARTS(?hspecies_full,"<%= species %>"))
   FILTER (!CONTAINS(?name,"<%= '_'+species.upcase+'C' %>"))  # Skip Mi in ESTs using WORMBASE convention
