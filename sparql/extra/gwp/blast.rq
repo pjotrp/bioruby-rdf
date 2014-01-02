@@ -36,8 +36,8 @@
     rdf:label ?name ;
     :homolog_species ?hspecies ; 
     :homolog_species_full ?hspecies_full .
-  MINUS  { ?hgene :homolog_species "<%= species %>" } .
   <%= '?cluster :is_pos_sel true .' if is_pos_sel %>
+  MINUS  { ?hgene :homolog_species "<%= species %>" } .
 
   FILTER (STRSTARTS(?name,"<%= species+'_'+source %>") && !STRSTARTS(?hspecies_full,"<%= species %>")
     && !CONTAINS(?hspecies_full,"_DNA") && !CONTAINS(?hspecies_full,"_EST") ) . 
