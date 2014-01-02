@@ -8,8 +8,9 @@
    species     = h['species']
    source      = h['source']
    # options
-   by_gene      = h['by_gene']    # list all genes
-   is_pos_sel   = h['is_pos_sel'] # only include ps
+   by_gene       = h['by_gene']       # list all genes
+   is_pos_sel    = h['is_pos_sel']    # only include ps
+   species_blast = h['species_blast'] # against species db
 %>
 
 <%= File.read(File.dirname(__FILE__)+'/preamble.rq')  %>
@@ -39,6 +40,6 @@
   <%= '?cluster :is_pos_sel true .' if is_pos_sel %>
   MINUS  { ?hgene :homolog_species "<%= species %>" } .
 
-  FILTER (STRSTARTS(?name,"<%= species+'_'+source %>") && !STRSTARTS(?hspecies_full,"<%= species %>")
-    && !CONTAINS(?hspecies_full,"_DNA") && !CONTAINS(?hspecies_full,"_EST") ) . 
+  FILTER (STRSTARTS(?name,"<%= species+'_'+source %>") && !STRSTARTS(?hspecies_full,"<%= species %>"))
+  FILTER (!CONTAINS(?hspecies_full,"_DNA") && !CONTAINS(?hspecies_full,"_EST")) . 
 }
