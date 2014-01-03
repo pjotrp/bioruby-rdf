@@ -20,7 +20,7 @@
 <% if not by_gene %>
   SELECT DISTINCT ?cluster WHERE 
 <% else %>
-  SELECT ?cluster ?name ?hspecies ?hspecies_full ?hcluster WHERE 
+  SELECT ?cluster ?name ?hspecies ?hcluster ?hspecies_full ?descr WHERE 
 <% end %>
 {
 
@@ -41,19 +41,22 @@
     :homolog_species_full ?hspecies_full .
   <%= '?cluster :is_pos_sel true .' if is_pos_sel %>
   MINUS  { ?hgene :homolog_species "<%= species %>" } .
-  
+  <%= 'OPTIONAL { ?hgene :descr ?descr } .' if by_gene %>
+
+  # ---- Two-way positive selection
   <% if is_pos_sel2 %>
     ?hgene :homolog_cluster ?hcluster .
     ?hcluster :is_pos_sel true .
   <% end %>
 
   FILTER (STRSTARTS(?name,"<%= species+'_'+source %>") && !STRSTARTS(?hspecies_full,"<%= species %>"))
-  FILTER (!CONTAINS(?name,"<%= '_'+species.upcase+'C' %>"))  # Skip Mi in ESTs using WORMBASE convention
+  # ---- Skip species ESTs using WORMBASE convention
+  FILTER (!CONTAINS(?name,"<%= '_'+species.upcase+'C' %>"))  
 
   <% if species_blast %>
     # Species BLAST
     <% if include_dna %>
-      # With ORFs
+      # With ORFs (all)
       FILTER (CONTAINS(?hspecies_full,"_DNA") || CONTAINS(?hspecies_full,"_EST") || CONTAINS(?hspecies_full,"_CDS")) . 
     <% else %>
       # Without ORFs
