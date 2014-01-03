@@ -65,6 +65,9 @@ browsing, visualisation and QTL mapping.  E.g.
 See also the [design
 doc](https://github.com/pjotrp/bioruby-rdf/blob/master/doc/design.md).
 
+A list of important converters is at
+[W3C](http://www.w3.org/wiki/ConverterToRdf).
+
 ## Parser functionality
 
 Existing bio-rdf parsers are listed on
@@ -194,25 +197,30 @@ Also visit http://localhost:8080/status/
 
 Load 4-store with a database through
 
-
 Load with
 
+```sh
   rdf=file.rdf
   rapper -i turtle $rdf
   uri=http://localhost:8080/data/http://biobeat.org/data/$rdf
 
   curl -X DELETE $uri
   curl -T $rdf -H 'Content-Type: application/x-turtle' $uri
+```
 
 Again visit http://localhost:8080/status/
 
 Next
 
+```sh
   ~/opt/local/bin/sparql-query --pipe localhost:8000/sparql/ < test_gsea.rq
+```
 
 Convert XML
 
-  xalan -xsl ~/Downloads/sparql-results-csv.xsl -in chr11_pos10.0_fdr0.10.xml
+```sh
+  xalan -xsl ./scripts/sparql-results-csv.xsl -in chr11_pos10.0_fdr0.10.xml
+```
 
 ~
 Useful headers
