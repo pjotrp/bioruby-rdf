@@ -63,7 +63,7 @@
       FILTER (CONTAINS(?hspecies_full,"_EST") || CONTAINS(?hspecies_full,"_CDS")) . 
     <% end %>
   <% else %>
-    # NR BLAST
-    FILTER (!CONTAINS(?hspecies_full,"_DNA") && !CONTAINS(?hspecies_full,"_EST")) . 
+    # ---- Pure NR BLAST
+    FILTER (!CONTAINS(?hspecies_full,"_DNA") &&!CONTAINS(?hspecies_full,"_EST") && !CONTAINS(?hspecies_full,"_CDS")) . 
   <% end %>
 }
