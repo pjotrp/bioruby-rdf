@@ -213,13 +213,13 @@ Again visit http://localhost:8080/status/
 Next
 
 ```sh
-  ~/opt/local/bin/sparql-query --pipe localhost:8000/sparql/ < test_gsea.rq
+  ~/opt/local/bin/sparql-query --pipe localhost:8000/sparql/ < test_gsea.rq 
 ```
 
-Convert XML
+Convert XML with XSL to a comma separated file (CSV)
 
 ```sh
-  xalan -xsl ./scripts/sparql-results-csv.xsl -in chr11_pos10.0_fdr0.10.xml
+  xalan -xsl ./scripts/sparql-results-csv.xsl -in sparql-result.xml
 ```
 
 ~
