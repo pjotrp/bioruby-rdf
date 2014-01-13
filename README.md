@@ -233,7 +233,6 @@ Useful headers
 @prefix : <http://biobeat.org/rdf/exominer/ns#>  .
 
 
-
 Command line SPARQL queries can be done with 4s-query and
 [sparql-query](https://github.com/pjotrp/sparql-query). The latter has 
 the advantage of generating readable (non-XML) output. To install 
@@ -261,6 +260,11 @@ the soft-limit, e.g.
 ```sh
 ./sparql-query "http://localhost:8080/sparql/?soft-limit=-1" 'SELECT * WHERE { ?s ?p ?o } LIMIT 10'
 ```
+
+## SPARQL with ERB and parameters
+
+ERB can help reuse SPARQL queries. Here is an
+[example](https://github.com/pjotrp/bioruby-rdf/tree/master/sparql/variant_calling/varscan_freq_vs_coverage.rq).
 
 ## Usage
 
