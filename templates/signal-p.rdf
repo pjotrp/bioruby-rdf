@@ -1,0 +1,23 @@
+# Template for generating RDF triples from Signal-P output
+#
+# Convert signalP output to text with 
+#
+#   lynx --dump signal_p.html > signal_p.txt
+#
+# And create RDF with 
+#
+#   env INFILE=signal_p.txt erb templates/signal-p.rdf
+#
+# Example: :Minc12337 :signalP  true .
+
+<%= File.read(File.dirname(__FILE__)+'/preamble.rdf')  %>
+
+<%
+   File.open(ENV["INFILE"]).each_line do |line|
+     fields = line.split
+     if fields[9] == 'Y'
+       gene_id = fields.first
+%>
+  :<%= gene_id %>  :signalP   true .
+<%  end 
+  end %>
