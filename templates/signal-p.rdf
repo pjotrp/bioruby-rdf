@@ -20,6 +20,7 @@
      if fields[9] == 'Y'
        gene_id = fields.first
 %>
+  :<%= gene_id %>  :gene_name   "<%= gene_id %>" .
   :<%= gene_id %>  :signalP   true .
 <%  end 
   end %>
