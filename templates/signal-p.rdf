@@ -8,7 +8,9 @@
 #
 #   env INFILE=signal_p.txt erb templates/signal-p.rdf
 #
-# Example: :Minc12337 :signalP  true .
+# Example: 
+#
+#   :Minc12337 :signalP  true .
 
 <%= File.read(File.dirname(__FILE__)+'/preamble.rdf')  %>
 

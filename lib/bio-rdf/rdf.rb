@@ -52,13 +52,15 @@ module BioRdf
     # identifiers.
 
     def Turtle::mangle_identifier(s)
-      id = s.strip.gsub(/[^[:print:]]/, '').gsub(/[#)(,]/,"").gsub(/[%]/,"perc").gsub(/(\s|\.|\$|\/|\\)+/,"_")
+      id = s.strip.gsub(/[^[:print:]]/, '').gsub(/[#)(,]/,"").gsub(/[%]/,"perc").gsub(/(\s|\.|\$|\/|\\|\>)+/,"_")
       # id = URI::escape(id)
       id = id.gsub(/\|/,'_')
       id = id.gsub(/\-|:/,'_')
       if id != s 
-        logger = Bio::Log::LoggerPlus.new 'bio-rdf'
-        logger.warn "\nWARNING: Changed identifier <#{s}> to <#{id}>"
+        # Don't want Bio depency in templates!
+        # logger = Bio::Log::LoggerPlus.new 'bio-rdf'
+        # logger.warn "\nWARNING: Changed identifier <#{s}> to <#{id}>"
+        $stderr.print "\nWARNING: Changed identifier <#{s}> to <#{id}>"
       end
       if not RDF::valid_uri?(id)
         raise "Invalid URI after mangling <#{s}> to <#{id}>!"
