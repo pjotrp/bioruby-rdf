@@ -8,8 +8,12 @@
 SELECT ?cluster ?gene_name WHERE 
 # SELECT distinct ?cluster WHERE 
 {
-  ?gene    :signalP true .
-  ?gene    :gene_name ?gene_name .
-  ?geneid  :gene_name ?gene_name .
-  ?geneid  :cluster ?cluster .
+  ?id      :signalP true .
+  ?id      :gene_name ?gene_name .
+  ?id      :species ?species .
+  ?id      :source ?source .
+  ?id2     :gene_name ?gene_name .
+  ?id2     :species ?species .
+  ?id2     :source ?source .
+  ?id2     :cluster ?cluster .
 }

@@ -29,10 +29,14 @@
        (species,source) = gene.scan(/(\w\w)_(CDS|DNA|EST)/)[0]
        m = gene.match(/\.\w\w\w:(\S+)$/)
        gene = m[1] if m
+       # Look for transmembrame
+       loop = fields[3]
+       tm = loop.include?('i') and loop.include?('o')
 %>
   :<%= id %>  :gene_name   "<%= gene %>" .
   :<%= id %>  :species     "<%= species %>" .
   :<%= id %>  :source      "<%= source %>" .
-  :<%= id %>  :phobius   true .
+  :<%= id %>  :phobius     true .
+  :<%= id %>  :tm          <%= tm %> .
 <%  end 
   end %>
