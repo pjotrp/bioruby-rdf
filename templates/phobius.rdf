@@ -6,7 +6,17 @@
 #
 # Example: 
 #
+#   :Minc12337 :gene_name  "Minc12337" .
 #   :Minc12337 :phobius  true .
+#
+# Two possible input files exist, one native, one with grep filename prefixed:
+#
+#   EFV47125                        0  Y n6-16c21/22o
+#
+# or
+#
+#   Ts_CDS/phobius_Ts_CDS.tab:EFV47125                        0  Y n6-16c21/22o
+#   
 
 <%= File.read(File.dirname(__FILE__)+'/preamble.rdf')  %>
 
@@ -16,9 +26,13 @@
      if fields[2] == 'Y'
        gene = fields.first
        id = BioRdf::Turtle.mangle_identifier(gene)
-
+       (species,source) = gene.scan(/(\w\w)_(CDS|DNA|EST)/)[0]
+       m = gene.match(/\.\w\w\w:(\S+)$/)
+       gene = m[1] if m
 %>
   :<%= id %>  :gene_name   "<%= gene %>" .
+  :<%= id %>  :species     "<%= species %>" .
+  :<%= id %>  :source      "<%= source %>" .
   :<%= id %>  :phobius   true .
 <%  end 
   end %>

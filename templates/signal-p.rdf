@@ -8,19 +8,23 @@
 #
 #   env INFILE=signal_p.txt erb templates/signal-p.rdf
 #
-# Example: 
+# Input can be prepended by a filename (see also templates/phobius.rdf)
 #
-#   :Minc12337 :signalP  true .
-
 <%= File.read(File.dirname(__FILE__)+'/preamble.rdf')  %>
 
 <%
    File.open(ENV["INFILE"]).each_line do |line|
      fields = line.split
      if fields[9] == 'Y'
-       gene_id = fields.first
+       gene = fields.first
+       (species,source) = gene.scan(/(\w\w)_(CDS|DNA|EST)/)[0]
+       id = BioRdf::Turtle.mangle_identifier(gene)
+       m = gene.match(/\.\w\w\w:(\S+)$/)
+       gene = m[1] if m
 %>
-  :<%= gene_id %>  :gene_name   "<%= gene_id %>" .
-  :<%= gene_id %>  :signalP   true .
+  :<%= id %>  :gene_name   "<%= gene %>" .
+  :<%= id %>  :species     "<%= species %>" .
+  :<%= id %>  :source      "<%= source %>" .
+  :<%= id %>  :signalP   true .
 <%  end 
   end %>
