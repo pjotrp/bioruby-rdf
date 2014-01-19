@@ -1,0 +1,24 @@
+# Template for generating RDF triples from Signal-P output
+#
+# And create RDF with 
+#
+#   env INFILE=phobius.txt erb -r ./lib/bio-rdf/rdf templates/phobius.rdf
+#
+# Example: 
+#
+#   :Minc12337 :phobius  true .
+
+<%= File.read(File.dirname(__FILE__)+'/preamble.rdf')  %>
+
+<%
+   File.open(ENV["INFILE"]).each_line do |line|
+     fields = line.split
+     if fields[2] == 'Y'
+       gene = fields.first
+       id = BioRdf::Turtle.mangle_identifier(gene)
+
+%>
+  :<%= id %>  :gene_name   "<%= gene %>" .
+  :<%= id %>  :phobius   true .
+<%  end 
+  end %>
