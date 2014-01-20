@@ -6,8 +6,11 @@
 #
 # Example: 
 #
-#   :Minc12337 :gene_name  "Minc12337" .
-#   :Minc12337 :phobius  true .
+#   :Ts_CDS_phobius_Ts_CDS_tab_EFV51680  :gene_name     "EFV51680" .
+#   :Ts_CDS_phobius_Ts_CDS_tab_EFV51680  :species       "Ts" .
+#   :Ts_CDS_phobius_Ts_CDS_tab_EFV51680  :source        "CDS" .
+#   :Ts_CDS_phobius_Ts_CDS_tab_EFV51680  :phobius       true .
+#   :Ts_CDS_phobius_Ts_CDS_tab_EFV51680  :transmembrane false .
 #
 # Two possible input files exist, one native, one with grep filename prefixed:
 #
@@ -26,17 +29,18 @@
      if fields[2] == 'Y'
        gene = fields.first
        id = BioRdf::Turtle.mangle_identifier(gene)
+       # Get species and source from, e.g., 'Mi_CDS'
        (species,source) = gene.scan(/(\w\w)_(CDS|DNA|EST)/)[0]
        m = gene.match(/\.\w\w\w:(\S+)$/)
        gene = m[1] if m
        # Look for transmembrame
        loop = fields[3]
-       tm = loop.include?('i') and loop.include?('o')
+       transmembrane = loop.include?('i') and loop.include?('o')
 %>
-  :<%= id %>  :gene_name   "<%= gene %>" .
-  :<%= id %>  :species     "<%= species %>" .
-  :<%= id %>  :source      "<%= source %>" .
-  :<%= id %>  :phobius     true .
-  :<%= id %>  :tm          <%= tm %> .
+  :<%= id %>  :gene_name     "<%= gene %>" .
+  :<%= id %>  :species       "<%= species %>" .
+  :<%= id %>  :source        "<%= source %>" .
+  :<%= id %>  :phobius       true .
+  :<%= id %>  :transmembrane <%= transmembrane %> .
 <%  end 
   end %>
