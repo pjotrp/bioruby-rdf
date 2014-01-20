@@ -1,6 +1,6 @@
 # Gather all species/cluster/gene names in a text file with
 #
-#   grep '>' */cluster00*/ntpar.fa > gene_names.txt
+#   grep '>' */cluster*/ntpar.fa > gene_names.txt
 #
 # So each line contains for example
 #
@@ -15,7 +15,7 @@
 
 <%
    File.open(ENV["INFILE"]).each_line do |line|
-     match = /(\S\S)_([^\/]+?)\/([^\/]+)[^:]+:>+(.*)/.match(line)
+     match = /(\S\S)_([^\/]+?)\/([^\/]+)[^:]+:>+(\S*)/.match(line)
      species=match[1]
      source=match[2]
      cluster=match[3]
