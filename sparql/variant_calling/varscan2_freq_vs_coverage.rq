@@ -3,7 +3,7 @@
 #
 # (see also https://github.com/pjotrp/bioruby-rdf/blob/master/features/snvs.feature)
 #
-# env FILTER=_hc erb sparql/variant_calling/varscan_freq_vs_coverage.rq |~/opt/bin/sparql-query "http://localhost:8000/sparql/?soft-limit=1000" -p
+# env FILTER=_hc erb sparql/variant_calling/varscan2_freq_vs_coverage.rq |~/opt/bin/sparql-query "http://localhost:8000/sparql/?soft-limit=1000" -p
 # 
 
 <%
