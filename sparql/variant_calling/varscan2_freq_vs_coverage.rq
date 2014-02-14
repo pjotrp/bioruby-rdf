@@ -13,7 +13,7 @@
 <%= File.read(File.dirname(__FILE__)+'/preamble.rq')  %>
 
 # SELECT distinct ?id,?freq,(?ref_reads_in_tumor + ?variant_reads_in_tumor AS ?tumor_coverage),(?ref_reads_in_normal + ?variant_reads_in_normal AS ?normal_coverage) ?variant_reads_in_tumor ?variant_reads_in_normal WHERE
-SELECT distinct ?freq,(?ref_reads_in_tumor + ?variant_reads_in_tumor AS ?tumor_coverage),(?ref_reads_in_normal + ?variant_reads_in_normal AS ?normal_coverage) ?variant_reads_in_tumor ?variant_reads_in_normal WHERE
+SELECT distinct ?id,?freq,(?ref_reads_in_tumor + ?variant_reads_in_tumor AS ?tumor_coverage),(?ref_reads_in_normal + ?variant_reads_in_normal AS ?normal_coverage) ?variant_reads_in_tumor ?variant_reads_in_normal WHERE
 {
   ?mutation :caller :varscan2 .
   ?mutation rdf:label ?id .
@@ -23,7 +23,7 @@ SELECT distinct ?freq,(?ref_reads_in_tumor + ?variant_reads_in_tumor AS ?tumor_c
   ?mutation :variant_reads_in_tumor ?variant_reads_in_tumor .
   ?mutation :variant_frequency_tumor ?freq .
   # FILTER (CONTAINS(?id,"<%= filter %>")) .
-  MINUS { ?mutation :hc true } .
-  # OPTIONAL { ?mutation :hc ?hc } .
+  # MINUS { ?mutation :hc true } .
+  OPTIONAL { ?mutation :hc ?hc } .
   # FILTER (!BOUND(?hc)) .
 }
