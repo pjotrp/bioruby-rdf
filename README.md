@@ -193,7 +193,7 @@ To test for valid Turtle RDF rapper may help:
     rapper -i turtle file.rdf
 ```
     
-Also visit http://localhost:8080/status/
+Also visit http://localhost:8000/status/
 
 Load 4-store with a database through
 
@@ -202,13 +202,13 @@ Load with
 ```sh
   rdf=file.rdf
   rapper -i turtle $rdf
-  uri=http://localhost:8080/data/http://biobeat.org/data/$rdf
+  uri=http://localhost:8000/data/http://biobeat.org/data/$rdf
 
   curl -X DELETE $uri
   curl -T $rdf -H 'Content-Type: application/x-turtle' $uri
 ```
 
-Again visit http://localhost:8080/status/
+Again visit http://localhost:8000/status/
 
 Next
 
@@ -246,7 +246,7 @@ sparql-query, fetch the git repository and
 Example:
 
 ```sh
-./sparql-query "http://localhost:8080/sparql/" 'SELECT * WHERE { ?s ?p ?o } LIMIT 10'
+./sparql-query "http://localhost:8000/sparql/" 'SELECT * WHERE { ?s ?p ?o } LIMIT 10'
   .--------------.
   | ?s | ?p | ?o |
   |----+----+----|
@@ -258,7 +258,7 @@ Empty result, if it is empty :). Note the final slash on the URL. For
 the soft-limit, e.g.
 
 ```sh
-./sparql-query "http://localhost:8080/sparql/?soft-limit=-1" 'SELECT * WHERE { ?s ?p ?o } LIMIT 10'
+./sparql-query "http://localhost:8000/sparql/?soft-limit=-1" 'SELECT * WHERE { ?s ?p ?o } LIMIT 10'
 ```
 
 ## SPARQL with ERB and parameters
@@ -295,5 +295,5 @@ This Biogem is published at [#bio-rdf](http://biogems.info/index.html)
 
 ## Copyright
 
-Copyright (c) 2012,2013,2014 Pjotr Prins. See LICENSE.txt for further details.
+Copyright (c) 2012-2014 Pjotr Prins. See LICENSE.txt for further details.
 
