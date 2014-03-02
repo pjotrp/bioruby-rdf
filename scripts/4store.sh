@@ -1,9 +1,15 @@
 #! /bin/bash
 #
-#  Options
+#  4store.sh [-r|-d] dbname
+#
+#  Options:
 #
 #    -r     Restart server
 #    -d     Delete DB and restart server
+#
+#  Example:
+#
+#    ./scripts/4store.sh -d mydb   (possibly using root)
 
 if [ "$1" == "-r" ] ; then
   echo "Restarting"
