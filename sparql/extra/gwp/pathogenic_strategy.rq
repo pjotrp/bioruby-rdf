@@ -1,0 +1,32 @@
+# Cross reference pathogenic strategies, adaptive evolution and homology
+#
+#   env HASH="strategy=plant_pathogen,source=CDS" ./scripts/sparql.sh sparql/extra/gwp/pathogenic_strategy.rq 
+#
+#   env HASH="by_gene=1,species=Mi,source=CDS" erb sparql/extra/gwp/pathogenic_strategy.rq |~/opt/bin/sparql-query "http://localhost:8000/sparql/?soft-limit=1000" -p
+<%
+   h=ENV['HASH'].split(',').map{ |s| s.split('=') }.to_h
+   # inputs
+   source      = h['source']
+   strategy    = h['strategy']
+   is_pos_sel2   = h['is_pos_sel2']
+   include_dna   = h['include_dna']
+%>
+
+<%= File.read(File.dirname(__FILE__)+'/preamble.rq')  %>
+
+SELECT ?species ?name ?hspecies WHERE
+{
+  # All clusters under positive selection matching source and strategy
+  ?sid :species ?species .
+  ?sid :pathogenic_strategy ?strategy .
+  ?cluster :species ?species .
+  ?cluster :source ?source .
+  ?cluster :is_pos_sel true .
+  ?hgene
+    :cluster ?cluster ;
+    a :blast_match ;
+    rdf:label ?name ;
+    :homolog_species ?hspecies ; 
+    # :homolog_species_full ?hspecies_full .
+  MINUS  { ?hgene :homolog_species ?species } .
+}
