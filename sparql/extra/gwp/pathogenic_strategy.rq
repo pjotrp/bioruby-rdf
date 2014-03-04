@@ -14,7 +14,7 @@
 
 <%= File.read(File.dirname(__FILE__)+'/preamble.rq')  %>
 
-SELECT ?species ?name ?hspecies WHERE
+SELECT ?species ?name ?hspecies ?hstrategy WHERE
 {
   # All clusters under positive selection matching source and strategy
   ?sid :species ?species .
@@ -26,7 +26,11 @@ SELECT ?species ?name ?hspecies WHERE
     :cluster ?cluster ;
     a :blast_match ;
     rdf:label ?name ;
-    :homolog_species ?hspecies ; 
-    # :homolog_species_full ?hspecies_full .
-  MINUS  { ?hgene :homolog_species ?species } .
+    :homolog_species ?hspecies ;
+    :homolog_species_full ?hspecies_full .
+  FILTER (CONTAINS(?hspecies_full,"_CDS")) . 
+  # MINUS  { ?hgene :homolog_species ?species } .
+  ?hsid :species ?hspecies .
+  ?hsid :pathogenic_strategy ?hstrategy .
+  MINUS  { ?hsid :pathogenic_strategy ?strategy } .
 }
