@@ -1,0 +1,43 @@
+# Template for generating RDF triples from GSEA GMT files
+#
+#   env INFILE=c2.all.v3.0.symbols.gmt erb templates/gsea/gsea_gmt.rdf
+#
+# or
+#
+#   env INFILE=test/data/parsers/gsea/gsea_gmt_example.gmt erb templates/gsea/gsea_gmt.rdf
+#   
+# The generated RDF
+#
+#   :west_adrenocortical_tumor_markers_up  rdf:label  "WEST_ADRENOCORTICAL_TUMOR_MARKERS_UP"
+#   :west_adrenocortical_tumor_markers_up  :geneset  :true
+#   :west_adrenocortical_tumor_markers_up  :gene  "FGFR4"
+#   :west_adrenocortical_tumor_markers_up  :gene  "PRC1"
+#   :west_adrenocortical_tumor_markers_up  :gene  "CDC2"
+#   :west_adrenocortical_tumor_markers_up  :gene  "NEK2"
+#   etc.
+#   
+<%= File.read(File.dirname(__FILE__)+'/preamble.rdf')  %>
+
+<%
+   File.open(ENV["INFILE"]).each_line do |line|
+     fields = line.split
+     geneset = fields.shift
+     next if not geneset
+     id = geneset.downcase
+     url = fields.shift
+     cancer = id =~ /cancer|carcinoma/
+     breast = id =~ /breast/
+     ovarian = id =~ /ovarian/
+     kegg = id =~ /kegg/
+     pathway = id =~ /pathway/
+%>
+   :<%= id %>  rdf:label  "<%= geneset %>"
+   :<%= id %>  :geneset  :true
+   <% if kegg %>:<%= id %>  :kegg  :true<% end %>
+   <% if pathway %>:<%= id %>  :pathway  :true<% end %>
+   <% if cancer %>:<%= id %>  :cancer  :true<% end %>
+   <% if breast %>:<%= id %>  :breast  :true<% end %>
+   <% if ovarian %>:<%= id %> :ovarian  :true<% end %>
+   <% fields.each do | gene | %> :<%= id %>  :gene  "<%= gene %>"
+   <% end %>
+<%  end %>
