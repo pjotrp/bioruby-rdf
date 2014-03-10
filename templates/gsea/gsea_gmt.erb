@@ -1,0 +1,22 @@
+# Template for generating RDF triples from GSEA GMT files
+#
+#   env INFILE=c2.all.v3.0.symbols.gmt erb templates/gsea/gsea_gmt.rdf
+#
+<%= File.read(File.dirname(__FILE__)+'/preamble.rdf')  %>
+
+<%
+   File.open(ENV["INFILE"]).each_line do |line|
+     fields = line.split
+     if fields[9] == 'Y'
+       gene = fields.first
+       (species,source) = gene.scan(/(\w\w)_(CDS|DNA|EST)/)[0]
+       id = BioRdf::Turtle.mangle_identifier(gene)
+       m = gene.match(/\.\w\w\w:(\S+)$/)
+       gene = m[1] if m
+%>
+  :<%= id %>  :gene_name   "<%= gene %>" .
+  :<%= id %>  :species     "<%= species %>" .
+  :<%= id %>  :source      "<%= source %>" .
+  :<%= id %>  :signalP   true .
+<%  end 
+  end %>

@@ -123,6 +123,9 @@ To create a tab delimited file from a GSEA result, where FDR < 0.25
 You can convert the tabular format to RDF by using the included
 bioruby-table tool.
 
+To convert GMT input files to RDF use ./templates/gsea/gsea_gmt.erb.
+
+
 ### Mapping Affymetrix probes to sequence information, through R/Bioconductor
 
 [R/Bioconductor](http://www.bioconductor.org/) contains a lot of
