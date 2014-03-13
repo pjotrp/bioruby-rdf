@@ -9,7 +9,7 @@
 # The generated RDF
 #
 #   :west_adrenocortical_tumor_markers_up  rdf:label  "WEST_ADRENOCORTICAL_TUMOR_MARKERS_UP"
-#   :west_adrenocortical_tumor_markers_up  :geneset  :true
+#   :west_adrenocortical_tumor_markers_up  :geneset  true
 #   :west_adrenocortical_tumor_markers_up  :gene  "FGFR4"
 #   :west_adrenocortical_tumor_markers_up  :gene  "PRC1"
 #   :west_adrenocortical_tumor_markers_up  :gene  "CDC2"
@@ -33,12 +33,12 @@
      id = BioRdf::Turtle.mangle_identifier(id)
 %>
    :<%= id %>  rdf:label  "<%= geneset %>"
-   :<%= id %>  :geneset  :true
-   <% if kegg %>:<%= id %>  :kegg  :true<% end %>
-   <% if pathway %>:<%= id %>  :pathway  :true<% end %>
-   <% if cancer %>:<%= id %>  :cancer  :true<% end %>
-   <% if breast %>:<%= id %>  :breast  :true<% end %>
-   <% if ovarian %>:<%= id %> :ovarian  :true<% end %>
+   :<%= id %>  :geneset  true
+   <% if kegg %>:<%= id %>  :kegg  true<% end %>
+   <% if pathway %>:<%= id %>  :pathway  true<% end %>
+   <% if cancer %>:<%= id %>  :cancer  true<% end %>
+   <% if breast %>:<%= id %>  :breast  true<% end %>
+   <% if ovarian %>:<%= id %> :ovarian  true<% end %>
    <% fields.each do | gene | %> :<%= id %>  :gene  "<%= gene %>"
    <% end %>
 <%  end %>

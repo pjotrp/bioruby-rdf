@@ -4,12 +4,12 @@
 #
 # or
 #
-#   env INFILE=test/data/parsers/gsea/gsea_gmt_example.gmt erb -r ./lib/bio-rdf/rdf templates/gsea/gsea_gmt.rdf
-#   
+#   env INFILE=test/data/parsers/gsea/gsea_gmt_example.gmt erb -r ./lib/bio-rdf/rdf templates/gsea/gsea_gmt.rdf > test/data/regression/gsea/gsea_gmt_example.rdf
+# 
 # The generated RDF
 #
 #   :west_adrenocortical_tumor_markers_up  rdf:label  "WEST_ADRENOCORTICAL_TUMOR_MARKERS_UP"
-#   :west_adrenocortical_tumor_markers_up  :geneset  :true
+#   :west_adrenocortical_tumor_markers_up  :geneset  true
 #   :west_adrenocortical_tumor_markers_up  :gene  "FGFR4"
 #   :west_adrenocortical_tumor_markers_up  :gene  "PRC1"
 #   :west_adrenocortical_tumor_markers_up  :gene  "CDC2"
@@ -26,11 +26,11 @@
 
 
    :turashvili_breast_carcinoma_ductal_vs_lobular_up  rdf:label  "TURASHVILI_BREAST_CARCINOMA_DUCTAL_VS_LOBULAR_UP"
-   :turashvili_breast_carcinoma_ductal_vs_lobular_up  :geneset  :true
+   :turashvili_breast_carcinoma_ductal_vs_lobular_up  :geneset  true
    
    
-   :turashvili_breast_carcinoma_ductal_vs_lobular_up  :cancer  :true
-   :turashvili_breast_carcinoma_ductal_vs_lobular_up  :breast  :true
+   :turashvili_breast_carcinoma_ductal_vs_lobular_up  :cancer  true
+   :turashvili_breast_carcinoma_ductal_vs_lobular_up  :breast  true
    
     :turashvili_breast_carcinoma_ductal_vs_lobular_up  :gene  "S100P"
     :turashvili_breast_carcinoma_ductal_vs_lobular_up  :gene  "C20ORF114"
@@ -56,11 +56,11 @@
    
 
    :turashvili_breast_carcinoma_ductal_vs_lobular_dn  rdf:label  "TURASHVILI_BREAST_CARCINOMA_DUCTAL_VS_LOBULAR_DN"
-   :turashvili_breast_carcinoma_ductal_vs_lobular_dn  :geneset  :true
+   :turashvili_breast_carcinoma_ductal_vs_lobular_dn  :geneset  true
    
    
-   :turashvili_breast_carcinoma_ductal_vs_lobular_dn  :cancer  :true
-   :turashvili_breast_carcinoma_ductal_vs_lobular_dn  :breast  :true
+   :turashvili_breast_carcinoma_ductal_vs_lobular_dn  :cancer  true
+   :turashvili_breast_carcinoma_ductal_vs_lobular_dn  :breast  true
    
     :turashvili_breast_carcinoma_ductal_vs_lobular_dn  :gene  "ASPN"
     :turashvili_breast_carcinoma_ductal_vs_lobular_dn  :gene  "SEC24A"
@@ -72,11 +72,11 @@
    
 
    :turashvili_breast_lobular_carcinoma_vs_ductal_normal_up  rdf:label  "TURASHVILI_BREAST_LOBULAR_CARCINOMA_VS_DUCTAL_NORMAL_UP"
-   :turashvili_breast_lobular_carcinoma_vs_ductal_normal_up  :geneset  :true
+   :turashvili_breast_lobular_carcinoma_vs_ductal_normal_up  :geneset  true
    
    
-   :turashvili_breast_lobular_carcinoma_vs_ductal_normal_up  :cancer  :true
-   :turashvili_breast_lobular_carcinoma_vs_ductal_normal_up  :breast  :true
+   :turashvili_breast_lobular_carcinoma_vs_ductal_normal_up  :cancer  true
+   :turashvili_breast_lobular_carcinoma_vs_ductal_normal_up  :breast  true
    
     :turashvili_breast_lobular_carcinoma_vs_ductal_normal_up  :gene  "ASPN"
     :turashvili_breast_lobular_carcinoma_vs_ductal_normal_up  :gene  "GNA13"
@@ -149,7 +149,7 @@
    
 
    :white_neuroblastoma_with_1p36_3_deletion  rdf:label  "WHITE_NEUROBLASTOMA_WITH_1P36.3_DELETION"
-   :white_neuroblastoma_with_1p36_3_deletion  :geneset  :true
+   :white_neuroblastoma_with_1p36_3_deletion  :geneset  true
    
    
    
@@ -158,7 +158,7 @@
    
 
    :gdb_cards_white_neuroblastoma_with_1p36_3_deletion_html  rdf:label  "gdb/cards/WHITE_NEUROBLASTOMA_WITH_1P36.3_DELETION.html"
-   :gdb_cards_white_neuroblastoma_with_1p36_3_deletion_html  :geneset  :true
+   :gdb_cards_white_neuroblastoma_with_1p36_3_deletion_html  :geneset  true
    
    
    
