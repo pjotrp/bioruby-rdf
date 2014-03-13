@@ -1,11 +1,11 @@
 # Template for generating RDF triples from GSEA GMT files
 #
-#   env INFILE=c2.all.v3.0.symbols.gmt erb templates/gsea/gsea_gmt.rdf
+#   env INFILE=c2.all.v3.0.symbols.gmt erb -r ./lib/bio-rdf/rdf templates/gsea/gsea_gmt.rdf
 #
 # or
 #
-#   env INFILE=test/data/parsers/gsea/gsea_gmt_example.gmt erb templates/gsea/gsea_gmt.rdf
-#   
+#   env INFILE=test/data/parsers/gsea/gsea_gmt_example.gmt erb -r ./lib/bio-rdf/rdf templates/gsea/gsea_gmt.rdf > test/data/regression/gsea/gsea_gmt_example.rdf
+# 
 # The generated RDF
 #
 #   :west_adrenocortical_tumor_markers_up  rdf:label  "WEST_ADRENOCORTICAL_TUMOR_MARKERS_UP"
@@ -30,6 +30,7 @@
      ovarian = id =~ /ovarian/
      kegg = id =~ /kegg/
      pathway = id =~ /pathway/
+     id = BioRdf::Turtle.mangle_identifier(id)
 %>
    :<%= id %>  rdf:label  "<%= geneset %>"
    :<%= id %>  :geneset  :true
