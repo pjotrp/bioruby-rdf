@@ -8,7 +8,7 @@ $: << File.join(rootpath,'lib')
 
 version = File.new(File.join(rootpath,'VERSION')).read.chomp
 
-$stderr.print "bio-rdf #{version} by Pjotr Prins (c) 2012,2013\n"
+$stderr.print "bio-rdf #{version} by Pjotr Prins (c) 2012-2014\n"
 
 USAGE = <<EOP
 
