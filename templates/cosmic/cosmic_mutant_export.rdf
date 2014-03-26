@@ -1,0 +1,38 @@
+# Template for generating RDF triples from COSMIC mution data
+#
+#   env INFILE=CosmicMutantExportIncFus_v68.txt erb cosmic_mutant_export.rdf
+#
+<%= File.read(File.dirname(__FILE__)+'/preamble.rdf')  %>
+<%
+   File.open(ENV["INFILE"]).each_line do |line|
+     fields = line.split(/\t/)
+     next if fields.first == 'Gene name'
+     next if fields[13] == ''
+     if fields[10] !~ /silent/
+       gene = fields[0]
+       (chr,pos1) = fields[13].split(/:/)
+       next if not pos1
+       pos2 = pos1.split(/-/)
+       next if not pos2
+       pos = pos2[0]
+       cosmicid = fields[7]
+       id = 'cosmic'+cosmicid+'_'+chr+'_'+pos
+%>
+  :<%= id %>  :chr         "<%= chr %>" .
+  :<%= id %>  :pos         <%= pos %> .
+  :<%= id %>  :gene_name   "<%= gene %>" .
+  :<%= id %>  :type        :cosmic .
+  :<%= id %>  :cosmic      <%= cosmicid %> .
+  :<%= id %>  :nuc_mutation    "<%= fields[8] %>" .
+  :<%= id %>  :aa_mutation    "<%= fields[9] %>" .
+  :<%= id %>  :cancer      :<%= fields[3] %> .
+  :<%= id %>  :sample      "<%= fields[2] %>" .
+  :<%= id %>  :descr       "<%= fields[11]+' '+fields[10] %>" .
+  <% if fields[6]!='' and fields[6]!='NS' %>
+  :<%= id %>  :histology_subtype "<%= fields[6] %>" .
+  <% end %>
+  <% if fields[15] %>
+  :<%= id %>  :pmid "<%= fields[15] %>" .
+  <% end %>
+<%  end 
+  end %>
