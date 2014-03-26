@@ -10,7 +10,7 @@
      next if fields[13] == ''
      if fields[10] !~ /silent/
        gene = fields[0]
-       (chr,pos1) = fields[13].split(/:/)
+       (chr,pos1) = fields[13].split(/:/) if fields[13]
        next if not pos1
        pos2 = pos1.split(/-/)
        next if not pos2
@@ -25,7 +25,7 @@
   :<%= id %>  :cosmic      <%= cosmicid %> .
   :<%= id %>  :nuc_mutation    "<%= fields[8] %>" .
   :<%= id %>  :aa_mutation    "<%= fields[9] %>" .
-  :<%= id %>  :cancer      :<%= fields[3] %> .
+  :<%= id %>  :cancer      "<%= fields[3] %>" .
   :<%= id %>  :sample      "<%= fields[2] %>" .
   :<%= id %>  :descr       "<%= fields[11]+' '+fields[10] %>" .
   <% if fields[6]!='' and fields[6]!='NS' %>
