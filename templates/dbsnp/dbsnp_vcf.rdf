@@ -2,7 +2,8 @@
 #
 # First convert VCF to a table with, e.g.,
 #
-#   bio-vcf --eval '[rec.id,rec.chr,rec.pos,rec.alt,rec.info.sao,rec.info.CLNDBN].join("\t")' < clinvar_20140303.vcf > clinvar_20140303.tab
+#   bio-vcf --filter rec.info.geneinfo --eval '[rec.id,rec.chr,rec.pos,rec.info.sao,rec.info.CLNDBN,rec.info.geneinfo.split(/:/)[0]].join("\t")' < /export/data/MBC/clinvar_20140303.vcf > /export/data/MBC/clinvar_20140303.tab
+#   
 #
 # followed by
 #
@@ -16,7 +17,8 @@
      chr = fields[1]
      pos = fields[2]
      sao = fields[3]
-     descr = fields[4].strip
+     descr = fields[4].strip.gsub(/\\/,'')
+     gene = fields[5].chomp
      type = case sao
               when '1' then 'germline'
               when '2' then 'somatic'
@@ -29,6 +31,7 @@
 %>
   :<%= id %>  :chr         "<%= chr %>" .
   :<%= id %>  :pos         <%= pos %> .
+  :<%= id %>  :gene_name   "<%= gene %>" .
   :<%= id %>  :snpid       "<%= snpid %>" .
   :<%= id %>  :descr       "<%= descr %>" .
   <% if type %>

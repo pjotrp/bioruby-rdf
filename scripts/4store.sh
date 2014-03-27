@@ -45,3 +45,4 @@ fi
 4s-backend $dbname
 4s-httpd -p 8000 $dbname
 
+echo "http://localhost:8000/status/size"
