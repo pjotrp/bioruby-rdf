@@ -30,6 +30,10 @@ fi
 
 echo Starting DB $dbname
 
+ulimit -Sm 8000000
+ulimit -Sv 8000000
+ulimit -a
+
 if [ "$restart" == "1" ]; then
   killall 4s-httpd
   killall 4s-backend
