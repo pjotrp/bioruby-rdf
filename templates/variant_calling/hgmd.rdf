@@ -2,14 +2,33 @@
 #
 #   env INFILE=table.txt erb hgmd.rdf
 #
-<%= File.read(File.dirname(__FILE__)+'/preamble.rdf')  %>
+
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix hgnc: <http://identifiers.org/hgnc.symbol/> .
+@prefix : <http://biobeat.org/rdf/hgmd#> .
+
 <%
    File.open(ENV["INFILE"]).each_line do |line|
      next if line =~ /^(#|Chr)/
      fields = line.split(/\t/)
      chr = fields[0]
      pos = fields[1]
-     descr = fields[92]
+     ref = fields[3]
+     var = fields[6]
+     gene = fields[22]
+     vt = fields[91]
+     variant_type = 
+       if vt =~ /assoc/
+         'associated'
+       elsif vt =~ /caus/
+         'causal'
+       else
+         nil
+       end
+        
+     descr = fields[92].strip
      is_cancer = (descr =~ /cancer/i) != nil
      if is_cancer
        is_bc = (descr =~ /breast|ovar/i) != nil
@@ -19,8 +38,12 @@
   :<%= id %>  :chr         "<%= chr %>" .
   :<%= id %>  :pos         <%= pos %> .
   :<%= id %>  :id          "<%= id %>" .
+  :<%= id %>  :ref         "<%= ref %>" .
+  :<%= id %>  :var         "<%= var %>" .
+  :<%= id %>  :gene_name   "<%= gene %>" .
   :<%= id %>  :descr       "<%= descr %>" .
   :<%= id %>  :type        :hgmd .
   :<%= id %>  :cancer      <%= is_cancer %> .
   <% if is_cancer %> :<%= id %>  :breast_cancer      <%= is_bc %> . <% end %>
+  <% if variant_type %>:<%= id %>  :variant_type :<%= variant_type %> . <% end %>
 <% end %>
