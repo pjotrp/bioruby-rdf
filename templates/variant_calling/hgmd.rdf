@@ -1,0 +1,26 @@
+# Template for generating RDF triples from HGMD data
+#
+#   env INFILE=table.txt erb hgmd.rdf
+#
+<%= File.read(File.dirname(__FILE__)+'/preamble.rdf')  %>
+<%
+   File.open(ENV["INFILE"]).each_line do |line|
+     next if line =~ /^(#|Chr)/
+     fields = line.split(/\t/)
+     chr = fields[0]
+     pos = fields[1]
+     descr = fields[92]
+     is_cancer = (descr =~ /cancer/i) != nil
+     if is_cancer
+       is_bc = (descr =~ /breast|ovar/i) != nil
+     end
+     id = 'hgmd_'+chr+'_'+pos
+%>
+  :<%= id %>  :chr         "<%= chr %>" .
+  :<%= id %>  :pos         <%= pos %> .
+  :<%= id %>  :id          "<%= id %>" .
+  :<%= id %>  :descr       "<%= descr %>" .
+  :<%= id %>  :type        :hgmd .
+  :<%= id %>  :cancer      <%= is_cancer %> .
+  <% if is_cancer %> :<%= id %>  :breast_cancer      <%= is_bc %> . <% end %>
+<% end %>
