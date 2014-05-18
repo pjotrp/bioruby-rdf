@@ -1,0 +1,43 @@
+# Template for generating RDF triples from freebayes data
+#
+#   bio-vcf --filter rec.info.geneinfo --eval '[rec.id,rec.chr,rec.pos,rec.info.sao,rec.info.CLNDBN,rec.info.geneinfo.split(/:/)[0]].join("\t")' < /export/data/MBC/clinvar_20140303.vcf > /export/data/MBC/clinvar_20140303.tab
+#   
+#   bio-vcf -v --eval 'fields[0..4]+[r.info.sample]' --seval 's.dp' < germline_freebayes.vcf
+#
+# resulting in
+#
+#   10      101964404       .       G       A       MBC012R 20      18
+#   10      101977883       .       C       T       MBC003R 4       13
+#   (...)
+#   
+# followed by
+#
+#   env INFILE=table.txt erb freebayes.rdf
+#
+
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix hgnc: <http://identifiers.org/hgnc.symbol/> .
+@prefix : <http://biobeat.org/rdf/freebayes#> .
+
+<%
+   File.open(ENV["INFILE"]).each_line do |line|
+     next if line =~ /^(#|Chr)/
+     fields = line.split(/\t/)
+     chr = fields[0]
+     pos = fields[1]
+     ref = fields[3]
+     var = fields[4]
+     sample = fields[5]
+     id = 'freebayes_'+chr+'_'+pos+'_'+sample
+%>
+  :<%= id %>  :chr         "<%= chr %>" .
+  :<%= id %>  :pos         <%= pos %> .
+  :<%= id %>  :id          "<%= id %>" .
+  :<%= id %>  :ref         "<%= ref %>" .
+  :<%= id %>  :var         "<%= var %>" .
+  :<%= id %>  :sample      "<%= sample %>" .
+  :<%= id %>  :type        :freebayes .
+  :<%= id %>  :variant_type :germline .
+<% end %>
