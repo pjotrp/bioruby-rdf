@@ -19,8 +19,11 @@
      var = fields[6]
      gene = fields[22]
      vt = fields[91]
+     descr = fields[92].strip
      variant_type = 
-       if vt =~ /assoc/
+       if descr =~ /reduce/i
+         'reduced'
+       elsif vt =~ /assoc/
          'associated'
        elsif vt =~ /caus/
          'causal'
@@ -28,7 +31,6 @@
          nil
        end
         
-     descr = fields[92].strip
      is_cancer = (descr =~ /cancer/i) != nil
      if is_cancer
        is_bc = (descr =~ /breast|ovar/i) != nil
