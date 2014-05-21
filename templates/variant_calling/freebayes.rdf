@@ -2,7 +2,7 @@
 #
 #   bio-vcf --filter rec.info.geneinfo --eval '[rec.id,rec.chr,rec.pos,rec.info.sao,rec.info.CLNDBN,rec.info.geneinfo.split(/:/)[0]].join("\t")' < /export/data/MBC/clinvar_20140303.vcf > /export/data/MBC/clinvar_20140303.tab
 #   
-#   bio-vcf -v --eval 'fields[0..4]+[r.info.sample]' --seval 's.dp' < germline_freebayes.vcf
+#   bio-vcf -v --eval 'fields[0..4]+[r.info.sample[0..5]]' --seval 's.dp' < germline_freebayes.vcf
 #
 # resulting in
 #
