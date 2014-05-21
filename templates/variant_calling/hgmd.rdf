@@ -1,6 +1,7 @@
 # Template for generating RDF triples from HGMD data
 #
 #   env INFILE=table.txt erb hgmd.rdf
+#   env MVL=2 INFILE=MVL_P_LP_VOUS.txt erb hgmd.rdf
 #
 
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
@@ -10,6 +11,9 @@
 @prefix : <http://biobeat.org/rdf/hgmd#> .
 
 <%
+   type = "hgmd"
+   type = "mvl" if ENV["MVL"]
+
    File.open(ENV["INFILE"]).each_line do |line|
      next if line =~ /^(#|Chr)/
      fields = line.split(/\t/)
@@ -17,12 +21,19 @@
      pos = fields[1]
      ref = fields[3]
      var = fields[6]
+     dbsnp = fields[10]
+     dp = fields[17]
      gene = fields[22]
+     af_1000eu = fields[83]
      vt = fields[91]
      descr = fields[92].strip
      variant_type = 
        if descr =~ /reduce/i
          'reduced'
+       elsif vt =~ /likely disease causing/
+         'likely_causal'
+       elsif vt =~ /laborat/
+         'laboratory'
        elsif vt =~ /assoc/
          'associated'
        elsif vt =~ /caus/
@@ -35,16 +46,20 @@
      if is_cancer
        is_bc = (descr =~ /breast|ovar/i) != nil
      end
-     id = 'hgmd_'+chr+'_'+pos
+     id = type+'_'+chr+'_'+pos
 %>
   :<%= id %>  :chr         "<%= chr %>" .
   :<%= id %>  :pos         <%= pos %> .
   :<%= id %>  :id          "<%= id %>" .
   :<%= id %>  :ref         "<%= ref %>" .
   :<%= id %>  :var         "<%= var %>" .
+  :<%= id %>  :dp          <%= dp %> .
+  <% if dbsnp!="" %> :<%= id %>  :dbsnp          "<%= dbsnp %>" . <% end %>
+  <% if af_1000eu!="" %> :<%= id %>  :af          <%= af_1000eu %> . <% end %>
   :<%= id %>  :gene_name   "<%= gene %>" .
   :<%= id %>  :descr       "<%= descr %>" .
-  :<%= id %>  :type        :hgmd .
+  :<%= id %>  :vt          "<%= vt %>" .
+  :<%= id %>  :type        :<%= type %> .
   :<%= id %>  :cancer      <%= is_cancer %> .
   <% if is_cancer %> :<%= id %>  :breast_cancer      <%= is_bc %> . <% end %>
   <% if variant_type %>:<%= id %>  :variant_type :<%= variant_type %> . <% end %>
