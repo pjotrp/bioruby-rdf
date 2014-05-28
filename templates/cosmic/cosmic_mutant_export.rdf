@@ -16,20 +16,30 @@
        next if not pos2
        pos = pos2[0]
        cosmicid = fields[7]
+       nuc = fields[8]
+       ref = nuc[-3]
+       alt = nuc[-1]
+       descr = fields[3]
+       breast_cancer = true if descr =~ /breast/
+       cancer = true 
        id = 'cosmic'+cosmicid+'_'+chr+'_'+pos
 %>
-  :<%= id %>  :chr         "<%= chr %>" .
-  :<%= id %>  :pos         <%= pos %> .
-  :<%= id %>  :gene_name   "<%= gene %>" .
-  :<%= id %>  :type        :cosmic .
-  :<%= id %>  :cosmic      <%= cosmicid %> .
-  :<%= id %>  :nuc_mutation    "<%= fields[8] %>" .
-  :<%= id %>  :aa_mutation    "<%= fields[9] %>" .
-  :<%= id %>  :cancer      "<%= fields[3] %>" .
-  :<%= id %>  :sample      "<%= fields[2] %>" .
-  :<%= id %>  :descr       "<%= fields[11]+' '+fields[10] %>" .
+  :<%= id %>  seq:chr         "<%= chr %>" .
+  :<%= id %>  seq:pos         <%= pos %> .
+  :<%= id %>  seq:ref         "<%= ref %>" .
+  :<%= id %>  seq:alt         "<%= alt %>" .
+  :<%= id %>  seq:gene_name   "<%= gene %>" .
+  :<%= id %>  db:id        :cosmic .
+  :<%= id %>  cosmic:id      "COSM<%= cosmicid %>" .
+  :<%= id %>  cosmic:nuc_mutation    "<%= nuc %>" .
+  :<%= id %>  cosmic:aa_mutation    "<%= fields[9] %>" .
+  :<%= id %>  annotate:cancer         true .
+  <% if breast_cancer %>:<%= id %>  annotate:breast_cancer  true .<% end %>
+  :<%= id %>  cosmic:sample      "<%= fields[2] %>" .
+  :<%= id %>  cosmic:descr       "<%= fields[11]+' '+fields[10] %>" .
+  :<%= id %>  disease:descr      "<%= descr %> cancer" .
   <% if fields[6]!='' and fields[6]!='NS' %>
-  :<%= id %>  :histology_subtype "<%= fields[6] %>" .
+  :<%= id %>  cosmic:subtype "<%= fields[6] %>" .
   <% end %>
   <% if fields[15] %>
   :<%= id %>  :pmid "<%= fields[15] %>" .
