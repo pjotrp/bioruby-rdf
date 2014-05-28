@@ -47,6 +47,8 @@
        is_bc = (descr =~ /breast|ovar/i) != nil
      end
      id = type+'_'+chr+'_'+pos
+     descr = nil if descr and descr.strip == ''
+     vt = nil if vt and vt.strip == ''
 %>
   :<%= id %>  :chr         "<%= chr %>" .
   :<%= id %>  :pos         <%= pos %> .
@@ -57,8 +59,8 @@
   <% if dbsnp!="" %> :<%= id %>  :dbsnp          "<%= dbsnp %>" . <% end %>
   <% if af_1000eu!="" %> :<%= id %>  :af          <%= af_1000eu %> . <% end %>
   :<%= id %>  :gene_name   "<%= gene %>" .
-  :<%= id %>  :descr       "<%= descr %>" .
-  :<%= id %>  :vt          "<%= vt %>" .
+  <% if descr %>:<%= id %>  :descr       "<%= descr %>" .<% end %>
+  <% if vt %>:<%= id %>  :vt          "<%= vt %>" .<% end %>
   :<%= id %>  :type        :<%= type %> .
   :<%= id %>  :cancer      <%= is_cancer %> .
   <% if is_cancer %> :<%= id %>  :breast_cancer      <%= is_bc %> . <% end %>

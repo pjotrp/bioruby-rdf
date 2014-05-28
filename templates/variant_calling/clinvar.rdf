@@ -1,24 +1,36 @@
-# Template for generating RDF triples from dbsnp VCF 
+# Template for generating RDF triples from Clinvar VCF 
 #
 # First convert VCF to a table with, e.g.,
 #
-#   bio-vcf --filter rec.info.geneinfo --eval '[rec.id,rec.chr,rec.pos,rec.info.sao,rec.info.CLNDBN,rec.info.geneinfo.split(/:/)[0]].join("\t")' < /export/data/MBC/clinvar_20140303.vcf > /export/data/MBC/clinvar_20140303.tab
-#   
+#   time ~/izip/git/opensource/ruby/bioruby-vcf/bin/bio-vcf --skip-header --filter rec.info.geneinfo --eval '[rec.id,rec.chr,rec.pos,rec.ref,rec.alt[0],rec.info.sao,rec.info.CLNDBN,rec.info.geneinfo.split(/:/)[0]].join("\t")' < /export/data/MBC/clinvar_20140303.vcf > /export/data/MBC/clinvar_20140303.tab
 #
 # followed by
 #
-#   env INFILE=clinvar_20140303.tab erb dbsnp_vcf.rdf
+#   env INFILE=clinvar_20140303.tab erb clinvar.rdf
 #
-<%= File.read(File.dirname(__FILE__)+'/preamble.rdf')  %>
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix hgnc: <http://identifiers.org/hgnc.symbol/> .
+@prefix db: <http://biobeat.org/rdf/db> .
+@prefix seq: <http://biobeat.org/rdf/seq> .
+@prefix dbsnp: <http://biobeat.org/rdf/dbsnp> .
+@prefix annotate: <http://biobeat.org/rdf/annotate> .
+@prefix : <http://biobeat.org/rdf/clinvar> .
+
 <%
    File.open(ENV["INFILE"]).each_line do |line|
-     fields = line.split(/\t/)
-     snpid = fields[0]
-     chr = fields[1]
-     pos = fields[2]
-     sao = fields[3]
-     descr = fields[4].strip.gsub(/\\/,'')
-     gene = fields[5].chomp
+     snpid,chr,pos,ref,alt,sao,descr,gene = line.split(/\t/)
+     descr = if descr 
+               if descr.strip == ""
+                 nil
+               else
+                 descr.strip.gsub(/\\/,'') 
+               end
+             else
+               nil
+             end
+     gene = gene.chomp
      type = case sao
               when '1' then 'germline'
               when '2' then 'somatic'
@@ -26,15 +38,26 @@
               else
                 nil
             end
+     if descr
+         cancer = true if descr =~ /cancer|malig/i
+         breast_cancer = true if descr =~ /breast/i
+         associate = true if descr =~ /associa/i
+     end
 
-     id = 'dbsnp_'+snpid+'_'+chr+'_'+pos
+
+     id = 'clinvar_'+snpid+'_'+chr+'_'+pos
 %>
-  :<%= id %>  :chr         "<%= chr %>" .
-  :<%= id %>  :pos         <%= pos %> .
-  :<%= id %>  :gene_name   "<%= gene %>" .
-  :<%= id %>  :snpid       "<%= snpid %>" .
-  :<%= id %>  :descr       "<%= descr %>" .
-  <% if type %>
-  :<%= id %>  :type        :<%= type %> .
-  <% end %>
+  :<%= id %>  db:type      :clinvar .
+  :<%= id %>  seq:chr         "<%= chr %>" .
+  :<%= id %>  seq:pos         <%= pos %> .
+  :<%= id %>  seq:ref         "<%= ref %>" .
+  :<%= id %>  seq:alt         "<%= alt %>" .
+  :<%= id %>  seq:gene_name   "<%= gene %>" .
+  # :<%= id %>  seq:hgnc     hgnc:<%= gene %> .
+  :<%= id %>  dbsnp:id       "<%= snpid %>" .
+  <% if descr %>:<%= id %>  :descr       "<%= descr %>" .<% end %>
+  <% if type %>:<%= id %>  :type        :<%= type %> .<% end %>
+  <% if cancer %>:<%= id %>  annotate:cancer     true .<% end %>
+  <% if breast_cancer %>:<%= id %>  annotate:breast_cancer     true .<% end %>
+  <% if associate %>:<%= id %>  annotate:associated     true .<% end %>
 <% end %>
