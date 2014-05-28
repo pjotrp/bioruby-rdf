@@ -22,6 +22,11 @@
 @prefix : <http://biobeat.org/rdf/freebayes#> .
 
 <%
+   variant_type = if ENV["INFILE"] =~ /germl/
+                    'germline'
+                  else
+                    'somatic'
+                  end
    File.open(ENV["INFILE"]).each_line do |line|
      next if line =~ /^(#|Chr)/
      fields = line.split(/\t/)
@@ -39,5 +44,5 @@
   :<%= id %>  :var         "<%= var %>" .
   :<%= id %>  :sample      "<%= sample %>" .
   :<%= id %>  :type        :freebayes .
-  :<%= id %>  :variant_type :germline .
+  :<%= id %>  :variant_type :<%= variant_type %> .
 <% end %>
