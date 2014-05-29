@@ -9,7 +9,7 @@
      next if fields.first == 'Gene name'
      next if fields[13] == ''
      if fields[10] !~ /silent/
-       gene = fields[0]
+       gene = fields[0].split(/_/).first
        (chr,pos1) = fields[13].split(/:/) if fields[13]
        next if not pos1
        pos2 = pos1.split(/-/)
@@ -29,7 +29,7 @@
   :<%= id %>  seq:ref         "<%= ref %>" .
   :<%= id %>  seq:alt         "<%= alt %>" .
   :<%= id %>  seq:gene_name   "<%= gene %>" .
-  :<%= id %>  db:id        :cosmic .
+  :<%= id %>  db:id        db:cosmic .
   :<%= id %>  cosmic:id      "COSM<%= cosmicid %>" .
   :<%= id %>  cosmic:nuc_mutation    "<%= nuc %>" .
   :<%= id %>  cosmic:aa_mutation    "<%= fields[9] %>" .

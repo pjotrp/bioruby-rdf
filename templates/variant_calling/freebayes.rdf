@@ -19,6 +19,10 @@
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix dc: <http://purl.org/dc/elements/1.1/> .
 @prefix hgnc: <http://identifiers.org/hgnc.symbol/> .
+@prefix seq: <http://biobeat.org/rdf/seq#> .
+@prefix db: <http://biobeat.org/rdf/db#> .
+@prefix disease: <http://biobeat.org/rdf/disease#> .
+@prefix mbc: <http://biobeat.org/rdf/mbc#> .
 @prefix : <http://biobeat.org/rdf/freebayes#> .
 
 <%
@@ -33,16 +37,16 @@
      chr = fields[0]
      pos = fields[1]
      ref = fields[3]
-     var = fields[4]
+     alt = fields[4]
      sample = fields[5]
      id = 'freebayes_'+chr+'_'+pos+'_'+sample
 %>
-  :<%= id %>  :chr         "<%= chr %>" .
-  :<%= id %>  :pos         <%= pos %> .
+  :<%= id %>  seq:chr         "<%= chr %>" .
+  :<%= id %>  seq:pos         <%= pos %> .
   :<%= id %>  :id          "<%= id %>" .
-  :<%= id %>  :ref         "<%= ref %>" .
-  :<%= id %>  :var         "<%= var %>" .
-  :<%= id %>  :sample      "<%= sample %>" .
-  :<%= id %>  :type        :freebayes .
-  :<%= id %>  :variant_type :<%= variant_type %> .
+  :<%= id %>  seq:variant_type :<%= variant_type %> .
+  :<%= id %>  seq:ref         "<%= ref %>" .
+  :<%= id %>  seq:alt         "<%= alt %>" .
+  :<%= id %>  mbc:sample      "<%= sample %>" .
+  :<%= id %>  db:id         db:freebayes .
 <% end %>
