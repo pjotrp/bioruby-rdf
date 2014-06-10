@@ -12,11 +12,11 @@
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix dc: <http://purl.org/dc/elements/1.1/> .
 @prefix hgnc: <http://identifiers.org/hgnc.symbol/> .
-@prefix db: <http://biobeat.org/rdf/db> .
-@prefix seq: <http://biobeat.org/rdf/seq> .
-@prefix dbsnp: <http://biobeat.org/rdf/dbsnp> .
-@prefix annotate: <http://biobeat.org/rdf/annotate> .
-@prefix : <http://biobeat.org/rdf/clinvar> .
+@prefix db: <http://biobeat.org/rdf/db#> .
+@prefix seq: <http://biobeat.org/rdf/seq#> .
+@prefix dbsnp: <http://biobeat.org/rdf/dbsnp#> .
+@prefix annotate: <http://biobeat.org/rdf/annotate#> .
+@prefix : <http://biobeat.org/rdf/clinvar#> .
 
 <%
    File.open(ENV["INFILE"]).each_line do |line|
