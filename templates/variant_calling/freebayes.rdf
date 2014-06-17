@@ -52,10 +52,10 @@
 <% if n_ro %>
   :<%= id %>  freebayes:n_ro    <%= n_ro %> .
   :<%= id %>  freebayes:n_ao    <%= n_ao %> .
-  :<%= id %>  freebayes:n_db    <%= n_dp %> .
+  :<%= id %>  freebayes:n_dp    <%= n_dp %> .
   :<%= id %>  freebayes:t_ro    <%= t_ro %> .
   :<%= id %>  freebayes:t_ao    <%= t_ao %> .
-  :<%= id %>  freebayes:t_db    <%= t_dp %> .
+  :<%= id %>  freebayes:t_dp    <%= t_dp %> .
 <% end %>
   :<%= id %>  mbc:sample      "<%= sample %>" .
   :<%= id %>  db:id         db:freebayes .
