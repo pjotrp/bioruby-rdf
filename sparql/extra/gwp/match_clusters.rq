@@ -2,6 +2,14 @@
 #
 # ./scripts/sparql.sh script.rq
 # 
+# List all Mi/CDS matches, including Mi
+#
+# env HASH="paired=1,species1=Mi,source1=CDS" sparql.sh script.rq
+#
+# List all Mi/CDS matches, excluding Mi
+#
+# env HASH="paired=1,species1=Mi,source1=CDS,species2=Other" sparql.sh script.rq
+#
 # List all Mi CDS that have Mi DNA matches
 #
 #   env HASH="species1=Mi,source1=CDS,species2=Mi,source2=DNA" erb sparql/extra/gwp/match_clusters.rq |~/opt/bin/sparql-query "http://localhost:8000/sparql/?soft-limit=-1" -p
@@ -15,11 +23,12 @@
 #   env HASH="by_gene=1,species1=Mi,source1=CDS,species2=Mi,source2=DNA" erb sparql/extra/gwp/match_clusters.rq |~/opt/bin/sparql-query "http://localhost:8000/sparql/?soft-limit=-1" -p
 #
 <%
+   # p ENV['HASH']
    h=ENV['HASH'].split(',').map{ |s| s.split('=') }.to_h
    # inputs
    species1     = h['species1']
    source1      = h['source1']
-   species2     = h['species2']
+   species2     = h['species2'] # Other = not within species
    source2      = h['source2']
    # options
    by_gene      = h['by_gene']
@@ -32,7 +41,7 @@
 
 <% if not by_gene %>
   <% if paired %>
-    SELECT DISTINCT ?cluster ?hcluster WHERE 
+    SELECT DISTINCT ?cluster ?hcluster ?hspecies WHERE 
   <% else %>
     SELECT DISTINCT ?cluster WHERE 
   <% end %>
@@ -53,6 +62,13 @@
     :homolog_cluster ?cluster ;  # match all genes in cluster
     :cluster ?hcluster ;
     rdf:label ?hname .
+  FILTER (?cluster != ?hcluster) .  # skip exact self matches
+  ?hcluster 
+    :species ?hspecies .
+  <% if species2 == 'Other' %>
+    MINUS { ?hgene :homolog_species ?hspecies } .
+  <% elsif species2 %>
     FILTER (CONTAINS(?hname,"<%= species2+'_'+source2 %>") && (?cluster != ?hcluster)) . 
+  <% end %>
   <%= '?hcluster :is_pos_sel true .' if is_pos_sel2 %>
 }
