@@ -10,6 +10,10 @@
 #
 # env HASH="paired=1,species1=Mi,source1=CDS,species2=Other" sparql.sh script.rq
 #
+# List all matches in CDS, ORF or EST
+#
+# env HASH="paired=1,species1=Mi,source1=CDS,species2=Other,source2=[CDS|DNA|EST]" sparql.sh script.rq
+#
 # List all Mi CDS that have Mi DNA matches
 #
 #   env HASH="species1=Mi,source1=CDS,species2=Mi,source2=DNA" erb sparql/extra/gwp/match_clusters.rq |~/opt/bin/sparql-query "http://localhost:8000/sparql/?soft-limit=-1" -p
@@ -48,7 +52,7 @@
   <% if paired %>
     SELECT DISTINCT ?cluster ?hcluster ?hspecies WHERE 
   <% else %>
-    SELECT DISTINCT ?cluster WHERE 
+    SELECT DISTINCT ?cluster ?hspecies WHERE 
   <% end %>
 <% else %>
   SELECT ?cluster ?hcluster ?hname WHERE 
@@ -57,9 +61,9 @@
 
   ?cluster
     :species "<%= species1 %>" ;
-    :source "<%= source1 %>" ;
     <%= ':is_pos_sel true ;' if is_pos_sel %>
-    :lnL ?lnl .
+    # :lnL ?lnl . <- implicit
+    :source "<%= source1 %>" .
   ?hgene
     a :blast_match ;
     :homolog_species "<%= species1 %>" ;
@@ -70,6 +74,7 @@
   FILTER (?cluster != ?hcluster) .  # skip exact self matches
   ?hcluster 
     :species ?hspecies .
+  <%= '?hcluster :is_pos_sel true .' if is_pos_sel2 %>
   <% if species2 == 'Other' %>
     MINUS { ?hgene :homolog_species ?hspecies } .
   <% end %>
