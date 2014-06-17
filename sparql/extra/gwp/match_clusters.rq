@@ -35,6 +35,11 @@
    paired       = h['paired']
    is_pos_sel   = h['is_pos_sel']
    is_pos_sel2  = h['is_pos_sel2']
+
+
+   filter = ''
+   filter = species2 if species2 and species2 != 'Other'
+   filter += '_'+source2 if source2
 %>
 
 <%= File.read(File.dirname(__FILE__)+'/preamble.rq')  %>
@@ -67,8 +72,9 @@
     :species ?hspecies .
   <% if species2 == 'Other' %>
     MINUS { ?hgene :homolog_species ?hspecies } .
-  <% elsif species2 %>
-    FILTER (CONTAINS(?hname,"<%= species2+'_'+source2 %>") && (?cluster != ?hcluster)) . 
+  <% end %>
+  <% if filter %>
+    FILTER (CONTAINS(?hname,"<%= filter %>" )) .
   <% end %>
   <%= '?hcluster :is_pos_sel true .' if is_pos_sel2 %>
 }
