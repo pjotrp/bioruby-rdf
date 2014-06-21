@@ -40,7 +40,6 @@
    is_pos_sel   = h['is_pos_sel']
    is_pos_sel2  = h['is_pos_sel2']
 
-
    filter = ''
    filter = species2 if species2 and species2 != 'Other'
    filter += '_'+source2 if source2
