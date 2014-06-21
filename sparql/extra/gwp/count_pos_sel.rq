@@ -11,7 +11,18 @@ prefix hgnc: <http://identifiers.org/hgnc.symbol/>
 prefix doi: <http://dx.doi.org/>
 prefix : <http://biobeat.org/rdf/ns#> 
 
+<%
+   # inputs
+   species     = ENV['species1']
+   source1     = ENV['source1']
+   count       = ENV['count']
+%>
+
+<% if count %>
 SELECT ?species ?source (COUNT(?name) AS ?num) WHERE 
+<% else %>
+SELECT ?species ?source ?name WHERE 
+<% end %>
 # SELECT ?name ?source ?sites WHERE 
 { 
   ?id :is_pos_sel true .
@@ -20,5 +31,7 @@ SELECT ?species ?source (COUNT(?name) AS ?num) WHERE
   ?id :species ?species .
   ?id :source ?source .
 }
+<% if count %>
 GROUP by ?species ?source
 ORDER by ?species ?source
+<% end %>

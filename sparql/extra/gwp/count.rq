@@ -1,4 +1,4 @@
-# Count all clusters under positive selection
+# Count all clusters tested for positive selection
 #
 # Run with, for example:
 #
@@ -16,7 +16,7 @@ SELECT ?species ?source (COUNT(?id) AS ?num) WHERE
 { 
   ?id :species ?species .
   ?id :source ?source .
-  ?id :is_pos_sel ?is_pos_sel
+  ?id :is_pos_sel ?is_pos_sel .
 }
 GROUP by ?species ?source
 ORDER by ?species ?source
