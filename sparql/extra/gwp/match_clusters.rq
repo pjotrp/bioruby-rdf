@@ -32,7 +32,7 @@
    # inputs
    species1     = h['species1']
    source1      = h['source1']
-   species2     = h['species2'] # Other = not within species, PlantP = pathogen
+   species2     = h['species2'] # Other = not within species
    source2      = h['source2']
    # options
    by_gene      = h['by_gene']
@@ -41,7 +41,7 @@
    is_pos_sel2  = h['is_pos_sel2']
 
    filter = ''
-   filter = species2 if species2 and species2 != 'Other' and species2 != 'PlantP'
+   filter = species2 if species2 and species2 != 'Other' 
    filter += '_'+source2 if source2
 %>
 
@@ -76,8 +76,6 @@
   <%= '?hcluster :is_pos_sel true .' if is_pos_sel2 %>
   <% if species2 == 'Other' %>
     MINUS { ?hgene :homolog_species ?hspecies } .
-  <% elsif species2 == 'PlantP' %>
-    FILTER (?hspecies="Mi" || ?hspecies="Mh" || ?hspecies="Gp") .
   <% end %>
   <% if filter %>
     FILTER (CONTAINS(?hname,"<%= filter %>" )) .

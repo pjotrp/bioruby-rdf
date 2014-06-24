@@ -4,21 +4,31 @@
 #
 require 'csv'
 
-TYPE='CDS'
+TYPE = if ARGV[0] == 'DNA'
+         'DNA'
+       else
+         'CDS'
+       end
 PATHOGENS=['Mi','Mh','Gp','Bx']
 
-# ---- Get the total tally of CDS PSC
+# ---- Get the total tally of PSC
 count_pos = CSV::parse(`env count=1 ../../../scripts/sparql-csv.sh count_pos_sel.rq`)
-cds_count_pos = {}
+type_count_pos = {}
 count_pos.each do | l |
   (s,t,num) = l
-  cds_count_pos[s.to_sym] = num.to_i if t=='CDS'
+  type_count_pos[s.to_sym] = num.to_i if t==TYPE
 end
-total = cds_count_pos[:Mi]
+total = type_count_pos[:Mi]
 p [:total,total]
 
+csv_parse = lambda { |cmd|
+  $stderr.print "Calling: #{cmd}"
+  CSV::parse(`#{cmd}`)
+}
+
+
 # ---- Cat. A
-catA = CSV::parse(`env HASH="species1=Mi,is_pos_sel=1,source1=CDS,species2=Other,source2=CDS,is_pos_sel2=1" ../../../scripts/sparql-csv.sh match_clusters.rq`)
+catA = csv_parse.call("env HASH=\"species1=Mi,is_pos_sel=1,source1=#{TYPE},species2=PlantP,is_pos_sel2=1\" ../../../scripts/sparql-csv.sh match_clusters.rq")
 total_catA = catA.size-1
 p catA
 p [:catA,total_catA]
@@ -27,18 +37,18 @@ subcatA = catA[1..-1].map {|duo| duo[1]}.inject(Hash.new(0)) { |total, e| total[
 p [:subcatA,subcatA]
 
 # ---- Cat. B
-catB1 = CSV::parse(`env HASH="species=Mi,source1=CDS" ../../../scripts/sparql-csv.sh blast2.rq`)
+catB1 = CSV::parse(`env HASH="species=Mi,source1=#{TYPE}" ../../../scripts/sparql-csv.sh blast2.rq`)
 total_catB = catB1.size-1 - total_catA
 p [:catB,total_catB]
 cnames = catB1.flatten[1..-1]
 # p cnames
 cluster = {}
 cnames.map { |c| cluster[c] = [] }
-catB = CSV::parse(`env HASH="by_gene=1,species=Mi,source1=CDS" ../../../scripts/sparql-csv.sh blast2.rq`)[1..-1].map {|row| cluster[row[0]] << row[2] }
+catB = CSV::parse(`env HASH="by_gene=1,species=Mi,source1=#{TYPE}" ../../../scripts/sparql-csv.sh blast2.rq`)[1..-1].map {|row| cluster[row[0]] << row[2] }
 
 # subcategorise B, first split into plantp, non-plantp, refseq, and dna
 #
-# The idea is to first find the Refseq matches, next the CDS and
+# The idea is to first find the Refseq matches, next the TYPE and
 # finally the DNA.
 wormp = []; worm = []; refseq=[]; orf=[]
 cluster.each do | cname, species |
