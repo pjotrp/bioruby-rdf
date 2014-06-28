@@ -9,7 +9,7 @@ TYPE = if ARGV[0] == 'DNA'
        else
          'CDS'
        end
-PATHOGENS=['Mi','Mh','Gp','Bx']
+PATHOGENS=['Mi','Mh','Gp','Bx','Pi']
 
 # ---- Get the total tally of PSC
 count_pos = CSV::parse(`env count=1 ../../../scripts/sparql-csv.sh count_pos_sel.rq`)
@@ -19,7 +19,8 @@ count_pos.each do | l |
   type_count_pos[s.to_sym] = num.to_i if t==TYPE
 end
 total = type_count_pos[:Mi]
-p [:total,total]
+p [:total,total] 
+raise "Error" if TYPE=='CDS' and total!=43
 
 csv_parse = lambda { |cmd|
   $stderr.print "Calling: #{cmd}"
@@ -27,14 +28,31 @@ csv_parse = lambda { |cmd|
 }
 
 
-# ---- Cat. A
-catA = csv_parse.call("env HASH=\"species1=Mi,is_pos_sel=1,source1=#{TYPE},species2=PlantP,is_pos_sel2=1\" ../../../scripts/sparql-csv.sh match_clusters.rq")
+# ---- Cat. A - create pairs of cluster + species
+listA = csv_parse.call("env HASH=\"species1=Mi,is_pos_sel=1,source1=#{TYPE},species2=Other,is_pos_sel2=1\" ../../../scripts/sparql-csv.sh match_clusters.rq")
+
+# Create hash of clusters with matching species
+catA = listA[1..-1].inject(Hash.new) { |h,pair| 
+  h[pair[0]] ||= []
+  h[pair[0]] << pair[1] 
+  h
+}
 total_catA = catA.size-1
 p catA
 p [:catA,total_catA]
-subcatA = catA[1..-1].map {|duo| duo[1]}.inject(Hash.new(0)) { |total, e| total[e] += 1 ;total}
+raise "Error" if TYPE=='CDS' and total_catA!=9
+# ---- subcat A1 count PlantP only
+subcatA = catA.keys.map { |cluster| 
+  species = catA[cluster]
+  p species
+  species.inject(true) { |cnt,s|
+    (!PATHOGENS.include?(s) ? false : cnt )
+  }
+}
+# FIXME: check list
+p [:subcatA,subcatA.count(true)]
 
-p [:subcatA,subcatA]
+exit
 
 # ---- Cat. B
 catB1 = CSV::parse(`env HASH="species=Mi,source1=#{TYPE}" ../../../scripts/sparql-csv.sh blast2.rq`)
