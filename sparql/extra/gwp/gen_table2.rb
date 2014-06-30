@@ -9,7 +9,11 @@ TYPE = if ARGV[0] == 'DNA'
        else
          'CDS'
        end
-PATHOGENS=['Mi','Mh','Gp','Bx','Pi']
+PLANT_PATHOGENS=['Mi','Mh','Gp','Bx','Pi']
+ANIMAL_PATHOGENS=['Bm','Ts','Sr']
+FREE_LIVING=['Ce','Cb','Pp']
+
+ALL_PATHOGENS  = PLANT_PATHOGENS + ANIMAL_PATHOGENS + FREE_LIVING
 
 # ---- Get the total tally of PSC
 count_pos = CSV::parse(`env count=1 ../../../scripts/sparql-csv.sh count_pos_sel.rq`)
@@ -26,7 +30,6 @@ csv_parse = lambda { |cmd|
   $stderr.print "Calling: #{cmd}"
   CSV::parse(`#{cmd}`)
 }
-
 
 # ---- Cat. A - create pairs of cluster + species
 listA = csv_parse.call("env HASH=\"species1=Mi,is_pos_sel=1,source1=#{TYPE},species2=Other,is_pos_sel2=1\" ../../../scripts/sparql-csv.sh match_clusters.rq")
@@ -46,13 +49,13 @@ subcatA = catA.keys.map { |cluster|
   species = catA[cluster]
   p species
   species.inject(true) { |cnt,s|
-    (!PATHOGENS.include?(s) ? false : cnt )
+    (!PLANT_PATHOGENS.include?(s) ? false : cnt )
   }
 }
-# FIXME: check list
 p [:subcatA,subcatA.count(true)]
 
-exit
+# Not quite done yet, we need to subtract the ones that have matches in catB.
+
 
 # ---- Cat. B
 catB1 = CSV::parse(`env HASH="species=Mi,source1=#{TYPE}" ../../../scripts/sparql-csv.sh blast2.rq`)
@@ -76,7 +79,7 @@ cluster.each do | cname, species |
   species.each do | s |
     if (match = /(\S\S)_CDS/.match(s))
       matched = true
-      if not PATHOGENS.include?(match[1])
+      if not PLANT_PATHOGENS.include?(match[1])
         non_pathogen = true 
       end
     end
@@ -96,7 +99,7 @@ cluster.each do | cname, species |
   species.each do | s |
     if (match = /(\S\S)_DNA/.match(s))
       matched = true
-      is_pathogen = true if PATHOGENS.include?(match[1])
+      is_pathogen = true if PLANT_PATHOGENS.include?(match[1])
     end
   end
   if matched
