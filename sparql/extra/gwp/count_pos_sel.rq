@@ -13,22 +13,28 @@ prefix : <http://biobeat.org/rdf/ns#>
 
 <%
    # inputs
-   species     = ENV['species1']
-   source1     = ENV['source1']
+   species     = ENV['species']
+   source      = ENV['source']
    count       = ENV['count']
 %>
 
 <% if count %>
 SELECT ?species ?source (COUNT(?name) AS ?num) WHERE 
 <% else %>
-SELECT ?species ?source ?name WHERE 
+SELECT ?species ?source ?id WHERE 
 <% end %>
 # SELECT ?name ?source ?sites WHERE 
 { 
   ?id :is_pos_sel true .
   ?id rdf:label ?name .
   ?id :sites ?sites .
+  <% if species %>
+  ?id :species "<%= species %>" .
+  <% end %>
   ?id :species ?species .
+  <% if source %>
+  ?id :source "<%= source %>" .
+  <% end %>
   ?id :source ?source .
 }
 <% if count %>
