@@ -22,24 +22,31 @@ csv_parse = lambda { |cmd|
 }
 
 minc_cluster_prop = {}
-# ---- 1. Get the full list of Minc PSC in minc_psc
+# ---- 1. Get the full list of Minc PSC in minc_psc (&)
 minc_psc1 = csv_parse.call("env species=Mi source=#{TYPE} ../../../scripts/sparql-csv.sh count_pos_sel.rq")
 minc_psc = minc_psc1.drop(1).map { |l| c = l[2] ; minc_cluster_prop[c] = {} ; c }
+p [:num_PSC, minc_psc.size]
 
 # ---- 2. Annotate for homologs
-# ---- 2a. Get all PSC that have homologs
+# ---- 2a. Get all PSC that have homologs (&)
 catB1 = csv_parse.call("env HASH=\"species=Mi,source1=#{TYPE}\" ../../../scripts/sparql-csv.sh blast2.rq").drop(1).flatten
 # p catB1
 
-# ---- 2b. Now we have the unique PSC (catC green)
+# ---- 2b. Now we have the unique PSC (catC green) (&)
 minc_cluster_unique = minc_psc - catB1
-p minc_cluster_unique.size
-
+p [:unique_PSC, minc_cluster_unique.size]
 raise "Error" if TYPE=='CDS' and minc_cluster_unique.size != 7
 
 # ---- 2c. Annotate plantP only
+#      CatB1 contains all annotated PSC. So we can drop all those that
+#      contain non-plant matches
+p catB1
 # ---- Cat. A - create pairs of cluster + species
-  listA = csv_parse.call("env HASH=\"species1=Mi,is_pos_sel=1,source1=#{TYPE},species2=Other,is_pos_sel2=1\" ../../../scripts/sparql-csv.sh match_clusters.rq")
+listA = csv_parse.call("env HASH=\"species1=Mi,is_pos_sel=1,source1=#{TYPE},species2=Other,is_pos_sel2=1\" ../../../scripts/sparql-csv.sh match_clusters.rq")
+listA = csv_parse.call("env HASH=\"species1=Mi,is_pos_sel=1,source1=#{TYPE},species2=Other,is_pos_sel2=1\" ../../../scripts/sparql-csv.sh match_clusters.rq")
+
+p listA
+exit
 
 # Create hash of clusters with matching species
 catA = listA.drop(1).inject(Hash.new) { |h,pair| 
@@ -49,7 +56,7 @@ catA = listA.drop(1).inject(Hash.new) { |h,pair|
 }
 total_catA = catA.size
 p catA
-p [:catA,total_catA]
+p [:catA_PSC_PSC,total_catA]
 raise "Error" if TYPE=='CDS' and total_catA!=10
 
 exit
@@ -135,7 +142,5 @@ raise "Error" if TYPE=='CDS' and total!=43
   p worm
 
   exit
-# ---- Cat. C
-total_catC = total - total_catB - total_catA
-p [:catC,total_catC]
+  
 
