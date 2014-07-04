@@ -122,7 +122,11 @@ listA = csv_parse.call("env HASH=\"species1=Mi,is_pos_sel=1,source1=#{TYPE},spec
 
 # ---- 3a catA plant only
 red_plant_pathogenA = listA.map{ |pair| pair[0] }.select { |c| ann[c] and ann[c].include?(:plant_pathogen) }
-orange_planthogenA = listA.map{ |pair| pair[0] }.select { |c| ann[c] and ann[c].include?(:pathogen) }
+p [:red, red_plant_pathogenA.size]
+orange_planthogenA = listA - red_plant_pathogenA
+p [:orange, orange_planthogenA.size]
+
+assert(red_plant_pathogenA.size == 2) if TYPE=='CDS' 
 
 # ---- Fetch conserved (catB)
 
