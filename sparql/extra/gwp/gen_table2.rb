@@ -37,24 +37,28 @@ minc_cluster_unique = minc_psc - catB1
 p [:unique_PSC, minc_cluster_unique.size]
 raise "Error" if TYPE=='CDS' and minc_cluster_unique.size != 7
 
-# ---- 2c. Annotate plantP only
+# ---- 2c. Annotate plantP only (&)
 #      CatB1 contains all ann PSC. So we can select those that
 #      contain only-plant matches
-list1 = csv_parse.call("env HASH=\"species=Mi,source1=#{TYPE}\" ../../../scripts/sparql-csv.sh blast2.rq").drop(1)
-list = list1.inject(Hash.new) { |h,pair| 
-  h[pair[0]] ||= []
-  h[pair[0]] << pair[1] 
+list1 = csv_parse.call("env HASH=\"by_gene=1,species=Mi,source1=#{TYPE}\" ../../../scripts/sparql-csv.sh blast2.rq").drop(1)
+# Create a hash of clusters that contain species and num
+matches = list1.inject(Hash.new) { |h,a| 
+  cluster = a[0]
+  h[cluster] ||= {}
+  match = a[1]
+  h[cluster][match] = a[2]
   h
 }
+# p [:matches, matches]
 
 ann = {}
 
-list.each { |k,v| 
+matches.each { |cluster,ms| 
   plant = false
   patho = false
   free  = false
   other = false
-  v.each { | s |
+  ms.keys.each { | s |
     if PLANT_PATHOGENS.include?(s)
       plant = true 
     elsif ANIMAL_PATHOGENS.include?(s)
@@ -65,27 +69,35 @@ list.each { |k,v|
       other = true
     end
   }
-  ann[k] = []
+  ann[cluster] = [:matches => ms.keys ]
   if other
     # nothing
   elsif free
-    ann[k] << :free
+    ann[cluster] << :free
   elsif patho
-    ann[k] << :pathogen
+    ann[cluster] << :pathogen
   elsif plant
-    ann[k] << :pathogen
-    ann[k] << :plant_pathogen
+    ann[cluster] << :pathogen
+    ann[cluster] << :plant_pathogen
   end
 }
 
-p ann.keys.select { |k| ann[k].include?(:plant_pathogen) }
-exit # Old old old...
+minc_cluster_plantp = ann.keys.select { |k| ann[k].include?(:plant_pathogen) }
+p [:plantP, minc_cluster_plantp.size ]
+raise "Error" if TYPE=='CDS' and minc_cluster_plantp.size != 9
+exit
 
-# ---- Cat. A - create pairs of cluster + species
-listA = csv_parse.call("env HASH=\"species1=Mi,is_pos_sel=1,source1=#{TYPE},species2=Other,is_pos_sel2=1\" ../../../scripts/sparql-csv.sh match_clusters.rq")
-listA = csv_parse.call("env HASH=\"species1=Mi,is_pos_sel=1,source1=#{TYPE},species2=Other,is_pos_sel2=1\" ../../../scripts/sparql-csv.sh match_clusters.rq")
+# ---- 2d and 2e. Annotate is in ann (&)
+
+# ---- 3. Fetch matching PSC (catA).
+#      Cat. A - create pairs of cluster + species
+listA = csv_parse.call("env HASH=\"species1=Mi,is_pos_sel=1,source1=#{TYPE},species2=Other,is_pos_sel2=1\" ../../../scripts/sparql-csv.sh match_clusters.rq").drop(1)
 
 p listA
+
+
+exit # Old old old...
+
 exit
 
 # Create hash of clusters with matching species
