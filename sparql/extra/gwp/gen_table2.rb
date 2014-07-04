@@ -29,7 +29,7 @@ p [:num_PSC, minc_psc.size]
 
 # ---- 2. Annotate for homologs
 # ---- 2a. Get all PSC that have homologs (&)
-catB1 = csv_parse.call("env HASH=\"species=Mi,source1=#{TYPE}\" ../../../scripts/sparql-csv.sh blast2.rq").drop(1).flatten
+catB1 = csv_parse.call("env HASH=\"clusters=1,species=Mi,source1=#{TYPE}\" ../../../scripts/sparql-csv.sh blast2.rq").drop(1).flatten
 # p catB1
 
 # ---- 2b. Now we have the unique PSC (catC green) (&)
@@ -38,9 +38,49 @@ p [:unique_PSC, minc_cluster_unique.size]
 raise "Error" if TYPE=='CDS' and minc_cluster_unique.size != 7
 
 # ---- 2c. Annotate plantP only
-#      CatB1 contains all annotated PSC. So we can drop all those that
-#      contain non-plant matches
-p catB1
+#      CatB1 contains all ann PSC. So we can select those that
+#      contain only-plant matches
+list1 = csv_parse.call("env HASH=\"species=Mi,source1=#{TYPE}\" ../../../scripts/sparql-csv.sh blast2.rq").drop(1)
+list = list1.inject(Hash.new) { |h,pair| 
+  h[pair[0]] ||= []
+  h[pair[0]] << pair[1] 
+  h
+}
+
+ann = {}
+
+list.each { |k,v| 
+  plant = false
+  patho = false
+  free  = false
+  other = false
+  v.each { | s |
+    if PLANT_PATHOGENS.include?(s)
+      plant = true 
+    elsif ANIMAL_PATHOGENS.include?(s)
+      patho = true 
+    elsif FREE_LIVING.include?(s)
+      free = true
+    else
+      other = true
+    end
+  }
+  ann[k] = []
+  if other
+    # nothing
+  elsif free
+    ann[k] << :free
+  elsif patho
+    ann[k] << :pathogen
+  elsif plant
+    ann[k] << :pathogen
+    ann[k] << :plant_pathogen
+  end
+}
+
+p ann.keys.select { |k| ann[k].include?(:plant_pathogen) }
+exit # Old old old...
+
 # ---- Cat. A - create pairs of cluster + species
 listA = csv_parse.call("env HASH=\"species1=Mi,is_pos_sel=1,source1=#{TYPE},species2=Other,is_pos_sel2=1\" ../../../scripts/sparql-csv.sh match_clusters.rq")
 listA = csv_parse.call("env HASH=\"species1=Mi,is_pos_sel=1,source1=#{TYPE},species2=Other,is_pos_sel2=1\" ../../../scripts/sparql-csv.sh match_clusters.rq")
@@ -100,7 +140,7 @@ raise "Error" if TYPE=='CDS' and total!=43
   # finally the DNA.
   wormp = []; worm = []; refseq=[]; orf=[]
   cluster.each do | cname, species |
-    # Look for CDS pathogens annotated
+    # Look for CDS pathogens ann
     non_pathogen = nil
     matched = nil
     species.each do | s |
@@ -120,7 +160,7 @@ raise "Error" if TYPE=='CDS' and total!=43
       next # cluster
     end
     next
-    # Look for RefSeq annotated or DNA
+    # Look for RefSeq ann or DNA
     is_orf = false
     matched = false
     species.each do | s |
