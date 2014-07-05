@@ -12,6 +12,7 @@
    source2      = h['source2']
    # options
    by_gene      = h['by_gene']
+   cluster      = h['cluster']
    paired       = h['paired']
    is_pos_sel   = h['is_pos_sel']
    is_pos_sel2  = h['is_pos_sel2']
@@ -26,6 +27,8 @@
 <% if not by_gene %>
   <% if paired %>
     SELECT DISTINCT ?cluster ?hcluster ?hspecies WHERE 
+  <% elsif cluster %>
+    SELECT DISTINCT ?cluster WHERE 
   <% else %>
     SELECT DISTINCT ?cluster ?hspecies WHERE 
   <% end %>

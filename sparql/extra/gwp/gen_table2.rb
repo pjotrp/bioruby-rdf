@@ -5,7 +5,8 @@
 # catA: PSC-PSC
 # catB: PSC-conserved
 # catC: PSC-unique
-# all:  All PSC 
+# all:  All PSC (catA+catB+catC)
+# catH: All clusters that have BLAST homologs
 #
 require 'csv'
 require 'solid_assert'
@@ -32,22 +33,26 @@ minc_cluster_prop = {}
 # ---- 1. Get the full list of Minc PSC in all (&)
 all1 = csv_parse.call("env species=Mi source=#{TYPE} ../../../scripts/sparql-csv.sh count_pos_sel.rq")
 all = all1.drop(1).map { |l| c = l[2] ; minc_cluster_prop[c] = {} ; c }
+# The following all have BLAST matches
+# all = csv_parse.call("env HASH=\"species1=Mi,is_pos_sel=1,source1=CDS,species2=Other,cluster=1\" ../../../scripts/sparql-csv.sh match_clusters.rq").drop(1)
+
 p [:num_PSC, all.size]
 assert(all.size == 43)
 
 # ---- 2. Annotate for homologs
 # ---- 2a. Get all PSC that have homologs (&)
-# Note that catB1 overlaps with catA
-catB1 = csv_parse.call("env HASH=\"clusters=1,species=Mi,source1=#{TYPE}\" ../../../scripts/sparql-csv.sh blast2.rq").drop(1).flatten
-# p catB1
+# Note that catH overlaps with catA and that catH is larger than all PSC(!)
+catH = csv_parse.call("env HASH=\"clusters=1,species=Mi,source1=#{TYPE}\" ../../../scripts/sparql-csv.sh blast2.rq").drop(1).flatten
+assert(catH.size == 27,"Expect 27 was #{catH.size}") if TYPE=='CDS'
+# p catH
 
 # ---- 2b. Now we have the unique PSC (catC green) (&)
-catC1 = all - catB1
+catC1 = all - catH
 p [:unique_PSC, catC1.size]
 assert(catC1.size == 7,"Expect 7") if TYPE=='CDS'
 
 # ---- 2c. Annotate plantP only (&)
-#      CatB1 contains all ann PSC. So we can select those that
+#      catH contains all ann PSC. So we can select those that
 #      contain only-plant matches
 list1 = csv_parse.call("env HASH=\"by_gene=1,species=Mi,source1=#{TYPE}\" ../../../scripts/sparql-csv.sh blast2.rq").drop(1)
 # Create a hash of clusters that contain species and num
@@ -138,13 +143,23 @@ p [:orange, orange_planthogenA.size]
 assert(red_plant_pathogenA.size == 2) if TYPE=='CDS' 
 
 # ---- Fetch conserved (catB)
-p '************************'
+p '** all **********************'
 p all
-p '************************'
+p '** catA **********************'
 p catA
-p '************************'
-p catC
-p '************************'
+p '** catB **********************'
 p catB
+p '** catC **********************'
+p catC
+p '** overlap **********************'
+p catA & catB
+p catA & catC
+p catB & catC
+p catA & all
+p [(catA & all).size,catA.size]
+assert(all & catB == catB)
+assert(all & catC == catC)
+assert(all & catA == catA)
+
 assert(all.size == catA.size + catB.size + catC.size, [catA,catB,catC,all].map {|i| i.size}.to_s)
 
