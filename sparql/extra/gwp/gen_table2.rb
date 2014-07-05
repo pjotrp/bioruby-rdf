@@ -133,21 +133,6 @@ p [:orange, orange_planthogenA.size]
 assert(red_plant_pathogenA.size == 2) if TYPE=='CDS' 
 
 # ---- Fetch conserved (catB)
-catB = catC
-
-
-exit # Old old old...
-
-
-# ---- 1b. Get the other PSC
-count_pos = csv_parse.call("env count=1 ../../../scripts/sparql-csv.sh count_pos_sel.rq")
-type_count_pos = {}
-count_pos.each do | l |
-  (s,t,num) = l
-  type_count_pos[s.to_sym] = num.to_i if t==TYPE
-end
-total = type_count_pos[:Mi]
-p [:total,total] 
-raise "Error" if TYPE=='CDS' and total!=43
-
+catB = all - catA - catC
+p catB
 
