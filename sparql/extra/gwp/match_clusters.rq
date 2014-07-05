@@ -1,30 +1,6 @@
 # List all clusters that have within dataset matches
 #
-# ./scripts/sparql.sh script.rq
-# 
-# List all Mi/CDS matches, including Mi
-#
-# env HASH="paired=1,species1=Mi,source1=CDS" sparql.sh script.rq
-#
-# List all Mi/CDS matches, excluding Mi
-#
-# env HASH="paired=1,species1=Mi,source1=CDS,species2=Other" sparql.sh script.rq
-#
-# List all matches in CDS, ORF or EST
-#
-# env HASH="paired=1,species1=Mi,source1=CDS,species2=Other,source2=[CDS|DNA|EST]" sparql.sh script.rq
-#
-# List all Mi CDS that have Mi DNA matches
-#
-#   env HASH="species1=Mi,source1=CDS,species2=Mi,source2=DNA" erb sparql/extra/gwp/match_clusters.rq |~/opt/bin/sparql-query "http://localhost:8000/sparql/?soft-limit=-1" -p
-#
-# List all Mi CDS with matching DNA matches
-# 
-#   env HASH="paired=1,species1=Mi,source1=CDS,species2=Mi,source2=DNA" erb sparql/extra/gwp/match_clusters.rq |~/opt/bin/sparql-query "http://localhost:8000/sparql/?soft-limit=-1" -p |sort
-#
-# List all DNA sequences matching Mi CDS
-#
-#   env HASH="by_gene=1,species1=Mi,source1=CDS,species2=Mi,source2=DNA" erb sparql/extra/gwp/match_clusters.rq |~/opt/bin/sparql-query "http://localhost:8000/sparql/?soft-limit=-1" -p
+# env HASH="species1=Mi,is_pos_sel=1,source1=DNA,species2=Other,is_pos_sel2=1" ../../../scripts/sparql-csv.sh match_clusters.rq
 #
 <%
    # p ENV['HASH']
@@ -80,5 +56,4 @@
   <% if filter %>
     FILTER (CONTAINS(?hname,"<%= filter %>" )) .
   <% end %>
-  <%= '?hcluster :is_pos_sel true .' if is_pos_sel2 %>
 }

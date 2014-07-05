@@ -2,6 +2,10 @@
 #
 # Display relative contribution to Mi PSC.
 #
+# catA: PSC-PSC
+# catB: PSC-conserved
+# catC: PSC-unique
+# all:  All PSC 
 #
 require 'csv'
 require 'solid_assert'
@@ -25,10 +29,10 @@ csv_parse = lambda { |cmd|
 }
 
 minc_cluster_prop = {}
-# ---- 1. Get the full list of Minc PSC in minc_psc (&)
-minc_psc1 = csv_parse.call("env species=Mi source=#{TYPE} ../../../scripts/sparql-csv.sh count_pos_sel.rq")
-minc_psc = minc_psc1.drop(1).map { |l| c = l[2] ; minc_cluster_prop[c] = {} ; c }
-p [:num_PSC, minc_psc.size]
+# ---- 1. Get the full list of Minc PSC in all (&)
+all1 = csv_parse.call("env species=Mi source=#{TYPE} ../../../scripts/sparql-csv.sh count_pos_sel.rq")
+all = all1.drop(1).map { |l| c = l[2] ; minc_cluster_prop[c] = {} ; c }
+p [:num_PSC, all.size]
 
 # ---- 2. Annotate for homologs
 # ---- 2a. Get all PSC that have homologs (&)
@@ -36,9 +40,9 @@ catB1 = csv_parse.call("env HASH=\"clusters=1,species=Mi,source1=#{TYPE}\" ../..
 # p catB1
 
 # ---- 2b. Now we have the unique PSC (catC green) (&)
-minc_cluster_unique = minc_psc - catB1
-p [:unique_PSC, minc_cluster_unique.size]
-assert(minc_cluster_unique.size == 7) if TYPE=='CDS'
+catC = all - catB1
+p [:unique_PSC, catC.size]
+assert(catC.size == 7,"Expect 7") if TYPE=='CDS'
 
 # ---- 2c. Annotate plantP only (&)
 #      CatB1 contains all ann PSC. So we can select those that
@@ -116,20 +120,20 @@ assert(minc_cluster_plantp.size == 9) if TYPE=='CDS'
 # ---- 3. Fetch matching PSC (catA).
 #      Cat. A - create pairs of cluster + species, the list may contain
 #      references to other Mi EST clusters, but not to self
-listA = csv_parse.call("env HASH=\"species1=Mi,is_pos_sel=1,source1=#{TYPE},species2=Other,is_pos_sel2=1\" ../../../scripts/sparql-csv.sh match_clusters.rq").drop(1)
+catA = csv_parse.call("env HASH=\"species1=Mi,is_pos_sel=1,source1=#{TYPE},species2=Other,is_pos_sel2=1\" ../../../scripts/sparql-csv.sh match_clusters.rq").drop(1)
 
-# p listA
+# p catA
 
 # ---- 3a catA plant only
-red_plant_pathogenA = listA.map{ |pair| pair[0] }.select { |c| ann[c] and ann[c].include?(:plant_pathogen) }
+red_plant_pathogenA = catA.map{ |pair| pair[0] }.select { |c| ann[c] and ann[c].include?(:plant_pathogen) }
 p [:red, red_plant_pathogenA.size]
-orange_planthogenA = listA - red_plant_pathogenA
+orange_planthogenA = catA - red_plant_pathogenA
 p [:orange, orange_planthogenA.size]
 
 assert(red_plant_pathogenA.size == 2) if TYPE=='CDS' 
 
 # ---- Fetch conserved (catB)
-
+catB = catC
 
 
 exit # Old old old...
