@@ -127,6 +127,7 @@ catA = listA.map{ |pair| pair[0] }
 
 catC = catC1 - catA # subtract those unique which fall into catA
 assert(catA - catC == catA,"There should be no overlap between catA and catC")
+catB = all - catA - catC 
 
 # ---- 3a catA plant only
 red_plant_pathogenA = listA.map{ |pair| pair[0] }.select { |c| ann[c] and ann[c].include?(:plant_pathogen) }
