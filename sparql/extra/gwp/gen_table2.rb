@@ -33,16 +33,18 @@ minc_cluster_prop = {}
 all1 = csv_parse.call("env species=Mi source=#{TYPE} ../../../scripts/sparql-csv.sh count_pos_sel.rq")
 all = all1.drop(1).map { |l| c = l[2] ; minc_cluster_prop[c] = {} ; c }
 p [:num_PSC, all.size]
+assert(all.size == 43)
 
 # ---- 2. Annotate for homologs
 # ---- 2a. Get all PSC that have homologs (&)
+# Note that catB1 overlaps with catA
 catB1 = csv_parse.call("env HASH=\"clusters=1,species=Mi,source1=#{TYPE}\" ../../../scripts/sparql-csv.sh blast2.rq").drop(1).flatten
 # p catB1
 
 # ---- 2b. Now we have the unique PSC (catC green) (&)
-catC = all - catB1
-p [:unique_PSC, catC.size]
-assert(catC.size == 7,"Expect 7") if TYPE=='CDS'
+catC1 = all - catB1
+p [:unique_PSC, catC1.size]
+assert(catC1.size == 7,"Expect 7") if TYPE=='CDS'
 
 # ---- 2c. Annotate plantP only (&)
 #      CatB1 contains all ann PSC. So we can select those that
@@ -120,12 +122,14 @@ assert(minc_cluster_plantp.size == 9) if TYPE=='CDS'
 # ---- 3. Fetch matching PSC (catA).
 #      Cat. A - create pairs of cluster + species, the list may contain
 #      references to other Mi EST clusters, but not to self
-catA = csv_parse.call("env HASH=\"species1=Mi,is_pos_sel=1,source1=#{TYPE},species2=Other,is_pos_sel2=1\" ../../../scripts/sparql-csv.sh match_clusters.rq").drop(1)
+listA = csv_parse.call("env HASH=\"species1=Mi,is_pos_sel=1,source1=#{TYPE},species2=Other,is_pos_sel2=1\" ../../../scripts/sparql-csv.sh match_clusters.rq").drop(1)
+catA = listA.map{ |pair| pair[0] }
 
-# p catA
+catC = catC1 - catA # subtract those unique which fall into catA
+assert(catA - catC == catA,"There should be no overlap between catA and catC")
 
 # ---- 3a catA plant only
-red_plant_pathogenA = catA.map{ |pair| pair[0] }.select { |c| ann[c] and ann[c].include?(:plant_pathogen) }
+red_plant_pathogenA = listA.map{ |pair| pair[0] }.select { |c| ann[c] and ann[c].include?(:plant_pathogen) }
 p [:red, red_plant_pathogenA.size]
 orange_planthogenA = catA - red_plant_pathogenA
 p [:orange, orange_planthogenA.size]
@@ -133,6 +137,13 @@ p [:orange, orange_planthogenA.size]
 assert(red_plant_pathogenA.size == 2) if TYPE=='CDS' 
 
 # ---- Fetch conserved (catB)
-catB = all - catA - catC
+p '************************'
+p all
+p '************************'
+p catA
+p '************************'
+p catC
+p '************************'
 p catB
+assert(all.size == catA.size + catB.size + catC.size, [catA,catB,catC,all].map {|i| i.size}.to_s)
 
