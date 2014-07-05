@@ -44,19 +44,22 @@
     :source "<%= source1 %>" .
   ?hgene
     a :blast_match ;
+    # :homolog_species ?hspecies ;
     # :homolog_species "<%= species1 %>" ;
     # :homolog_source "<%= source1 %>" ;
     :homolog_cluster ?cluster ;  # match all genes in cluster
-    :cluster ?hcluster ;
-    rdf:label ?hname .
-  FILTER (?cluster != ?hcluster) .  # skip exact self matches
+    :cluster ?hcluster .
+    # rdf:label ?hname .
+  # Just make sure there are no matches to self:
   ?hcluster :species ?hspecies .
+  FILTER (?cluster != ?hcluster) .  # skip exact self matches
   FILTER (?hspecies != "<%= species1 %>") .  # skip exact self matches
+
   <%= '?hcluster :is_pos_sel true .' if is_pos_sel2 %>
   <% if species2 == 'Other' %>
-    MINUS { ?hgene :homolog_species ?hspecies } .
+  #  MINUS { ?hgene :homolog_species ?hspecies } .
   <% end %>
-  <% if filter %>
-    FILTER (CONTAINS(?hname,"<%= filter %>" )) .
+  <% if filter and filter != '' %>
+  #  FILTER (CONTAINS(?hname,"<%= filter %>" )) .
   <% end %>
 }
