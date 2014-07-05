@@ -111,7 +111,7 @@ matches.each { |cluster,ms|
   ann[cluster] << :cds if cds
   ann[cluster] << :dna if dna
 }
-p [:annotated, ann]
+p [:annotated, ann.sort]
 
 minc_cluster_plantp = ann.keys.select { |k| ann[k].include?(:plant_pathogen) }
 p [:plantP, minc_cluster_plantp.size ]
@@ -127,12 +127,12 @@ catA = csv_parse.call("env HASH=\"cluster=1,species1=Mi,is_pos_sel=1,source1=#{T
 assert(catA.size == 10) if TYPE=='CDS' 
 
 # ---- 3a catA plant only
-red_plant_pathogenA = catA.select { |c| ann[c] and ann[c].include?(:plant_pathogen) }
-p [:red, red_plant_pathogenA.size]
+plant_pathogenA = catA.select { |c| ann[c] and ann[c].include?(:plant_pathogen) }
+p [:red, plant_pathogenA.size]
 # ==== we have catA orange and red!
-orange_planthogenA = catA - red_plant_pathogenA
-p [:orange, orange_planthogenA.size]
-assert(red_plant_pathogenA.size == 2) if TYPE=='CDS' 
+otherA = catA - plant_pathogenA
+p [:orange, otherA.size]
+assert(otherA.size == 8,otherA.size.to_s) if TYPE=='CDS' 
 
 # ---- Now we can have the unique PSC (catC green) (&)
 catC = all - catA - catH
@@ -141,6 +141,7 @@ assert(catC.size == 6,"Expect 6") if TYPE=='CDS'
 
 assert(catA & catC == [],"There should be no overlap between catA and catC")
 catB = all - catA - catC 
+assert(catB.size == 27,"CatB is 27") if TYPE == 'CDS'
 
 # ---- Fetch conserved (catB)
 p '** all **********************'
@@ -162,7 +163,17 @@ assert(all & catC == catC)
 assert(catA & all == catA)
 assert(all.size == catA.size + catB.size + catC.size, [catA,catB,catC,all].map {|i| i.size}.to_s)
 
-print "cat A. plant pathogen only\t",red_plant_pathogenA.size,"\n"
-print "cat A. other\t",orange_planthogenA.size,"\n"
-print "cat B. plant pathogen only \t",planthogenB.size,"\n"
+# plant_pathogenB are those in catB that map to :plant_pathogen
+plant_pathogenB = catB.select { |c| a = ann[c] ; a.include?(:plant_pathogen) }
+p orfB = (catB - plant_pathogenB).select { |c| a = ann[c] ; a.include?(:dna) and !a.include?(:cds) and !a.include?(:refseq) }
+conservedB = catB - orfB - plant_pathogenB
+assert(plant_pathogenB & orfB == [])
+assert(plant_pathogenB & conservedB == [])
+assert(orfB & conservedB == [])
+
+print "cat A. plant pathogen only\t",plant_pathogenA.size,"\n"
+print "cat A. other\t",otherA.size,"\n"
+print "cat B. plant pathogen only \t",plant_pathogenB.size,"\n"
+print "cat B. conserved \t",conservedB.size,"\n"
+print "cat B. ORFs \t",orfB.size,"\n"
 print "cat C. unique\t",catC.size,"\n"

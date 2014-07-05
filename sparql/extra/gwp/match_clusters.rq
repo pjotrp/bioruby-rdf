@@ -44,8 +44,8 @@
     :source "<%= source1 %>" .
   ?hgene
     a :blast_match ;
-    :homolog_species "<%= species1 %>" ;
-    :homolog_source "<%= source1 %>" ;
+    # :homolog_species "<%= species1 %>" ;
+    # :homolog_source "<%= source1 %>" ;
     :homolog_cluster ?cluster ;  # match all genes in cluster
     :cluster ?hcluster ;
     rdf:label ?hname .
