@@ -2,11 +2,13 @@
 #
 # Display relative contribution to Mi PSC.
 #
-# catA: PSC-PSC
-# catB: PSC-conserved
-# catC: PSC-unique
+# catA: list PSC-PSC
+# catB: list PSC-conserved
+# catC: list PSC-unique
 # all:  All PSC (catA+catB+catC)
 # catH: All clusters that have BLAST homologs
+# ann:  All BLST annotated for :matches, :(plant_)pathogen, :refseq, 
+#                              :cds and :dna in catH 
 #
 require 'csv'
 require 'solid_assert'
@@ -33,25 +35,18 @@ minc_cluster_prop = {}
 # ---- 1. Get the full list of Minc PSC in all (&)
 all1 = csv_parse.call("env species=Mi source=#{TYPE} ../../../scripts/sparql-csv.sh count_pos_sel.rq")
 all = all1.drop(1).map { |l| c = l[2] ; minc_cluster_prop[c] = {} ; c }
-# The following all have BLAST matches
-# all = csv_parse.call("env HASH=\"species1=Mi,is_pos_sel=1,source1=CDS,species2=Other,cluster=1\" ../../../scripts/sparql-csv.sh match_clusters.rq").drop(1)
-
 p [:num_PSC, all.size]
-assert(all.size == 43)
+# ==== all
+assert(all.size == 43) if TYPE=='CDS'   
 
 # ---- 2. Annotate for homologs
-# ---- 2a. Get all PSC that have homologs (&)
+# ---- 2a. Get all PSC that have homologs *catH* (&)
 # Note that catH overlaps with catA and that catH is larger than all PSC(!)
 catH = csv_parse.call("env HASH=\"clusters=1,species=Mi,source1=#{TYPE}\" ../../../scripts/sparql-csv.sh blast2.rq").drop(1).flatten
-assert(catH.size == 27,"Expect 27 was #{catH.size}") if TYPE=='CDS'
-# p catH
+# ==== catH
+assert(catH.size == 36,"Expect 36 was #{catH.size}") if TYPE=='CDS'
 
-# ---- 2b. Now we have the unique PSC (catC green) (&)
-catC1 = all - catH
-p [:unique_PSC, catC1.size]
-assert(catC1.size == 7,"Expect 7") if TYPE=='CDS'
-
-# ---- 2c. Annotate plantP only (&)
+# ---- 2b. Annotate plantP only (&)
 #      catH contains all ann PSC. So we can select those that
 #      contain only-plant matches
 list1 = csv_parse.call("env HASH=\"by_gene=1,species=Mi,source1=#{TYPE}\" ../../../scripts/sparql-csv.sh blast2.rq").drop(1)
@@ -122,25 +117,30 @@ minc_cluster_plantp = ann.keys.select { |k| ann[k].include?(:plant_pathogen) }
 p [:plantP, minc_cluster_plantp.size ]
 assert(minc_cluster_plantp.size == 9) if TYPE=='CDS' 
 
-# ---- 2d and 2e. Annotate is in ann (&)
+# ---- 2c and 2d. Annotated in ann! (&)
 
-# ---- 3. Fetch matching PSC (catA).
+# ---- 3. Fetch matching PSC (catA) &
 #      Cat. A - create pairs of cluster + species, the list may contain
 #      references to other Mi EST clusters, but not to self
-listA = csv_parse.call("env HASH=\"species1=Mi,is_pos_sel=1,source1=#{TYPE},species2=Other,is_pos_sel2=1\" ../../../scripts/sparql-csv.sh match_clusters.rq").drop(1)
-catA = listA.map{ |pair| pair[0] }
-
-catC = catC1 - catA # subtract those unique which fall into catA
-assert(catA - catC == catA,"There should be no overlap between catA and catC")
-catB = all - catA - catC 
+catA = csv_parse.call("env HASH=\"cluster=1,species1=Mi,is_pos_sel=1,source1=#{TYPE},species2=Other,is_pos_sel2=1\" ../../../scripts/sparql-csv.sh match_clusters.rq").drop(1).flatten
+# ==== we have catA
+assert(catA.size == 10) if TYPE=='CDS' 
 
 # ---- 3a catA plant only
-red_plant_pathogenA = listA.map{ |pair| pair[0] }.select { |c| ann[c] and ann[c].include?(:plant_pathogen) }
+red_plant_pathogenA = catA.select { |c| ann[c] and ann[c].include?(:plant_pathogen) }
 p [:red, red_plant_pathogenA.size]
+# ==== we have catA orange and red!
 orange_planthogenA = catA - red_plant_pathogenA
 p [:orange, orange_planthogenA.size]
-
 assert(red_plant_pathogenA.size == 2) if TYPE=='CDS' 
+
+# ---- Now we can have the unique PSC (catC green) (&)
+catC = all - catA - catH
+p [:unique_PSC, catC.size]
+assert(catC.size == 6,"Expect 6") if TYPE=='CDS'
+
+assert(catA & catC == [],"There should be no overlap between catA and catC")
+catB = all - catA - catC 
 
 # ---- Fetch conserved (catB)
 p '** all **********************'
@@ -159,7 +159,10 @@ p catA & all
 p [(catA & all).size,catA.size]
 assert(all & catB == catB)
 assert(all & catC == catC)
-assert(all & catA == catA)
-
+assert(catA & all == catA)
 assert(all.size == catA.size + catB.size + catC.size, [catA,catB,catC,all].map {|i| i.size}.to_s)
 
+print "cat A. plant pathogen only\t",red_plant_pathogenA.size,"\n"
+print "cat A. other\t",orange_planthogenA.size,"\n"
+print "cat B. plant pathogen only \t",planthogenB.size,"\n"
+print "cat C. unique\t",catC.size,"\n"
