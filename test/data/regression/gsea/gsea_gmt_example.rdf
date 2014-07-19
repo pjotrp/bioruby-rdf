@@ -1,0 +1,179 @@
+# Template for generating RDF triples from GSEA GMT files
+#
+#   env INFILE=c2.all.v3.0.symbols.gmt erb -r ./lib/bio-rdf/rdf templates/gsea/gsea_gmt.rdf
+#
+# or
+#
+#   env INFILE=test/data/parsers/gsea/gsea_gmt_example.gmt erb -r ./lib/bio-rdf/rdf templates/gsea/gsea_gmt.rdf > test/data/regression/gsea/gsea_gmt_example.rdf
+# 
+# The generated RDF
+#
+#   :west_adrenocortical_tumor_markers_up  rdf:label  "WEST_ADRENOCORTICAL_TUMOR_MARKERS_UP"
+#   :west_adrenocortical_tumor_markers_up  :geneset  true
+#   :west_adrenocortical_tumor_markers_up  :gene  "FGFR4"
+#   :west_adrenocortical_tumor_markers_up  :gene  "PRC1"
+#   :west_adrenocortical_tumor_markers_up  :gene  "CDC2"
+#   :west_adrenocortical_tumor_markers_up  :gene  "NEK2"
+#   etc.
+#   
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix hgnc: <http://identifiers.org/hgnc.symbol/> .
+@prefix : <http://biobeat.org/rdf/gsea#> .
+
+
+
+
+   :turashvili_breast_carcinoma_ductal_vs_lobular_up  rdf:label  "TURASHVILI_BREAST_CARCINOMA_DUCTAL_VS_LOBULAR_UP"
+   :turashvili_breast_carcinoma_ductal_vs_lobular_up  :geneset  true
+   
+   
+   :turashvili_breast_carcinoma_ductal_vs_lobular_up  :cancer  true
+   :turashvili_breast_carcinoma_ductal_vs_lobular_up  :breast  true
+   
+    :turashvili_breast_carcinoma_ductal_vs_lobular_up  :gene  "S100P"
+    :turashvili_breast_carcinoma_ductal_vs_lobular_up  :gene  "C20ORF114"
+    :turashvili_breast_carcinoma_ductal_vs_lobular_up  :gene  "DTL"
+    :turashvili_breast_carcinoma_ductal_vs_lobular_up  :gene  "AHCTF1"
+    :turashvili_breast_carcinoma_ductal_vs_lobular_up  :gene  "LOC100132169"
+    :turashvili_breast_carcinoma_ductal_vs_lobular_up  :gene  "CDH1"
+    :turashvili_breast_carcinoma_ductal_vs_lobular_up  :gene  "GLCCI1"
+    :turashvili_breast_carcinoma_ductal_vs_lobular_up  :gene  "STK4"
+    :turashvili_breast_carcinoma_ductal_vs_lobular_up  :gene  "ZNF678"
+    :turashvili_breast_carcinoma_ductal_vs_lobular_up  :gene  "TTC3"
+    :turashvili_breast_carcinoma_ductal_vs_lobular_up  :gene  "EPB41L3"
+    :turashvili_breast_carcinoma_ductal_vs_lobular_up  :gene  "SLC1A2"
+    :turashvili_breast_carcinoma_ductal_vs_lobular_up  :gene  "LAMP2"
+    :turashvili_breast_carcinoma_ductal_vs_lobular_up  :gene  "B3GALNT1"
+    :turashvili_breast_carcinoma_ductal_vs_lobular_up  :gene  "HIST1H3B"
+    :turashvili_breast_carcinoma_ductal_vs_lobular_up  :gene  "CKS2"
+    :turashvili_breast_carcinoma_ductal_vs_lobular_up  :gene  "MEX3C"
+    :turashvili_breast_carcinoma_ductal_vs_lobular_up  :gene  "OSBPL10"
+    :turashvili_breast_carcinoma_ductal_vs_lobular_up  :gene  "CPB1"
+    :turashvili_breast_carcinoma_ductal_vs_lobular_up  :gene  "RAB11FIP1"
+    :turashvili_breast_carcinoma_ductal_vs_lobular_up  :gene  "FAM54A"
+   
+
+   :turashvili_breast_carcinoma_ductal_vs_lobular_dn  rdf:label  "TURASHVILI_BREAST_CARCINOMA_DUCTAL_VS_LOBULAR_DN"
+   :turashvili_breast_carcinoma_ductal_vs_lobular_dn  :geneset  true
+   
+   
+   :turashvili_breast_carcinoma_ductal_vs_lobular_dn  :cancer  true
+   :turashvili_breast_carcinoma_ductal_vs_lobular_dn  :breast  true
+   
+    :turashvili_breast_carcinoma_ductal_vs_lobular_dn  :gene  "ASPN"
+    :turashvili_breast_carcinoma_ductal_vs_lobular_dn  :gene  "SEC24A"
+    :turashvili_breast_carcinoma_ductal_vs_lobular_dn  :gene  "NEAT1"
+    :turashvili_breast_carcinoma_ductal_vs_lobular_dn  :gene  "VTCN1"
+    :turashvili_breast_carcinoma_ductal_vs_lobular_dn  :gene  "MAOB"
+    :turashvili_breast_carcinoma_ductal_vs_lobular_dn  :gene  "MID1"
+    :turashvili_breast_carcinoma_ductal_vs_lobular_dn  :gene  "C5ORF54"
+   
+
+   :turashvili_breast_lobular_carcinoma_vs_ductal_normal_up  rdf:label  "TURASHVILI_BREAST_LOBULAR_CARCINOMA_VS_DUCTAL_NORMAL_UP"
+   :turashvili_breast_lobular_carcinoma_vs_ductal_normal_up  :geneset  true
+   
+   
+   :turashvili_breast_lobular_carcinoma_vs_ductal_normal_up  :cancer  true
+   :turashvili_breast_lobular_carcinoma_vs_ductal_normal_up  :breast  true
+   
+    :turashvili_breast_lobular_carcinoma_vs_ductal_normal_up  :gene  "ASPN"
+    :turashvili_breast_lobular_carcinoma_vs_ductal_normal_up  :gene  "GNA13"
+    :turashvili_breast_lobular_carcinoma_vs_ductal_normal_up  :gene  "CTHRC1"
+    :turashvili_breast_lobular_carcinoma_vs_ductal_normal_up  :gene  "AEBP1"
+    :turashvili_breast_lobular_carcinoma_vs_ductal_normal_up  :gene  "PRC1"
+    :turashvili_breast_lobular_carcinoma_vs_ductal_normal_up  :gene  "AGTPBP1"
+    :turashvili_breast_lobular_carcinoma_vs_ductal_normal_up  :gene  "PRRX1"
+    :turashvili_breast_lobular_carcinoma_vs_ductal_normal_up  :gene  "POSTN"
+    :turashvili_breast_lobular_carcinoma_vs_ductal_normal_up  :gene  "ZEB1"
+    :turashvili_breast_lobular_carcinoma_vs_ductal_normal_up  :gene  "ENPEP"
+    :turashvili_breast_lobular_carcinoma_vs_ductal_normal_up  :gene  "LRRC15"
+    :turashvili_breast_lobular_carcinoma_vs_ductal_normal_up  :gene  "UXS1"
+    :turashvili_breast_lobular_carcinoma_vs_ductal_normal_up  :gene  "SSR1"
+    :turashvili_breast_lobular_carcinoma_vs_ductal_normal_up  :gene  "EDNRA"
+    :turashvili_breast_lobular_carcinoma_vs_ductal_normal_up  :gene  "CX"
+    :turashvili_breast_lobular_carcinoma_vs_ductal_normal_up  :gene  "CR4"
+    :turashvili_breast_lobular_carcinoma_vs_ductal_normal_up  :gene  "FBXO28"
+    :turashvili_breast_lobular_carcinoma_vs_ductal_normal_up  :gene  "COL12A1"
+    :turashvili_breast_lobular_carcinoma_vs_ductal_normal_up  :gene  "GPX8"
+    :turashvili_breast_lobular_carcinoma_vs_ductal_normal_up  :gene  "TIE1"
+    :turashvili_breast_lobular_carcinoma_vs_ductal_normal_up  :gene  "LOX"
+    :turashvili_breast_lobular_carcinoma_vs_ductal_normal_up  :gene  "COL11A1"
+    :turashvili_breast_lobular_carcinoma_vs_ductal_normal_up  :gene  "RAP2C"
+    :turashvili_breast_lobular_carcinoma_vs_ductal_normal_up  :gene  "C5AR1"
+    :turashvili_breast_lobular_carcinoma_vs_ductal_normal_up  :gene  "MICAL2"
+    :turashvili_breast_lobular_carcinoma_vs_ductal_normal_up  :gene  "CILP"
+    :turashvili_breast_lobular_carcinoma_vs_ductal_normal_up  :gene  "LYZ"
+    :turashvili_breast_lobular_carcinoma_vs_ductal_normal_up  :gene  "IFI44"
+    :turashvili_breast_lobular_carcinoma_vs_ductal_normal_up  :gene  "THY1"
+    :turashvili_breast_lobular_carcinoma_vs_ductal_normal_up  :gene  "SPAG9"
+    :turashvili_breast_lobular_carcinoma_vs_ductal_normal_up  :gene  "INHBA"
+    :turashvili_breast_lobular_carcinoma_vs_ductal_normal_up  :gene  "BGN"
+    :turashvili_breast_lobular_carcinoma_vs_ductal_normal_up  :gene  "RAB18"
+    :turashvili_breast_lobular_carcinoma_vs_ductal_normal_up  :gene  "PLXDC1"
+    :turashvili_breast_lobular_carcinoma_vs_ductal_normal_up  :gene  "COL1A2"
+    :turashvili_breast_lobular_carcinoma_vs_ductal_normal_up  :gene  "VCAN"
+    :turashvili_breast_lobular_carcinoma_vs_ductal_normal_up  :gene  "COL1A1"
+    :turashvili_breast_lobular_carcinoma_vs_ductal_normal_up  :gene  "ADAM12"
+    :turashvili_breast_lobular_carcinoma_vs_ductal_normal_up  :gene  "PLXNC1"
+    :turashvili_breast_lobular_carcinoma_vs_ductal_normal_up  :gene  "COL3A1"
+    :turashvili_breast_lobular_carcinoma_vs_ductal_normal_up  :gene  "ASAP1"
+    :turashvili_breast_lobular_carcinoma_vs_ductal_normal_up  :gene  "TAGAP"
+    :turashvili_breast_lobular_carcinoma_vs_ductal_normal_up  :gene  "DOCK1"
+    :turashvili_breast_lobular_carcinoma_vs_ductal_normal_up  :gene  "CD69"
+    :turashvili_breast_lobular_carcinoma_vs_ductal_normal_up  :gene  "FLJ38379"
+    :turashvili_breast_lobular_carcinoma_vs_ductal_normal_up  :gene  "COMP"
+    :turashvili_breast_lobular_carcinoma_vs_ductal_normal_up  :gene  "FNDC1"
+    :turashvili_breast_lobular_carcinoma_vs_ductal_normal_up  :gene  "COL6A3"
+    :turashvili_breast_lobular_carcinoma_vs_ductal_normal_up  :gene  "HSPA6"
+    :turashvili_breast_lobular_carcinoma_vs_ductal_normal_up  :gene  "WIPF1"
+    :turashvili_breast_lobular_carcinoma_vs_ductal_normal_up  :gene  "LAMB1"
+    :turashvili_breast_lobular_carcinoma_vs_ductal_normal_up  :gene  "UBTD2"
+    :turashvili_breast_lobular_carcinoma_vs_ductal_normal_up  :gene  "THBS2"
+    :turashvili_breast_lobular_carcinoma_vs_ductal_normal_up  :gene  "FN1"
+    :turashvili_breast_lobular_carcinoma_vs_ductal_normal_up  :gene  "SMCHD1"
+    :turashvili_breast_lobular_carcinoma_vs_ductal_normal_up  :gene  "FBN1"
+    :turashvili_breast_lobular_carcinoma_vs_ductal_normal_up  :gene  "LOC645513"
+    :turashvili_breast_lobular_carcinoma_vs_ductal_normal_up  :gene  "IGF1"
+    :turashvili_breast_lobular_carcinoma_vs_ductal_normal_up  :gene  "SPARC"
+    :turashvili_breast_lobular_carcinoma_vs_ductal_normal_up  :gene  "COL5A2"
+    :turashvili_breast_lobular_carcinoma_vs_ductal_normal_up  :gene  "COL5A1"
+    :turashvili_breast_lobular_carcinoma_vs_ductal_normal_up  :gene  "MXRA5"
+    :turashvili_breast_lobular_carcinoma_vs_ductal_normal_up  :gene  "RGS1"
+    :turashvili_breast_lobular_carcinoma_vs_ductal_normal_up  :gene  "SULF2"
+    :turashvili_breast_lobular_carcinoma_vs_ductal_normal_up  :gene  "NARG1"
+    :turashvili_breast_lobular_carcinoma_vs_ductal_normal_up  :gene  "SFRP2"
+    :turashvili_breast_lobular_carcinoma_vs_ductal_normal_up  :gene  "SULF1"
+    :turashvili_breast_lobular_carcinoma_vs_ductal_normal_up  :gene  "ZNF117"
+   
+
+   :white_neuroblastoma_with_1p36_3_deletion  rdf:label  "WHITE_NEUROBLASTOMA_WITH_1P36.3_DELETION"
+   :white_neuroblastoma_with_1p36_3_deletion  :geneset  true
+   
+   
+   
+   
+   
+   
+
+   :gdb_cards_white_neuroblastoma_with_1p36_3_deletion_html  rdf:label  "gdb/cards/WHITE_NEUROBLASTOMA_WITH_1P36.3_DELETION.html"
+   :gdb_cards_white_neuroblastoma_with_1p36_3_deletion_html  :geneset  true
+   
+   
+   
+   
+   
+    :gdb_cards_white_neuroblastoma_with_1p36_3_deletion_html  :gene  "KCNAB2"
+    :gdb_cards_white_neuroblastoma_with_1p36_3_deletion_html  :gene  "RPL22"
+    :gdb_cards_white_neuroblastoma_with_1p36_3_deletion_html  :gene  "PH"
+    :gdb_cards_white_neuroblastoma_with_1p36_3_deletion_html  :gene  "F13"
+    :gdb_cards_white_neuroblastoma_with_1p36_3_deletion_html  :gene  "TNFRSF25"
+    :gdb_cards_white_neuroblastoma_with_1p36_3_deletion_html  :gene  "HES2"
+    :gdb_cards_white_neuroblastoma_with_1p36_3_deletion_html  :gene  "ICMT"
+    :gdb_cards_white_neuroblastoma_with_1p36_3_deletion_html  :gene  "TAS1R1"
+    :gdb_cards_white_neuroblastoma_with_1p36_3_deletion_html  :gene  "CHD5"
+    :gdb_cards_white_neuroblastoma_with_1p36_3_deletion_html  :gene  "GPR153"
+    :gdb_cards_white_neuroblastoma_with_1p36_3_deletion_html  :gene  "ESPN"
+   
+

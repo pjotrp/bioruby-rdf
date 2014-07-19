@@ -1,0 +1,49 @@
+# List all clusters under pos_sel that have a BLAST homolog
+#
+# Example:
+#
+#   env HASH="by_gene=1,species=Mh,source1=CDS" ../../../scripts/sparql.sh blast2.rq
+#
+<%
+   h=ENV['HASH'].split(',').map{ |s| s.split('=') }.to_h
+   # inputs
+   species     = h['species']
+   source1     = h['source1']
+   source2     = h['source2']
+   # options
+   by_gene       = h['by_gene']       # list all genes
+%>
+
+<%= File.read(File.dirname(__FILE__)+'/preamble.rq')  %>
+
+<% if not by_gene %>
+  SELECT DISTINCT ?cluster WHERE 
+<% else %>
+  SELECT ?cluster ?hspecies ?hspecies_full ?gdescr WHERE 
+<% end %>
+{
+
+# :Mi_CDS_cluster00100_NP_001022867 :cluster :Mi_CDS_cluster00100 .
+# :Mi_CDS_cluster00100_NP_001022867 a :blast_match .
+# :Mi_CDS_cluster00100_NP_001022867 rdf:label "Mi_CDS_cluster00100_NP_001022867" .
+# :Mi_CDS_cluster00100_NP_001022867 :homolog_species "Ce" .
+# :Mi_CDS_cluster00100_NP_001022867 :homolog_species_full "Caenorhabditis elegans" .
+# :Mi_CDS_cluster00100_NP_001022867 :homolog_gene "NP_001022867" .
+# :Mi_CDS_cluster00100_NP_001022867 :descr "Protein MVK-1, isoform b  > Protein MVK-1, isoform b" .
+# :Mi_CDS_cluster00100_NP_001022867 :e_value 9.42776e-164 .
+
+  ?hgene
+    :cluster ?cluster ;
+    a :blast_match ;
+    # <% if source2 %>:homolog_source "<%= source2 %>" ; <% end %>
+    :homolog_species_full ?hspecies_full ;
+    :homolog_species ?hspecies .
+    # :homolog_species_full ?hspecies_full ;
+  ?cluster  # The cluster we are matching
+    :species "<%= species %>" ;
+    :source "<%= source1 %>" ;
+    :is_pos_sel true .
+  MINUS  { ?hgene :homolog_species "<%= species %>" } .
+  FILTER ( !CONTAINS(?hspecies_full,"Nema_EST")) .
+  OPTIONAL  { ?hgene :descr ?gdescr } .
+}

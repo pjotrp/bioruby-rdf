@@ -8,8 +8,7 @@
 #
 # In this file only require other files. Avoid other source code.
 
-
-require 'bio-table'
+# require 'bio-table'
 require 'bio-rdf/rdf.rb'
 require 'bio-rdf/writers/turtle'
 require 'bio-rdf/parsers/gsea/broadgsea'

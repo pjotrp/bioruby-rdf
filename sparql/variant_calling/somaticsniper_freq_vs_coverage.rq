@@ -1,0 +1,24 @@
+# Create a table of somatic freqencies and coverage as 
+# delivered by varscan2 
+#
+# (see also https://github.com/pjotrp/bioruby-rdf/blob/master/features/snvs.feature)
+#
+# env FILTER=100T erb sparql/variant_calling/somaticsniper_freq_vs_coverage.rq |~/opt/bin/sparql-query "http://localhost:8000/sparql/?soft-limit=1000" -p
+# 
+
+<%
+   filter=ENV['FILTER']
+%>
+
+<%= File.read(File.dirname(__FILE__)+'/preamble.rq')  %>
+
+SELECT ?id,(?variant_reads_in_tumor*100.0/?tumor_coverage AS ?freq),?tumor_coverage,?normal_coverage,?tumor_in_normal WHERE 
+  { 
+  ?mutation :caller :somaticsniper . 
+  ?mutation rdf:label ?id . 
+  ?mutation :depth_in_tumor ?tumor_coverage . 
+  ?mutation :depth_in_normal ?normal_coverage . 
+  ?mutation :depth_of_reads_supporting_variant_in_tumor ?variant_reads_in_tumor . 
+  ?mutation :depth_of_reads_supporting_variant_in_normal ?tumor_in_normal . 
+  FILTER (CONTAINS(?id,"<%= filter %>")) .
+}

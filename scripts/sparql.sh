@@ -3,4 +3,4 @@
 sparql=$1
 shift
 
-~/opt/bin/sparql-query "http://localhost:8000/sparql/?soft-limit=-1" -p < $sparql
+erb $sparql | ~/opt/bin/sparql-query "http://localhost:8000/sparql/?soft-limit=-1" -p 

@@ -1,0 +1,72 @@
+# List all clusters/sequences that have BLAST matches
+#
+#   env HASH="by_gene=1,species=Mi,source=CDS" erb sparql/extra/gwp/blast.rq |~/opt/bin/sparql-query "http://localhost:8000/sparql/?soft-limit=-1" -p
+#
+# or the shorter
+#
+#   env HASH="is_pos_sel=1,include_dna=1,species_blast=1,species=Mi,source=CDS" ./scripts/sparql.sh sparql/extra/gwp/blast.rq  
+<%
+   h=ENV['HASH'].split(',').map{ |s| s.split('=') }.to_h
+   # inputs
+   species     = h['species']
+   source      = h['source']
+   # options
+   by_gene       = h['by_gene']       # list all genes
+   is_pos_sel    = h['is_pos_sel']    # only include ps
+   is_pos_sel2   = h['is_pos_sel2']
+   species_blast = h['species_blast'] # against species db
+   include_dna   = h['include_dna']
+%>
+
+<%= File.read(File.dirname(__FILE__)+'/preamble.rq')  %>
+
+<% if not by_gene %>
+  SELECT DISTINCT ?cluster WHERE 
+<% else %>
+  SELECT ?cluster ?name ?hspecies ?hcluster ?hspecies_full ?descr WHERE 
+<% end %>
+{
+
+# :Mi_CDS_cluster00100_NP_001022867 :cluster :Mi_CDS_cluster00100 .
+# :Mi_CDS_cluster00100_NP_001022867 a :blast_match .
+# :Mi_CDS_cluster00100_NP_001022867 rdf:label "Mi_CDS_cluster00100_NP_001022867" .
+# :Mi_CDS_cluster00100_NP_001022867 :homolog_species "Ce" .
+# :Mi_CDS_cluster00100_NP_001022867 :homolog_species_full "Caenorhabditis elegans" .
+# :Mi_CDS_cluster00100_NP_001022867 :homolog_gene "NP_001022867" .
+# :Mi_CDS_cluster00100_NP_001022867 :descr "Protein MVK-1, isoform b  > Protein MVK-1, isoform b" .
+# :Mi_CDS_cluster00100_NP_001022867 :e_value 9.42776e-164 .
+
+  ?hgene
+    :cluster ?cluster ;
+    a :blast_match ;
+    rdf:label ?name ;
+    :homolog_species ?hspecies ; 
+    :homolog_species_full ?hspecies_full .
+  <%= '?cluster :is_pos_sel true .' if is_pos_sel %>
+  MINUS  { ?hgene :homolog_species "<%= species %>" } .
+  <%= 'OPTIONAL { ?hgene :descr ?descr } .' if by_gene %>
+
+  # ---- Two-way positive selection
+  <% if is_pos_sel2 %>
+    ?hgene :homolog_cluster ?hcluster .
+    ?hcluster :is_pos_sel true .
+  <% end %>
+
+  FILTER (STRSTARTS(?name,"<%= species+'_'+source %>") && !STRSTARTS(?hspecies_full,"<%= species %>"))
+  # ---- Skip species ESTs using WORMBASE convention
+  FILTER (!CONTAINS(?name,"<%= '_'+species.upcase+'C' %>"))  
+
+  <% if species_blast %>
+    # Species BLAST
+    <% if include_dna %>
+      # With ORFs (all)
+      FILTER (CONTAINS(?hspecies_full,"_DNA") || CONTAINS(?hspecies_full,"_EST") || CONTAINS(?hspecies_full,"_CDS")) . 
+    <% else %>
+      # Without ORFs
+      FILTER (CONTAINS(?hspecies_full,"_EST") || CONTAINS(?hspecies_full,"_CDS")) . 
+    <% end %>
+  <% else %>
+    # ---- Pure NR BLAST
+    FILTER (!CONTAINS(?hspecies_full,"_DNA") &&!CONTAINS(?hspecies_full,"_EST") && !CONTAINS(?hspecies_full,"_CDS")) . 
+  <% end %>
+}

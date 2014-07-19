@@ -1,0 +1,29 @@
+# Create a table of somatic freqencies and coverage as 
+# delivered by varscan2 
+#
+# (see also https://github.com/pjotrp/bioruby-rdf/blob/master/features/snvs.feature)
+#
+# env FILTER=_hc erb sparql/variant_calling/varscan2_freq_vs_coverage.rq |~/opt/bin/sparql-query "http://localhost:8000/sparql/?soft-limit=1000" -p
+# 
+
+<%
+   filter=ENV['FILTER']
+%>
+
+<%= File.read(File.dirname(__FILE__)+'/preamble.rq')  %>
+
+# SELECT distinct ?id,?freq,(?ref_reads_in_tumor + ?variant_reads_in_tumor AS ?tumor_coverage),(?ref_reads_in_normal + ?variant_reads_in_normal AS ?normal_coverage) ?variant_reads_in_tumor ?variant_reads_in_normal WHERE
+SELECT distinct ?id,?freq,(?ref_reads_in_tumor + ?variant_reads_in_tumor AS ?tumor_coverage),(?ref_reads_in_normal + ?variant_reads_in_normal AS ?normal_coverage) ?variant_reads_in_tumor ?variant_reads_in_normal WHERE
+{
+  ?mutation :caller :varscan2 .
+  ?mutation rdf:label ?id .
+  ?mutation :ref_reads_in_normal ?ref_reads_in_normal .
+  ?mutation :variant_reads_in_normal ?variant_reads_in_normal .
+  ?mutation :ref_reads_in_tumor ?ref_reads_in_tumor .
+  ?mutation :variant_reads_in_tumor ?variant_reads_in_tumor .
+  ?mutation :variant_frequency_tumor ?freq .
+  # FILTER (CONTAINS(?id,"<%= filter %>")) .
+  # MINUS { ?mutation :hc true } .
+  OPTIONAL { ?mutation :hc ?hc } .
+  # FILTER (!BOUND(?hc)) .
+}

@@ -1,4 +1,4 @@
-# Count all clusters under positive selection
+# Count all clusters tested for positive selection
 #
 # Run with, for example:
 #
@@ -11,27 +11,12 @@ prefix hgnc: <http://identifiers.org/hgnc.symbol/>
 prefix doi: <http://dx.doi.org/>
 prefix : <http://biobeat.org/rdf/ns#> 
 
-<%
-   # inputs
-   species     = ENV['species1']
-   source1     = ENV['source1']
-   count       = ENV['count']
-%>
-
-<% if count %>
-SELECT ?species ?source (COUNT(?name) AS ?num) WHERE 
-<% else %>
-SELECT ?species ?source ?name WHERE 
-<% end %>
+SELECT ?species ?source (COUNT(?id) AS ?num) WHERE 
 # SELECT ?name ?source ?sites WHERE 
 { 
-  ?id :is_pos_sel true .
-  ?id rdf:label ?name .
-  ?id :sites ?sites .
   ?id :species ?species .
   ?id :source ?source .
+  ?id :is_pos_sel ?is_pos_sel .
 }
-<% if count %>
 GROUP by ?species ?source
 ORDER by ?species ?source
-<% end %>

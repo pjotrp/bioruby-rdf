@@ -1,0 +1,24 @@
+# List all clusters that have signalP
+#
+#   ./scripts/sparql.sh script.rq
+# 
+# or
+#
+#   env FILTER=phobius erb sparql/extra/gwp/signalP-clusters.rq |~/opt/bin/sparql-query "http://localhost:8000/sparql/?soft-limit=-1" -p|grep DNA|sort|./bin/strip_uri.rb
+
+<%= File.read(File.dirname(__FILE__)+'/preamble.rq')  %>
+
+SELECT distinct ?cluster ?gene_name ?transmembrane WHERE 
+# SELECT distinct ?cluster WHERE 
+{
+  ?id      :signalP true .
+  # ?id      :phobius true .
+  ?id      :gene_name ?gene_name .
+  ?id      :species ?species .
+  ?id      :source ?source .
+  ?id2     :gene_name ?gene_name .
+  ?id2     :species ?species .
+  ?id2     :source ?source .
+  ?id2     :cluster ?cluster .
+  OPTIONAL { ?id :transmembrane ?transmembrane } .
+}

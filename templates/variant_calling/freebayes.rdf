@@ -1,0 +1,62 @@
+# Template for generating RDF triples from freebayes data
+#
+#   bio-vcf --filter rec.info.geneinfo --eval '[rec.id,rec.chr,rec.pos,rec.info.sao,rec.info.CLNDBN,rec.info.geneinfo.split(/:/)[0]].join("\t")' < /export/data/MBC/clinvar_20140303.vcf > /export/data/MBC/clinvar_20140303.tab
+#   
+#   bio-vcf -v --eval 'fields[0..4]+[r.info.sample[0..5]]' --seval 's.dp' < germline_freebayes.vcf
+#
+#   or
+#
+#   bio-vcf -v --eval 'fields[0..4]+[r.info.sample[0..5],r.normal.ro,r.tumor.ao]' --seval 's.dp' < $fn.vcf > $fn.tab
+#   
+# resulting in
+#
+#   10      101964404       .       G       A       MBC012R 20      18
+#   10      101977883       .       C       T       MBC003R 4       13
+#   (...)
+#   
+# followed by
+#
+#   env INFILE=table.txt erb freebayes.rdf
+#
+
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix hgnc: <http://identifiers.org/hgnc.symbol/> .
+@prefix seq: <http://biobeat.org/rdf/seq#> .
+@prefix db: <http://biobeat.org/rdf/db#> .
+@prefix disease: <http://biobeat.org/rdf/disease#> .
+@prefix mbc: <http://biobeat.org/rdf/mbc#> .
+@prefix freebayes: <http://biobeat.org/rdf/freebayes#> .
+@prefix : <http://biobeat.org/rdf/freebayes#> .
+
+<%
+   variant_type = if ENV["INFILE"] =~ /germl/
+                    'germline'
+                  else
+                    'somatic'
+                  end
+   # 
+   # 20      9370527 .       A       G       MBC129  8       5       9       23
+   File.open(ENV["INFILE"]).each_line do |line|
+     next if line =~ /^(#|Chr)/
+     (chr,pos,descr,ref,alt,sample,n_dp,n_ro,n_ao,t_dp,t_ro,t_ao) = line.split(/\t/)
+     id = 'freebayes_'+chr+'_'+pos+'_'+sample
+%>
+  :<%= id %>  seq:chr         "<%= chr %>" .
+  :<%= id %>  seq:pos         <%= pos %> .
+  :<%= id %>  :id          "<%= id %>" .
+  :<%= id %>  seq:variant_type :<%= variant_type %> .
+  :<%= id %>  seq:ref         "<%= ref %>" .
+  :<%= id %>  seq:alt         "<%= alt %>" .
+<% if n_ro %>
+  :<%= id %>  freebayes:n_ro    <%= n_ro %> .
+  :<%= id %>  freebayes:n_ao    <%= n_ao %> .
+  :<%= id %>  freebayes:n_dp    <%= n_dp %> .
+  :<%= id %>  freebayes:t_ro    <%= t_ro %> .
+  :<%= id %>  freebayes:t_ao    <%= t_ao %> .
+  :<%= id %>  freebayes:t_dp    <%= t_dp %> .
+<% end %>
+  :<%= id %>  mbc:sample      "<%= sample %>" .
+  :<%= id %>  db:id         db:freebayes .
+<% end %>

@@ -1,0 +1,32 @@
+# Gather all species/cluster/gene names in a text file with
+#
+#   grep '>' */cluster*/ntpar.fa > gene_names.txt
+#
+# So each line contains for example
+#
+#   Mi_CDS/cluster00001/ntpar.fa:>Minc13493
+#
+# and generate RDF with
+#
+#   env INFILE=gene_names.txt erb -r ./lib/bio-rdf/rdf templates/extra/gwp/gene_names.rdf
+#
+#
+<%= File.read(File.dirname(__FILE__)+'/preamble.rdf')  %>
+
+<%
+   File.open(ENV["INFILE"]).each_line do |line|
+     match = /(\S\S)_([^\/]+?)\/([^\/]+)[^:]+:>+(\S*)/.match(line)
+     species=match[1]
+     source=match[2]
+     cluster=match[3]
+     gene=match[4]
+     id = [species,source,cluster,BioRdf::Turtle.mangle_identifier(gene)].join('_')
+%>
+  :<%= id %>  rdf:label  "<%= id %>" .
+  :<%= id %>  :gene_name  "<%= gene %>" .
+  :<%= id %>  :species  "<%= species %>" .
+  :<%= id %>  :source  "<%= source %>" .
+  :<%= id %>  :cluster  :<%= species+'_'+source+'_'+cluster %> .
+<% end %>
+
+
