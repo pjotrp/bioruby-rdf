@@ -55,7 +55,7 @@ OPTIONS
 # RDF output by bio-rdf #{base[:version]} https://github.com/pjotrp/bioruby-rdf
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix dc: <http://purl.org/dc/elements/1.1/> .
-@prefix : <http://biobeat.org/rdf/gwp#>  .
+@prefix : <#{rdf_namespace}>  .
 HEADER
         
         ARGV.each do | fn |
