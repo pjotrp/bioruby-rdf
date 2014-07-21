@@ -52,7 +52,7 @@
     # rdf:label ?hname .
   # Just make sure there are no matches to self:
   ?hcluster :species ?hspecies .
-  FILTER (?cluster != ?hcluster) .  # skip exact self matches
+  FILTER (?cluster != ?hcluster) .  # skip exact self matches using cluster ID
   FILTER (?hspecies != "<%= species1 %>") .  # skip exact self matches
 
   <%= '?hcluster :is_pos_sel true .' if is_pos_sel2 %>

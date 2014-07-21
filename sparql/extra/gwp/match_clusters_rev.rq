@@ -25,14 +25,14 @@
 
 <% if not by_gene %>
   <% if paired %>
-    SELECT DISTINCT ?cluster ?hcluster ?hspecies WHERE 
+    SELECT DISTINCT ?mcluster ?hcluster ?hspecies WHERE 
   <% elsif by_cluster %>
-    SELECT DISTINCT ?cluster WHERE 
+    SELECT DISTINCT ?mcluster WHERE 
   <% else %>
-    SELECT DISTINCT ?cluster ?hspecies WHERE 
+    SELECT DISTINCT ?mcluster ?hspecies WHERE 
   <% end %>
 <% else %>
-  SELECT DISTINCT ?cluster ?hcluster ?hspecies ?hname ?gene_name WHERE 
+  SELECT DISTINCT ?mcluster ?hcluster ?mspecies ?gene_name WHERE 
 <% end %>
 {
         # Find all BLAST matches
@@ -69,9 +69,9 @@
     :cluster ?mcluster .
   FILTER (?species != "<%= species %>" && ?species != "Nema" ) .
   # ?hcluster :species ?hspecies .
-  # FILTER (?cluster != ?hcluster) .  # skip exact self matches
+  FILTER (?mspecies = ?hspecies && ?mcluster != ?hcluster) .  # skip exact self matches
 
-  # <%= '?hcluster :is_pos_sel true .' if is_pos_sel2 %>
+  <%= '?hcluster :is_pos_sel true .' if is_pos_sel2 %>
   # <%= '?cluster :is_pos_sel true .' if is_pos_sel %>
 }
 
