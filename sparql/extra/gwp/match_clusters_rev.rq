@@ -1,0 +1,77 @@
+# List all clusters that have reversed within dataset matches
+#
+#   env HASH="species=Mi,is_pos_sel=1,source=DNA,is_pos_sel2=1" ../../../scripts/sparql-csv.sh match_clusters_rev.rq
+#   env HASH="by_gene=1,species=Mi,is_pos_sel=1,source=DNA,is_pos_sel2=1" ../../../scripts/sparql.sh match_clusters_rev.rq 
+#   
+# Means
+#
+#   Fetch all homologs from clusters that match an Mi DNA gene where
+#   clusters on both sides are under positive selection.
+<%
+   h=ENV['HASH'].split(',').map{ |s| s.split('=') }.to_h
+   # inputs
+   species      = h['species']
+   source       = h['source']
+   # output
+   by_gene      = h['by_gene']
+   by_cluster   = h['by_cluster']
+   paired       = h['paired']
+   # filter
+   is_pos_sel   = h['is_pos_sel']
+   is_pos_sel2  = h['is_pos_sel2']
+%>
+
+<%= File.read(File.dirname(__FILE__)+'/preamble.rq')  %>
+
+<% if not by_gene %>
+  <% if paired %>
+    SELECT DISTINCT ?cluster ?hcluster ?hspecies WHERE 
+  <% elsif by_cluster %>
+    SELECT DISTINCT ?cluster WHERE 
+  <% else %>
+    SELECT DISTINCT ?cluster ?hspecies WHERE 
+  <% end %>
+<% else %>
+  SELECT DISTINCT ?cluster ?hcluster ?hspecies ?hname ?gene_name WHERE 
+<% end %>
+{
+        # Find all BLAST matches
+        #
+        # :Bm_DNA_cluster00011_Minc_Contig703_53 rdf:label "Bm_DNA_cluster00011_Minc_Contig703_53" .
+        # :Bm_DNA_cluster00011_Minc_Contig703_53 :cluster :Bm_DNA_cluster00011 .
+        # :Bm_DNA_cluster00011_Minc_Contig703_53 a :blast_match .
+        # :Bm_DNA_cluster00011_Minc_Contig703_53 :homolog_species "Mi" .
+        # :Bm_DNA_cluster00011_Minc_Contig703_53 :homolog_species_full "[Mi_DNA]" .
+        # :Bm_DNA_cluster00011_Minc_Contig703_53 :homolog_gene "Minc_Contig703_53" .
+        # :Bm_DNA_cluster00011_Minc_Contig703_53 :descr " (REVERSE SENSE) 1 22093 cluster01628 [Mi_DNA]" .
+        # :Bm_DNA_cluster00011_Minc_Contig703_53 :e_value 3.49324e-05 .
+        # :Bm_DNA_cluster00011_Minc_Contig703_53 :homolog_source "DNA" .
+        # 
+        # the homolog should be listed as
+        #
+        #   :Mi_DNA_cluster00069_Minc_Contig4376_23  rdf:label  "Mi_DNA_cluster00069_Minc_Contig4376_23" .
+        #   :Mi_DNA_cluster00069_Minc_Contig4376_23  :gene_name  "Minc_Contig4376_23" .
+        #   :Mi_DNA_cluster00069_Minc_Contig4376_23  :species  "Mi" .
+        #   :Mi_DNA_cluster00069_Minc_Contig4376_23  :source  "DNA" .
+        #   :Mi_DNA_cluster00069_Minc_Contig4376_23  :cluster  :Mi_DNA_cluster00069 .
+
+  ?hgene
+    a :blast_match ;
+    :homolog_species "<%= species %>" ;
+    :homolog_species ?hspecies ;
+    :homolog_source "<%= source %>" ;
+    :cluster ?hcluster ; 
+    :homolog_gene ?gene_name .
+  ?mgene  # matched gene
+    :gene_name ?gene_name ;
+    :species ?mspecies ; 
+    :source ?msource ; 
+    :cluster ?mcluster .
+  FILTER (?species != "<%= species %>" && ?species != "Nema" ) .
+  # ?hcluster :species ?hspecies .
+  # FILTER (?cluster != ?hcluster) .  # skip exact self matches
+
+  # <%= '?hcluster :is_pos_sel true .' if is_pos_sel2 %>
+  # <%= '?cluster :is_pos_sel true .' if is_pos_sel %>
+}
+
