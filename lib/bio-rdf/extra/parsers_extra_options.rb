@@ -4,6 +4,8 @@ module BioRdf
       def Parsers::handle_options(base)
         # $stderr.print "Entering extra mode\n"
         # p ARGV
+        rdf_namespace = "http://biobeat.org/rdf/ns#"
+
         options = OpenStruct.new()
         
         opts = OptionParser.new() do |o|
@@ -33,9 +35,11 @@ OPTIONS
               when :digest
                 options.func   = GWP::Digest.method(:parse)
                 options.to_rdf = BioRdf::Writers::Turtle::Digest.method(:to_rdf)
+                rdf_namespace = "http://biobeat.org/rdf/paml#"
               when :blast
                 options.func   = GWP::Blast.method(:parse)
                 options.to_rdf = BioRdf::Writers::Turtle::Blast.method(:to_rdf)
+                rdf_namespace = "http://biobeat.org/rdf/blast#"
             end
           end
 
@@ -51,7 +55,7 @@ OPTIONS
 # RDF output by bio-rdf #{base[:version]} https://github.com/pjotrp/bioruby-rdf
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix dc: <http://purl.org/dc/elements/1.1/> .
-@prefix : <http://biobeat.org/rdf/ns#>  .
+@prefix : <http://biobeat.org/rdf/gwp#>  .
 HEADER
         
         ARGV.each do | fn |

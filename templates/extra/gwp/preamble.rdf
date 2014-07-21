@@ -3,5 +3,5 @@
 @prefix dc: <http://purl.org/dc/elements/1.1/> .
 @prefix hgnc: <http://identifiers.org/hgnc.symbol/> .
 @prefix doi: <http://dx.doi.org/> .
-@prefix : <http://biobeat.org/rdf/ns#> .
+@prefix : <http://biobeat.org/rdf/gwp/gene-names#> .
 
