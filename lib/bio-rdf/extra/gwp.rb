@@ -23,6 +23,10 @@ module BioRdf
               r[:is_pos_sel] = (a[5] == '++')
               r[:sites] = a[6].to_i if a[6]
               r[:seq_size] = a[8][1..-1].to_i if a[8] 
+
+              # Assertions
+              raise "Error "+buf if not /\S\S_(CDS|DNA|EST)_cluster\d+$/.match(r[:id])
+              raise "Error "+buf if not /(CDS|DNA|EST)$/.match(r[:source])
             end
             recs
           end
@@ -70,6 +74,10 @@ module BioRdf
                 r[:homolog_species] = $2
                 r[:homolog_source] = $3
               end
+              # assertions
+              raise "Error "+buf if not /(CDS|DNA|EST)$/.match(r[:homolog_source])
+              raise "Error "+buf if not /\[\S\S_(CDS|DNA|EST)\]$/.match(r[:homolog_species_full])
+              raise "Error "+buf if not /\S\S_(CDS|DNA|EST)_cluster\d+$/.match(r[:homolog_cluster])
               # override species
               recs << r
             end
