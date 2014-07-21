@@ -59,7 +59,6 @@ module BioRdf
               end
               raise "Expected Ss_TYPE (e.g., Mi_CDS) instead of #{hfull} for "+buf if hfull !~ /\S\S_(CDS|DNA|EST)/
               r[:homolog_species] = hfull.split.map { |w| w[0] }.join('')
-              r[:homolog_species_full] = hfull
               r[:homolog_gene] = gene
               hcluster = /(cluster\d+)/.match(descr)[1]
               # $stderr.print hcluster,"\n"
@@ -69,14 +68,15 @@ module BioRdf
               r[:descr] = descr
               r[:e_value] = a[4].to_f
               # p "HERE",descr
-              if descr =~ /(\[(\S\S)_(DNA|CDS)\])/ or hfull =~ /((\S\S)_(DNA|CDS))/
+              if descr =~ /(\[(\w+)_(DNA|CDS|EST)\])/ or hfull =~ /((\w+)_(DNA|CDS|EST))/
                 r[:homolog_species_full] = $1
                 r[:homolog_species] = $2
                 r[:homolog_source] = $3
               end
+              r[:homolog_species_full] = hfull.sub(/\[|\]/,"") # remove brackets
               # assertions
-              raise "Error "+buf if not /(CDS|DNA|EST)$/.match(r[:homolog_source])
-              raise "Error "+buf if not /\[\S\S_(CDS|DNA|EST)\]$/.match(r[:homolog_species_full])
+              raise "Error <#{r[:homolog_source]}> "+buf if not /(CDS|DNA|EST)$/.match(r[:homolog_source])
+              raise "Error <#{r[:homolog_species_full]}> "+buf if not /\w+_(CDS|DNA|EST)$/.match(r[:homolog_species_full])
               raise "Error "+buf if not /\S\S_(CDS|DNA|EST)_cluster\d+$/.match(r[:homolog_cluster])
               # override species
               recs << r
