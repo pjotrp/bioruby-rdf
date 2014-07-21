@@ -2,6 +2,7 @@
 #
 # env HASH="species1=Mi,is_pos_sel=1,source1=DNA,species2=Other,is_pos_sel2=1" ../../../scripts/sparql-csv.sh match_clusters.rq
 #
+
 <%
    # p ENV['HASH']
    h=ENV['HASH'].split(',').map{ |s| s.split('=') }.to_h
@@ -37,11 +38,12 @@
 <% end %>
 {
 
+  # ---- Match PAML digest
   ?cluster
     :species "<%= species1 %>" ;
     <%= ':is_pos_sel true ;' if is_pos_sel %>
-    # :lnL ?lnl . <- implicit
     :source "<%= source1 %>" .
+  # ---- Find homolog genes
   ?hgene
     a :blast_match ;
     # :homolog_species ?hspecies ;
@@ -50,6 +52,7 @@
     :homolog_cluster ?cluster ;  # match all genes in cluster
     :cluster ?hcluster .
     # rdf:label ?hname .
+  <% if false %>
   # Just make sure there are no matches to self:
   ?hcluster :species ?hspecies .
   FILTER (?cluster != ?hcluster) .  # skip exact self matches using cluster ID
@@ -62,4 +65,6 @@
   <% if filter and filter != '' %>
   #  FILTER (CONTAINS(?hname,"<%= filter %>" )) .
   <% end %>
+  <% end %>
+
 }
