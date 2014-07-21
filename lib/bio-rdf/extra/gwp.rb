@@ -54,7 +54,8 @@ module BioRdf
               r[:homolog_species_full] = hfull
               r[:homolog_gene] = gene
               if descr =~ /^cluster\d+/
-                r[:homolog_cluster] = (hfull+'_'+descr).to_sym
+                symbol = hfull+'_'+descr.split.first.to_s
+                r[:homolog_cluster] = symbol.to_sym
               else
                 r[:descr] = descr
               end
