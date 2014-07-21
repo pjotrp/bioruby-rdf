@@ -50,14 +50,19 @@ module BioRdf
               # r[:species] = species
               # r[:source] = type
               hfull = a[0]
+              if hfull !~ /_(DNA|CDS|EST)/
+                hfull = /\[(\S+_(CDS|DNA|EST))\]/.match(buf)[1]
+              end
+              raise "Expected Ss_TYPE (e.g., Mi_CDS) instead of #{hfull} for "+buf if hfull !~ /\S\S_(CDS|DNA|EST)/
               r[:homolog_species] = hfull.split.map { |w| w[0] }.join('')
               r[:homolog_species_full] = hfull
               r[:homolog_gene] = gene
-              if descr =~ /^cluster\d+/
-                r[:homolog_cluster] = (hfull+'_'+descr).to_sym
-              else
-                r[:descr] = descr
-              end
+              hcluster = /(cluster\d+)/.match(descr)[1]
+              # $stderr.print hcluster,"\n"
+              raise "Missing cluster for "+buf if not hcluster
+              r[:homolog_cluster] = (hfull+'_'+hcluster).to_sym
+              raise "Illegal hcluster <#{r[:homolog_cluster]}> for "+buf if r[:homolog_cluster] =~ /\s/
+              r[:descr] = descr
               r[:e_value] = a[4].to_f
               # p "HERE",descr
               if descr =~ /(\[(\S\S)_(DNA|CDS)\])/ or hfull =~ /((\S\S)_(DNA|CDS))/
