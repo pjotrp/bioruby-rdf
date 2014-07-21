@@ -48,7 +48,11 @@ HEAD
             if v.kind_of? String
               rdf += ' '+BioRdf::RDF::quoted_stringify_literal(v)
             elsif v.kind_of? Symbol
-              rdf += ' :'+v.to_s
+              if v.to_s =~ /:/
+                rdf += ' '+v.to_s
+              else
+                rdf += ' :'+v.to_s
+              end
             else
               # another literal
               rdf += " " + v.to_s 

@@ -14,8 +14,8 @@ module BioRdf
               cluster = /(cluster\d+)/.match(a[0])[1]
               clusterid = name + '_' + cluster
               r = recs[cluster] = {}
-              r[:id] = name + '_' + cluster
-              r[:clusterid] = clusterid.to_sym
+              r[:id] = ('gwp:' + name + '_' + cluster).to_sym
+              # r[:clusterid] = clusterid.to_sym
               r[:model] = 'M78' if a[1] =~ /7/ 
               r[:species] = species
               r[:source] = type
@@ -49,7 +49,7 @@ module BioRdf
       
               r = {}
               r[:id] = name + '_' + cluster + '_' + gene
-              r[:cluster] = clusterid.to_sym
+              r[:cluster] = ('gwp:'+clusterid).to_sym
               r['a'] = :blast_match
               # r[:species] = species
               # r[:source] = type
@@ -63,7 +63,7 @@ module BioRdf
               hcluster = /(cluster\d+)/.match(descr)[1]
               # $stderr.print hcluster,"\n"
               raise "Missing cluster for "+buf if not hcluster
-              r[:homolog_cluster] = (hfull+'_'+hcluster).to_sym
+              r[:homolog_cluster] = ('gwp:'+hfull+'_'+hcluster).to_sym
               raise "Illegal hcluster <#{r[:homolog_cluster]}> for "+buf if r[:homolog_cluster] =~ /\s/
               r[:descr] = descr
               r[:e_value] = a[4].to_f
