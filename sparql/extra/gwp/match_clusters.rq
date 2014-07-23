@@ -39,33 +39,23 @@
 {
 
   # ---- Find all clusters in PAML digest
-  ?cluster   # gwp#Mi_CDS_cluster00159
+  ?cluster  
     paml:species "<%= species1 %>" ;
     <%= 'paml:is_pos_sel true ;' if is_pos_sel %>
     paml:source "<%= source1 %>" .
   # ---- Find homolog genes
   ?hgene
     a blast:blast_match ;
-    # blast:species ?species ;
     blast:homolog_species ?species ;
-    # :homolog_species "<%= species1 %>" ;
-    # :homolog_source "<%= source1 %>" ;
-    blast:homolog_cluster ?cluster ;  # match all genes in cluster (gwp ns) gwp#Cb_DNA_cluster00324
+    # :homolog_species "<%= species1 %>" ; <--- should be species1
+    blast:homolog_cluster ?cluster ; 
     blast:cluster ?hcluster .         # (gwp ns)
-    # rdf:label ?hname .
+  ?hcluster 
+    paml:species ?hspecies .
+
   # Just make sure there are no matches to self:
   # ?hcluster paml:species ?hspecies .
   FILTER (?cluster != ?hcluster) .  # skip exact self matches using cluster ID
-  # FILTER (?hspecies != "<%= species1 %>") .  # skip exact self matches
+  FILTER (?hspecies != ?species) .  # skip exact self matches
   <%= '?hcluster paml:is_pos_sel true .' if is_pos_sel2 %>
-
-  <% if false %>
-  <% if species2 == 'Other' %>
-  #  MINUS { ?hgene :homolog_species ?hspecies } .
-  <% end %>
-  <% if filter and filter != '' %>
-  #  FILTER (CONTAINS(?hname,"<%= filter %>" )) .
-  <% end %>
-  <% end %>
-
 }
