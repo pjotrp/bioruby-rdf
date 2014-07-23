@@ -30,8 +30,8 @@ HEAD
 
       def Turtle::hash_to_rdf(h)
         rdf = ""
-        id = h[:id].to_s
-        turtle_id = id # BioRdf::Turtle::mangle_identifier(id)
+        original_id = h[:id].to_s
+        turtle_id = BioRdf::Turtle::mangle_identifier(id)
         h.each do | k,v |
           if k != :id
             # Subject (mangled short hand notation)
@@ -64,7 +64,7 @@ HEAD
             rdf += " .\n"
           else
             rdf += ':' if turtle_id !~ /:/
-            rdf += turtle_id + ' rdf:label "' + id + "\" .\n"
+            rdf += turtle_id + ' rdf:label "' + original_id + "\" .\n"
           end
         end
         rdf
