@@ -48,8 +48,8 @@
     a blast:blast_match ;
     blast:homolog_species ?species ;
     # :homolog_species "<%= species1 %>" ; <--- should be species1
-    blast:homolog_cluster ?cluster ; 
-    blast:cluster ?hcluster .         # (gwp ns)
+    gwp:homolog_cluster ?cluster ; 
+    gwp:cluster ?hcluster .         # (gwp ns)
   ?hcluster 
     paml:species ?hspecies .
 

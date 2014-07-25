@@ -44,7 +44,7 @@ assert(all.size == 43) if TYPE=='CDS'
 # Note that catH overlaps with catA and that catH is larger than all PSC(!)
 catH = csv_parse.call("env HASH=\"clusters=1,species=Mi,source1=#{TYPE}\" ../../../scripts/sparql-csv.sh blast2.rq").drop(1).flatten
 # ==== catH
-assert(catH.size == 36,"Expect 36 was #{catH.size}") if TYPE=='CDS'
+assert(catH.size == 29,"Expect 29 was #{catH.size}") if TYPE=='CDS'
 
 # ---- 2b. Annotate plantP only (&)
 #      catH contains all ann PSC. So we can select those that
@@ -115,7 +115,7 @@ p [:annotated, ann.sort]
 
 minc_cluster_plantp = ann.keys.select { |k| ann[k].include?(:plant_pathogen) }
 p [:plantP, minc_cluster_plantp.size ]
-assert(minc_cluster_plantp.size == 9) if TYPE=='CDS' 
+assert(minc_cluster_plantp.size == 13) if TYPE=='CDS' 
 
 # ---- 2c and 2d. Annotated in ann! (&)
 
@@ -124,7 +124,7 @@ assert(minc_cluster_plantp.size == 9) if TYPE=='CDS'
 #      references to other Mi EST clusters, but not to self
 catA = csv_parse.call("env HASH=\"cluster=1,species1=Mi,is_pos_sel=1,source1=#{TYPE},species2=Other,is_pos_sel2=1\" ../../../scripts/sparql-csv.sh match_clusters.rq").drop(1).flatten
 # ==== we have catA
-assert(catA.size == 10) if TYPE=='CDS' 
+assert(catA.size == 8,catA.size) if TYPE=='CDS' 
 
 # ---- 3a catA plant only
 plant_pathogenA = catA.select { |c| ann[c] and ann[c].include?(:plant_pathogen) }
@@ -132,16 +132,16 @@ p [:red, plant_pathogenA.size]
 # ==== we have catA orange and red!
 otherA = catA - plant_pathogenA
 p [:orange, otherA.size]
-assert(otherA.size == 8,otherA.size.to_s) if TYPE=='CDS' 
+assert(otherA.size == 4,otherA.size.to_s) if TYPE=='CDS' 
 
 # ---- Now we can have the unique PSC (catC green) (&)
 catC = all - catA - catH
 p [:unique_PSC, catC.size]
-assert(catC.size == 6,"Expect 6") if TYPE=='CDS'
+assert(catC.size == 14,"Was #{catC.size}") if TYPE=='CDS'
 
 assert(catA & catC == [],"There should be no overlap between catA and catC")
 catB = all - catA - catC 
-assert(catB.size == 27,"CatB is 27") if TYPE == 'CDS'
+assert(catB.size == 21,catB.size) if TYPE == 'CDS'
 
 # ---- Fetch conserved (catB)
 p '** all **********************'
