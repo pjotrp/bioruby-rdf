@@ -20,6 +20,10 @@ TYPE = if ARGV[0] == 'DNA'
        else
          'CDS'
        end
+
+# Bm_DNA  Cb_DNA  Ce_DNA  Gp_DNA  Mh_DNA  Mi_DNA  Pi_DNA  Pp_DNA  Ts_CDS
+# Bx_DNA  Ce_CDS  Gp_CDS  Mh_CDS  Mi_CDS  Pi_CDS  Pp_CDS  Sr_DNA  Ts_DNA
+
 PLANT_PATHOGENS=['Mi','Mh','Gp','Bx','Pi']
 ANIMAL_PATHOGENS=['Bm','Ts','Sr']
 FREE_LIVING=['Ce','Cb','Pp']
