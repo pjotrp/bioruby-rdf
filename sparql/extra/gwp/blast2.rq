@@ -38,17 +38,18 @@
 # :Mi_CDS_cluster00100_NP_001022867 :e_value 9.42776e-164 .
 
   ?hgene
-    :cluster ?cluster ;
-    a :blast_match ;
+    gwp:cluster ?cluster ;    # <--- note the NS may change
+    a blast:blast_match ;
     # <% if source2 %>:homolog_source "<%= source2 %>" ; <% end %>
-    :homolog_species_full ?hspecies_full ;
-    :homolog_species ?hspecies .
+    blast:homolog_species_full ?hspecies_full ;
+    # blast:homolog_cluster ?hcluster ;
+    blast:homolog_species ?hspecies .
     # :homolog_species_full ?hspecies_full ;
   ?cluster  # The cluster we are matching
-    :species "<%= species %>" ;
-    :source "<%= source1 %>" ;
-    :is_pos_sel true .
-  MINUS  { ?hgene :homolog_species "<%= species %>" } .
+    paml:species "<%= species %>" ;
+    paml:source "<%= source1 %>" ;
+    paml:is_pos_sel true .
+  MINUS  { ?hgene blast:homolog_species "<%= species %>" } .
   FILTER ( !CONTAINS(?hspecies_full,"Nema_EST")) .
-  OPTIONAL  { ?hgene :descr ?gdescr } .
+  OPTIONAL  { ?hgene blast:descr ?gdescr } .
 }
