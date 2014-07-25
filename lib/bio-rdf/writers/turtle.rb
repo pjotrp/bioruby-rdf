@@ -31,7 +31,7 @@ HEAD
       def Turtle::hash_to_rdf(h)
         rdf = ""
         original_id = h[:id].to_s
-        turtle_id = BioRdf::Turtle::mangle_identifier(id)
+        turtle_id = BioRdf::Turtle::mangle_identifier(original_id)
         h.each do | k,v |
           if k != :id
             # Subject (mangled short hand notation)
