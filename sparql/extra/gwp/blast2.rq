@@ -28,7 +28,7 @@
 <% end %>
 {
 
-# :Mi_CDS_cluster00100_NP_001022867 :cluster :Mi_CDS_cluster00100 .
+# :Mi_CDS_cluster00100_NP_001022867 gwp:cluster :Mi_CDS_cluster00100 .
 # :Mi_CDS_cluster00100_NP_001022867 a :blast_match .
 # :Mi_CDS_cluster00100_NP_001022867 rdf:label "Mi_CDS_cluster00100_NP_001022867" .
 # :Mi_CDS_cluster00100_NP_001022867 :homolog_species "Ce" .

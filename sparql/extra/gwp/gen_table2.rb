@@ -52,7 +52,7 @@ assert(all.size == 43) if do_assert
 # Note that catH overlaps with catA and that catH is larger than all PSC(!)
 catH = csv_parse.call("env HASH=\"by_cluster=1,species=#{species},source1=#{TYPE}\" ../../../scripts/sparql-csv.sh blast2.rq").drop(1).flatten
 # ==== catH
-assert(catH.size == 29,"Expect 29 was #{catH.size}") if do_assert
+assert(catH.size == 36,"Expect 36 was #{catH.size}") if do_assert
 
 # ---- 2b. Annotate plantP only (&)
 #      catH contains all ann PSC. So we can select those that
@@ -123,7 +123,7 @@ p [:annotated, ann.sort]
 
 minc_cluster_plantp = ann.keys.select { |k| ann[k].include?(:plant_pathogen) }
 p [:plantP, minc_cluster_plantp.size ]
-assert(minc_cluster_plantp.size == 13) if do_assert 
+assert(minc_cluster_plantp.size == 9) if do_assert 
 
 # ---- 2c and 2d. Annotated in ann! (&)
 
@@ -140,16 +140,16 @@ p [:red, plant_pathogenA.size]
 # ==== we have catA orange and red!
 otherA = catA - plant_pathogenA
 p [:orange, otherA.size]
-assert(otherA.size == 4,otherA.size.to_s) if do_assert 
+assert(otherA.size == 6,otherA.size.to_s) if do_assert 
 
 # ---- Now we can have the unique PSC (catC green) (&)
 catC = all - catA - catH
 p [:unique_PSC, catC.size]
-assert(catC.size == 14,"Was #{catC.size}") if do_assert
+assert(catC.size == 7,"Was #{catC.size}") if do_assert
 
 assert(catA & catC == [],"There should be no overlap between catA and catC")
 catB = all - catA - catC 
-assert(catB.size == 21,catB.size) if do_assert
+assert(catB.size == 28,catB.size) if do_assert
 
 # ---- Fetch conserved (catB)
 p '** all **********************'

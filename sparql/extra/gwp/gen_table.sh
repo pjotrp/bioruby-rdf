@@ -14,4 +14,4 @@ for species in Bm Bx Ce Cb Gp Mi Mh Pi Pp Sr Ts ; do
     ./gen_table2.rb species=$species source=$source |egrep ^cat >> $fn
   done
 done
-bio-table --merge tmp/* > table2.tsv
+bio-table --merge tmp/*.tsv > table2.tsv
