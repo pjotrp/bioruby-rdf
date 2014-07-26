@@ -35,7 +35,7 @@ csv_parse = lambda { |cmd|
   CSV::parse(`#{cmd}`)
 }
 
-minc_cluster_prop = {}
+minc_cluster_prop = {} # cluster properties
 # ---- 1. Get the full list of Minc PSC in all (&)
 all1 = csv_parse.call("env species=Mi source=#{TYPE} ../../../scripts/sparql-csv.sh count_pos_sel.rq")
 all = all1.drop(1).map { |l| c = l[2] ; minc_cluster_prop[c] = {} ; c }

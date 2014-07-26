@@ -53,6 +53,11 @@
   ?hcluster 
     paml:species ?hspecies .
 
+  <% if source2 %>
+  ?hlcuster 
+    paml:source "<% source2 %>" .
+  <% end %>
+
   # Just make sure there are no matches to self:
   # ?hcluster paml:species ?hspecies .
   FILTER (?cluster != ?hcluster) .  # skip exact self matches using cluster ID
