@@ -42,9 +42,7 @@
     a blast:blast_match ;
     <% if source2 %>blast:homolog_source "<%= source2 %>" ; <% end %>
     blast:homolog_species_full ?hspecies_full ;
-    # blast:homolog_cluster ?hcluster ;
     blast:homolog_species ?hspecies .
-    # :homolog_species_full ?hspecies_full ;
   ?cluster  # The cluster we are matching
     paml:species "<%= species %>" ;
     paml:source "<%= source1 %>" ;

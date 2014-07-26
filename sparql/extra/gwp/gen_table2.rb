@@ -1,12 +1,14 @@
 #! /usr/bin/env ruby
 #
+# ./gen_table2.rb species=Mi source=CDS
+#
 # Display relative contribution to Mi PSC.
 #
 # catA: list PSC-PSC
 # catB: list PSC-conserved
 # catC: list PSC-unique
 # all:  All PSC (catA+catB+catC)
-# catH: All clusters that have BLAST homologs
+# catH: All clusters that have BLAST homologs, including refSeq
 # ann:  All BLST annotated for :matches, :(plant_)pathogen, :refseq, 
 #                              :cds and :dna in catH 
 #
