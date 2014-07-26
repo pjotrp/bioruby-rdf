@@ -13,7 +13,7 @@
    source2      = h['source2']
    # options
    by_gene      = h['by_gene']
-   cluster      = h['cluster']
+   by_cluster   = h['by_cluster']
    paired       = h['paired']
    is_pos_sel   = h['is_pos_sel']
    is_pos_sel2  = h['is_pos_sel2']
@@ -28,7 +28,7 @@
 <% if not by_gene %>
   <% if paired %>
     SELECT DISTINCT ?cluster ?hcluster ?hspecies WHERE 
-  <% elsif cluster %>
+  <% elsif by_cluster %>
     SELECT DISTINCT ?cluster WHERE 
   <% else %>
     SELECT DISTINCT ?cluster ?hspecies WHERE 
@@ -54,7 +54,7 @@
     paml:species ?hspecies .
 
   <% if source2 %>
-  ?hlcuster 
+  ?hcluster 
     paml:source "<% source2 %>" .
   <% end %>
 

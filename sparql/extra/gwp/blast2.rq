@@ -11,14 +11,14 @@
    source1     = h['source1']
    source2     = h['source2']
    # options
-   clusters    = h['clusters']       # clusters only
+   by_cluster  = h['by_cluster']       # clusters only
    by_gene     = h['by_gene']       # list all genes
 %>
 
 <%= File.read(File.dirname(__FILE__)+'/preamble.rq')  %>
 
 <% if not by_gene %>
-  <% if clusters %>
+  <% if by_cluster %>
     SELECT DISTINCT ?cluster WHERE
   <% else %>
     SELECT DISTINCT ?cluster ?hspecies WHERE 

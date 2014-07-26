@@ -14,12 +14,14 @@ require 'csv'
 require 'solid_assert'
 
 SolidAssert.enable_assertions
+h=ARGV.map{ |s| s.split('=') }.to_h
+p h
+# inputs
+species     = h['species']
+source      = h['source']
 
-TYPE = if ARGV[0] == 'DNA'
-         'DNA'
-       else
-         'CDS'
-       end
+TYPE = source
+do_assert = (TYPE=='CDS' and species == 'Mi')
 
 # Bm_DNA  Cb_DNA  Ce_DNA  Gp_DNA  Mh_DNA  Mi_DNA  Pi_DNA  Pp_DNA  Ts_CDS
 # Bx_DNA  Ce_CDS  Gp_CDS  Mh_CDS  Mi_CDS  Pi_CDS  Pp_CDS  Sr_DNA  Ts_DNA
@@ -37,23 +39,23 @@ csv_parse = lambda { |cmd|
 
 minc_cluster_prop = {} # cluster properties
 # ---- 1. Get the full list of Minc PSC in all (&)
-all1 = csv_parse.call("env species=Mi source=#{TYPE} ../../../scripts/sparql-csv.sh count_pos_sel.rq")
+all1 = csv_parse.call("env species=#{species} source=#{TYPE} ../../../scripts/sparql-csv.sh count_pos_sel.rq")
 all = all1.drop(1).map { |l| c = l[2] ; minc_cluster_prop[c] = {} ; c }
 p [:num_PSC, all.size]
 # ==== all
-assert(all.size == 43) if TYPE=='CDS'   
+assert(all.size == 43) if do_assert   
 
 # ---- 2. Annotate for homologs
 # ---- 2a. Get all PSC that have homologs *catH* (&)
 # Note that catH overlaps with catA and that catH is larger than all PSC(!)
-catH = csv_parse.call("env HASH=\"clusters=1,species=Mi,source1=#{TYPE}\" ../../../scripts/sparql-csv.sh blast2.rq").drop(1).flatten
+catH = csv_parse.call("env HASH=\"by_cluster=1,species=#{species},source1=#{TYPE}\" ../../../scripts/sparql-csv.sh blast2.rq").drop(1).flatten
 # ==== catH
-assert(catH.size == 29,"Expect 29 was #{catH.size}") if TYPE=='CDS'
+assert(catH.size == 29,"Expect 29 was #{catH.size}") if do_assert
 
 # ---- 2b. Annotate plantP only (&)
 #      catH contains all ann PSC. So we can select those that
 #      contain only-plant matches
-list1 = csv_parse.call("env HASH=\"by_gene=1,species=Mi,source1=#{TYPE}\" ../../../scripts/sparql-csv.sh blast2.rq").drop(1)
+list1 = csv_parse.call("env HASH=\"by_gene=1,species=#{species},source1=#{TYPE}\" ../../../scripts/sparql-csv.sh blast2.rq").drop(1)
 # Create a hash of clusters that contain species and num
 matches = list1.inject(Hash.new) { |h,a| 
   cluster = a[0]
@@ -73,7 +75,7 @@ matches.each { |cluster,ms|
   other  = false
 
   ms.keys.each { | s |
-    assert(s != 'Mi')  # Make sure there is no accidental self reference
+    assert(s != species)  # Make sure there is no accidental self reference
     assert(s != 'Nema')  # Make sure there is no accidental self reference
     if PLANT_PATHOGENS.include?(s)
       plant = true 
@@ -119,16 +121,16 @@ p [:annotated, ann.sort]
 
 minc_cluster_plantp = ann.keys.select { |k| ann[k].include?(:plant_pathogen) }
 p [:plantP, minc_cluster_plantp.size ]
-assert(minc_cluster_plantp.size == 13) if TYPE=='CDS' 
+assert(minc_cluster_plantp.size == 13) if do_assert 
 
 # ---- 2c and 2d. Annotated in ann! (&)
 
 # ---- 3. Fetch matching PSC (catA) &
 #      Cat. A - create pairs of cluster + species, the list may contain
 #      references to other Mi EST clusters, but not to self
-catA = csv_parse.call("env HASH=\"cluster=1,species1=Mi,is_pos_sel=1,source1=#{TYPE},species2=Other,is_pos_sel2=1\" ../../../scripts/sparql-csv.sh match_clusters.rq").drop(1).flatten
+catA = csv_parse.call("env HASH=\"by_cluster=1,species1=#{species},is_pos_sel=1,source1=#{TYPE},species2=Other,is_pos_sel2=1\" ../../../scripts/sparql-csv.sh match_clusters.rq").drop(1).flatten
 # ==== we have catA
-assert(catA.size == 8,catA.size) if TYPE=='CDS' 
+assert(catA.size == 8,catA.size) if do_assert 
 
 # ---- 3a catA plant only
 plant_pathogenA = catA.select { |c| ann[c] and ann[c].include?(:plant_pathogen) }
@@ -136,16 +138,16 @@ p [:red, plant_pathogenA.size]
 # ==== we have catA orange and red!
 otherA = catA - plant_pathogenA
 p [:orange, otherA.size]
-assert(otherA.size == 4,otherA.size.to_s) if TYPE=='CDS' 
+assert(otherA.size == 4,otherA.size.to_s) if do_assert 
 
 # ---- Now we can have the unique PSC (catC green) (&)
 catC = all - catA - catH
 p [:unique_PSC, catC.size]
-assert(catC.size == 14,"Was #{catC.size}") if TYPE=='CDS'
+assert(catC.size == 14,"Was #{catC.size}") if do_assert
 
 assert(catA & catC == [],"There should be no overlap between catA and catC")
 catB = all - catA - catC 
-assert(catB.size == 21,catB.size) if TYPE == 'CDS'
+assert(catB.size == 21,catB.size) if do_assert
 
 # ---- Fetch conserved (catB)
 p '** all **********************'
