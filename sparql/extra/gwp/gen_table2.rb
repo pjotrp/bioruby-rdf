@@ -1,15 +1,33 @@
 #! /usr/bin/env ruby
 #
+# ./gen_table2.rb species=Mi source=CDS
+#
 # Display relative contribution to Mi PSC.
 #
+# catA: list PSC-PSC
+# catB: list PSC-conserved
+# catC: list PSC-unique
+# all:  All PSC (catA+catB+catC)
+# catH: All clusters that have BLAST homologs, including refSeq
+# ann:  All BLST annotated for :matches, :(plant_)pathogen, :refseq, 
+#                              :cds and :dna in catH 
 #
 require 'csv'
+require 'solid_assert'
 
-TYPE = if ARGV[0] == 'DNA'
-         'DNA'
-       else
-         'CDS'
-       end
+SolidAssert.enable_assertions
+h=ARGV.map{ |s| s.split('=') }.to_h
+p h
+# inputs
+species     = h['species']
+source      = h['source']
+
+TYPE = source
+do_assert = (TYPE=='CDS' and species == 'Mi')
+
+# Bm_DNA  Cb_DNA  Ce_DNA  Gp_DNA  Mh_DNA  Mi_DNA  Pi_DNA  Pp_DNA  Ts_CDS
+# Bx_DNA  Ce_CDS  Gp_CDS  Mh_CDS  Mi_CDS  Pi_CDS  Pp_CDS  Sr_DNA  Ts_DNA
+
 PLANT_PATHOGENS=['Mi','Mh','Gp','Bx','Pi']
 ANIMAL_PATHOGENS=['Bm','Ts','Sr']
 FREE_LIVING=['Ce','Cb','Pp']
@@ -21,126 +39,149 @@ csv_parse = lambda { |cmd|
   CSV::parse(`#{cmd}`)
 }
 
-minc_cluster_prop = {}
-# ---- 1. Get the full list of Minc PSC in minc_psc (&)
-minc_psc1 = csv_parse.call("env species=Mi source=#{TYPE} ../../../scripts/sparql-csv.sh count_pos_sel.rq")
-minc_psc = minc_psc1.drop(1).map { |l| c = l[2] ; minc_cluster_prop[c] = {} ; c }
-p [:num_PSC, minc_psc.size]
+minc_cluster_prop = {} # cluster properties
+# ---- 1. Get the full list of Minc PSC in all (&)
+all1 = csv_parse.call("env species=#{species} source=#{TYPE} ../../../scripts/sparql-csv.sh count_pos_sel.rq")
+all = all1.drop(1).map { |l| c = l[2] ; minc_cluster_prop[c] = {} ; c }
+p [:num_PSC, all.size]
+# ==== all
+assert(all.size == 43) if do_assert   
 
 # ---- 2. Annotate for homologs
-# ---- 2a. Get all PSC that have homologs (&)
-catB1 = csv_parse.call("env HASH=\"species=Mi,source1=#{TYPE}\" ../../../scripts/sparql-csv.sh blast2.rq").drop(1).flatten
-# p catB1
+# ---- 2a. Get all PSC that have homologs *catH* (&)
+# Note that catH overlaps with catA and that catH is larger than all PSC(!)
+catH = csv_parse.call("env HASH=\"by_cluster=1,species=#{species},source1=#{TYPE}\" ../../../scripts/sparql-csv.sh blast2.rq").drop(1).flatten
+# ==== catH
+assert(catH.size == 36,"Expect 36 was #{catH.size}") if do_assert
 
-# ---- 2b. Now we have the unique PSC (catC green) (&)
-minc_cluster_unique = minc_psc - catB1
-p [:unique_PSC, minc_cluster_unique.size]
-raise "Error" if TYPE=='CDS' and minc_cluster_unique.size != 7
-
-# ---- 2c. Annotate plantP only
-#      CatB1 contains all annotated PSC. So we can drop all those that
-#      contain non-plant matches
-p catB1
-# ---- Cat. A - create pairs of cluster + species
-listA = csv_parse.call("env HASH=\"species1=Mi,is_pos_sel=1,source1=#{TYPE},species2=Other,is_pos_sel2=1\" ../../../scripts/sparql-csv.sh match_clusters.rq")
-listA = csv_parse.call("env HASH=\"species1=Mi,is_pos_sel=1,source1=#{TYPE},species2=Other,is_pos_sel2=1\" ../../../scripts/sparql-csv.sh match_clusters.rq")
-
-p listA
-exit
-
-# Create hash of clusters with matching species
-catA = listA.drop(1).inject(Hash.new) { |h,pair| 
-  h[pair[0]] ||= []
-  h[pair[0]] << pair[1] 
+# ---- 2b. Annotate plantP only (&)
+#      catH contains all ann PSC. So we can select those that
+#      contain only-plant matches
+list1 = csv_parse.call("env HASH=\"by_gene=1,species=#{species},source1=#{TYPE}\" ../../../scripts/sparql-csv.sh blast2.rq").drop(1)
+# Create a hash of clusters that contain species and num
+matches = list1.inject(Hash.new) { |h,a| 
+  cluster = a[0]
+  h[cluster] ||= {}
+  match = a[1]
+  h[cluster][match] = a[2]
   h
 }
-total_catA = catA.size
-p catA
-p [:catA_PSC_PSC,total_catA]
-raise "Error" if TYPE=='CDS' and total_catA!=10
+# p [:matches, matches]
 
-exit
+ann = {}
 
-# ---- 1b. Get the other PSC
-count_pos = csv_parse.call("env count=1 ../../../scripts/sparql-csv.sh count_pos_sel.rq")
-type_count_pos = {}
-count_pos.each do | l |
-  (s,t,num) = l
-  type_count_pos[s.to_sym] = num.to_i if t==TYPE
-end
-total = type_count_pos[:Mi]
-p [:total,total] 
-raise "Error" if TYPE=='CDS' and total!=43
+matches.each { |cluster,ms| 
+  plant  = false
+  patho  = false
+  free   = false
+  other  = false
 
-  # ---- subcat A1 count PlantP only
-  subcatA = catA.keys.map { |cluster| 
-    species = catA[cluster]
-    p species
-    species.inject(true) { |cnt,s|
-      (!PLANT_PATHOGENS.include?(s) ? false : cnt )
-    }
+  ms.keys.each { | s |
+    assert(s != species)  # Make sure there is no accidental self reference
+    assert(s != 'Nema')  # Make sure there is no accidental self reference
+    if PLANT_PATHOGENS.include?(s)
+      plant = true 
+    elsif ANIMAL_PATHOGENS.include?(s)
+      patho = true 
+    elsif FREE_LIVING.include?(s)
+      free = true
+    else
+      other = true
+    end
   }
-  p [:subcatA,subcatA.count(true)]
-
-# Not quite done yet, we need to subtract the ones that have matches in catB
-# as they are not totally unique!
-
-# ---- Cat. B
-  total_catB = catB1.size-1 - total_catA
-  p [:catB,total_catB]
-  cnames = catB1.flatten[1..-1]
-  # p cnames
-  cluster = {}
-  cnames.map { |c| cluster[c] = [] }
-  catB = csv_parse.call("env HASH=\"by_gene=1,species=Mi,source1=#{TYPE}\" ../../../scripts/sparql-csv.sh blast2.rq")[1..-1].map {|row| cluster[row[0]] << row[2] }
-
-  # subcategorise B, first split into plantp, non-plantp, refseq, and dna
-  #
-  # The idea is to first find the Refseq matches, next the TYPE and
-  # finally the DNA.
-  wormp = []; worm = []; refseq=[]; orf=[]
-  cluster.each do | cname, species |
-    # Look for CDS pathogens annotated
-    non_pathogen = nil
-    matched = nil
-    species.each do | s |
-      if (match = /(\S\S)_CDS/.match(s))
-        matched = true
-        if not PLANT_PATHOGENS.include?(match[1])
-          non_pathogen = true 
-        end
-      end
-    end
-    if matched
-      if non_pathogen
-        worm << cname
-      else
-        wormp << cname
-      end
-      next # cluster
-    end
-    next
-    # Look for RefSeq annotated or DNA
-    is_orf = false
-    matched = false
-    species.each do | s |
-      if (match = /(\S\S)_DNA/.match(s))
-        matched = true
-        is_pathogen = true if PLANT_PATHOGENS.include?(match[1])
-      end
-    end
-    if matched
-      if is_pathogen
-        wormp << cname
-      else
-        worm << cname
-      end
-      next # cluster
-    end
+  ann[cluster] = [:matches => ms.keys ]
+  if other
+    # nothing
+  elsif free
+    ann[cluster] << :free
+  elsif patho
+    ann[cluster] << :pathogen
+  elsif plant
+    ann[cluster] << :pathogen
+    ann[cluster] << :plant_pathogen
   end
-  p wormp
-  p worm
 
-  exit
-  
+  cds    = false
+  dna    = false
+  refseq = false
 
+  ms.keys.each { | s |
+    full = ms[s]
+    if full =~ /_CDS/
+      cds = true
+    elsif full =~ /_DNA/
+      dna = true
+    else 
+      refseq = true
+    end
+  }
+  ann[cluster] << :refseq if refseq 
+  ann[cluster] << :cds if cds
+  ann[cluster] << :dna if dna
+}
+p [:annotated, ann.sort]
+
+minc_cluster_plantp = ann.keys.select { |k| ann[k].include?(:plant_pathogen) }
+p [:plantP, minc_cluster_plantp.size ]
+assert(minc_cluster_plantp.size == 9) if do_assert 
+
+# ---- 2c and 2d. Annotated in ann! (&)
+
+# ---- 3. Fetch matching PSC (catA) &
+#      Cat. A - create pairs of cluster + species, the list may contain
+#      references to other Mi EST clusters, but not to self
+catA = csv_parse.call("env HASH=\"by_cluster=1,species1=#{species},is_pos_sel=1,source1=#{TYPE},species2=Other,is_pos_sel2=1\" ../../../scripts/sparql-csv.sh match_clusters.rq").drop(1).flatten
+# ==== we have catA
+assert(catA.size == 8,catA.size) if do_assert 
+
+# ---- 3a catA plant only
+plant_pathogenA = catA.select { |c| ann[c] and ann[c].include?(:plant_pathogen) }
+p [:red, plant_pathogenA.size]
+# ==== we have catA orange and red!
+otherA = catA - plant_pathogenA
+p [:orange, otherA.size]
+assert(otherA.size == 6,otherA.size.to_s) if do_assert 
+
+# ---- Now we can have the unique PSC (catC green) (&)
+catC = all - catA - catH
+p [:unique_PSC, catC.size]
+assert(catC.size == 7,"Was #{catC.size}") if do_assert
+
+assert(catA & catC == [],"There should be no overlap between catA and catC")
+catB = all - catA - catC 
+assert(catB.size == 28,catB.size) if do_assert
+
+# ---- Fetch conserved (catB)
+p '** all **********************'
+p all
+p '** catA **********************'
+p catA
+p '** catB **********************'
+p catB
+p '** catC **********************'
+p catC
+p '** overlap **********************'
+p catA & catB
+p catA & catC
+p catB & catC
+p catA & all
+p [(catA & all).size,catA.size]
+assert(all & catB == catB)
+assert(all & catC == catC)
+assert(catA & all == catA)
+assert(all.size == catA.size + catB.size + catC.size, [catA,catB,catC,all].map {|i| i.size}.to_s)
+
+# plant_pathogenB are those in catB that map to :plant_pathogen
+plant_pathogenB = catB.select { |c| a = ann[c] ; a.include?(:plant_pathogen) }
+p orfB = (catB - plant_pathogenB).select { |c| a = ann[c] ; a.include?(:dna) and !a.include?(:cds) and !a.include?(:refseq) }
+conservedB = catB - orfB - plant_pathogenB
+assert(plant_pathogenB & orfB == [])
+assert(plant_pathogenB & conservedB == [])
+assert(orfB & conservedB == [])
+
+print "cat A. plant pathogen only\t",plant_pathogenA.size,"\n"
+print "cat A. other\t",otherA.size,"\n"
+print "cat B. plant pathogen only \t",plant_pathogenB.size,"\n"
+print "cat B. conserved \t",conservedB.size,"\n"
+print "cat B. ORFs \t",orfB.size,"\n"
+print "cat C. unique\t",catC.size,"\n"

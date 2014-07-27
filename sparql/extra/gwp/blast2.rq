@@ -11,19 +11,24 @@
    source1     = h['source1']
    source2     = h['source2']
    # options
-   by_gene       = h['by_gene']       # list all genes
+   by_cluster  = h['by_cluster']       # clusters only
+   by_gene     = h['by_gene']       # list all genes
 %>
 
 <%= File.read(File.dirname(__FILE__)+'/preamble.rq')  %>
 
 <% if not by_gene %>
-  SELECT DISTINCT ?cluster WHERE 
+  <% if by_cluster %>
+    SELECT DISTINCT ?cluster WHERE
+  <% else %>
+    SELECT DISTINCT ?cluster ?hspecies WHERE 
+  <% end %>
 <% else %>
   SELECT ?cluster ?hspecies ?hspecies_full ?gdescr WHERE 
 <% end %>
 {
 
-# :Mi_CDS_cluster00100_NP_001022867 :cluster :Mi_CDS_cluster00100 .
+# :Mi_CDS_cluster00100_NP_001022867 gwp:cluster :Mi_CDS_cluster00100 .
 # :Mi_CDS_cluster00100_NP_001022867 a :blast_match .
 # :Mi_CDS_cluster00100_NP_001022867 rdf:label "Mi_CDS_cluster00100_NP_001022867" .
 # :Mi_CDS_cluster00100_NP_001022867 :homolog_species "Ce" .
@@ -33,17 +38,16 @@
 # :Mi_CDS_cluster00100_NP_001022867 :e_value 9.42776e-164 .
 
   ?hgene
-    :cluster ?cluster ;
-    a :blast_match ;
-    # <% if source2 %>:homolog_source "<%= source2 %>" ; <% end %>
-    :homolog_species_full ?hspecies_full ;
-    :homolog_species ?hspecies .
-    # :homolog_species_full ?hspecies_full ;
+    gwp:cluster ?cluster ;    # <--- note the NS may change
+    a blast:blast_match ;
+    <% if source2 %>blast:homolog_source "<%= source2 %>" ; <% end %>
+    blast:homolog_species_full ?hspecies_full ;
+    blast:homolog_species ?hspecies .
   ?cluster  # The cluster we are matching
-    :species "<%= species %>" ;
-    :source "<%= source1 %>" ;
-    :is_pos_sel true .
-  MINUS  { ?hgene :homolog_species "<%= species %>" } .
+    paml:species "<%= species %>" ;
+    paml:source "<%= source1 %>" ;
+    paml:is_pos_sel true .
+  MINUS  { ?hgene blast:homolog_species "<%= species %>" } .
   FILTER ( !CONTAINS(?hspecies_full,"Nema_EST")) .
-  OPTIONAL  { ?hgene :descr ?gdescr } .
+  OPTIONAL  { ?hgene blast:descr ?gdescr } .
 }

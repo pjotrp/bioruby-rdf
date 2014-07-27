@@ -9,7 +9,7 @@ PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 prefix dc: <http://purl.org/dc/elements/1.1/>
 prefix hgnc: <http://identifiers.org/hgnc.symbol/>
 prefix doi: <http://dx.doi.org/>
-prefix : <http://biobeat.org/rdf/ns#> 
+prefix : <http://biobeat.org/rdf/paml#> 
 
 <%
    # inputs
@@ -26,14 +26,16 @@ SELECT ?species ?source ?id WHERE
 # SELECT ?name ?source ?sites WHERE 
 { 
   ?id :is_pos_sel true .
-  ?id rdf:label ?name .
-  ?id :sites ?sites .
+  <% if count %>
+    ?id rdf:label ?name .
+  <% end %>
+  # ?id :sites ?sites .
   <% if species %>
-  ?id :species "<%= species %>" .
+    ?id :species "<%= species %>" .
   <% end %>
   ?id :species ?species .
   <% if source %>
-  ?id :source "<%= source %>" .
+    ?id :source "<%= source %>" .
   <% end %>
   ?id :source ?source .
 }
