@@ -59,7 +59,7 @@ module BioRdf
               hfull = a[0]
               if species_match
                 if hfull !~ /_(DNA|CDS|EST)/
-                  hfull = /\[(\S+_(CDS|DNA|EST))\]/.match(buf)[1]
+                  hfull = /(\S+_(CDS|DNA|EST))/.match(buf)[1]
                 end
                 raise "Expected Ss_TYPE (e.g., Mi_CDS) instead of #{hfull} for "+buf if hfull !~ /\S\S_(CDS|DNA|EST)/
                 r[:homolog_species] = hfull.split.map { |w| w[0] }.join('')
