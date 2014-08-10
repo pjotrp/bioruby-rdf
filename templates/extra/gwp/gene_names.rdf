@@ -30,11 +30,12 @@
        gene_names[check_name] = true
      end
 %>
-  :<%= id %>  rdf:label  "<%= id %>" .
-  :<%= id %>  :gene_name  "<%= gene %>" .
-  :<%= id %>  :species  "<%= species %>" .
-  :<%= id %>  :source  "<%= source %>" .
-  :<%= id %>  :cluster  :<%= species+'_'+source+'_'+cluster %> .
+  :<%= id %>  
+    rdf:label  "<%= id %>" ;
+    :gene_name  "<%= gene %>" ;
+    paml:species  "<%= species %>" ;
+    paml:source  "<%= source %>" ;
+    gwp:cluster  :<%= species+'_'+source+'_'+cluster %> .
 <% end %>
 
 
