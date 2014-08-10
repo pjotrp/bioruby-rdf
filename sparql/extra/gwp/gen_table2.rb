@@ -21,6 +21,8 @@ p h
 # inputs
 species     = h['species']
 source      = h['source']
+species = 'Mi' if not species
+source  = 'CDS' if not source
 
 TYPE = source
 do_assert = (TYPE=='CDS' and species == 'Mi')
