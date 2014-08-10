@@ -21,7 +21,16 @@
 #   Ts_CDS/phobius_Ts_CDS.tab:EFV47125                        0  Y n6-16c21/22o
 #   
 
-<%= File.read(File.dirname(__FILE__)+'/preamble.rdf')  %>
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix hgnc: <http://identifiers.org/hgnc.symbol/> .
+@prefix doi: <http://dx.doi.org/> .
+@prefix ns: <http://biobeat.org/rdf/ns#> .
+@prefix paml: <http://biobeat.org/rdf/paml#>  .
+@prefix gene: <http://biobeat.org/rdf/gwp/gene-names#> .
+@prefix : <http://biobeat.org/rdf/phobius#> .
+
 
 <%
    File.open(ENV["INFILE"]).each_line do |line|
@@ -37,10 +46,11 @@
        loop = fields[3]
        transmembrane = loop.include?('i') and loop.include?('o')
 %>
-  :<%= id %>  :gene_name     "<%= gene %>" .
-  :<%= id %>  :species       "<%= species %>" .
-  :<%= id %>  :source        "<%= source %>" .
-  :<%= id %>  :phobius       true .
-  :<%= id %>  :transmembrane <%= transmembrane %> .
+  :<%= id %>  
+    gene:gene_name     "<%= gene %>" ;
+    paml:species       "<%= species %>" ;
+    paml:source        "<%= source %>" ;
+    :signal_protein    true ;
+    :transmembrane     <%= transmembrane %> .
 <%  end 
   end %>
