@@ -4,12 +4,14 @@
 #
 #   env HASH="by_gene=1,species=Mh,source1=CDS" ../../../scripts/sparql.sh blast2.rq
 #
+# Optionally provide a source2 or blast (refseq|species) to match against
 <%
    h=ENV['HASH'].split(',').map{ |s| s.split('=') }.to_h
    # inputs
    species     = h['species']
    source1     = h['source1']
    source2     = h['source2']
+   blast       = h['blast']
    # options
    by_cluster  = h['by_cluster']       # clusters only
    by_gene     = h['by_gene']       # list all genes
@@ -39,7 +41,9 @@
 
   ?hgene
     gwp:cluster ?cluster ;    # <--- note the NS may change
-    a blast:refseq_match ;
+    <% if blast %>
+    a blast:<%= blast %>_match ;
+    <% end %>
     <% if source2 %>blast:homolog_source "<%= source2 %>" ; <% end %>
     blast:homolog_species_full ?hspecies_full ;
     blast:homolog_species ?hspecies .

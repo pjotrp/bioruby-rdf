@@ -6,7 +6,7 @@
 #
 # And create RDF with 
 #
-#   env INFILE=signal_p.txt erb templates/signal-p.rdf
+#   env INFILE=signal_p.txt erb ./lib/bio-rdf/rdf templates/signal-p.rdf
 #
 # Input can be prepended by a filename (see also templates/phobius.rdf)
 #
