@@ -2,29 +2,45 @@
 #
 # Convert signalP output to text with 
 #
-#   lynx --dump signal_p.html > signal_p.txt
+#   lynx --dump signal_p.html > signalp.tab
 #
 # And create RDF with 
 #
-#   env INFILE=signal_p.txt erb ./lib/bio-rdf/rdf templates/signal-p.rdf
+#   env INFILE=test/data/signalp.tab erb -r ./lib/bio-rdf/rdf templates/signal-p.rdf
 #
 # Input can be prepended by a filename (see also templates/phobius.rdf)
 #
-<%= File.read(File.dirname(__FILE__)+'/preamble.rdf')  %>
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix hgnc: <http://identifiers.org/hgnc.symbol/> .
+@prefix doi: <http://dx.doi.org/> .
+@prefix signalp: <http://biobeat.org/rdf/ns#> .
+
+# SignalP-4.1 euk predictions
+# name                     Cmax  pos  Ymax  pos  Smax  pos  Smean   D     ?  Dma xcut    Networks-used
+# Y51A2D.19d                 0.105  45  0.108  41  0.170  68  0.101   0.105 N  0.5 00      SignalP-TM
 
 <%
    File.open(ENV["INFILE"]).each_line do |line|
      fields = line.split
      if fields[9] == 'Y'
+       # Yes, we have signal
        gene = fields.first
+       type = fields[11]
+       tmm = (type !~ /noTM/)
        (species,source) = gene.scan(/(\w\w)_(CDS|DNA|EST)/)[0]
        id = BioRdf::Turtle.mangle_identifier(gene)
        m = gene.match(/\.\w\w\w:(\S+)$/)
        gene = m[1] if m
 %>
-  :<%= id %>  :gene_name   "<%= gene %>" .
-  :<%= id %>  :species     "<%= species %>" .
-  :<%= id %>  :source      "<%= source %>" .
-  :<%= id %>  :signalP   true .
+  :<%= id %>  
+              :gene_name     "<%= gene %>" ;
+              :species       "<%= species %>" ;
+              :source        "<%= source %>" ;
+  <% if tmm %> 
+              :transmembrane true ; 
+  <% end %>
+              :signalP       true .
 <%  end 
   end %>
