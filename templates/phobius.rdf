@@ -39,7 +39,7 @@
        gene = fields.first
        id = BioRdf::Turtle.mangle_identifier(gene)
        # Get species and source from, e.g., 'Mi_CDS'
-       (species,source) = gene.scan(/(\w\w)_(CDS|DNA|EST)/)[0]
+       (species,source) = gene.scan(/(\w\w+)_(CDS|DNA|EST)/)[0]
        m = gene.match(/\.\w\w\w:(\S+)$/)
        gene = m[1] if m
        # Look for transmembrame
