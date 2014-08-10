@@ -38,7 +38,7 @@
 
   ?hgene
     :cluster ?cluster ;
-    a :blast_match ;
+    a :refseq_match ;
     rdf:label ?name ;
     :homolog_species ?hspecies ; 
     :homolog_species_full ?hspecies_full .

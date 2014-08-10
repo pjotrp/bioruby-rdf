@@ -24,7 +24,7 @@ SELECT ?species ?name ?hspecies ?hstrategy WHERE
   ?cluster :is_pos_sel true .
   ?hgene
     :cluster ?cluster ;
-    a :blast_match ;
+    a :species_match ;
     rdf:label ?name ;
     :homolog_species ?hspecies ;
     :homolog_species_full ?hspecies_full .

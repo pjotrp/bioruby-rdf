@@ -39,7 +39,7 @@
 
   ?hgene
     gwp:cluster ?cluster ;    # <--- note the NS may change
-    a blast:blast_match ;
+    a blast:refseq_match ;
     <% if source2 %>blast:homolog_source "<%= source2 %>" ; <% end %>
     blast:homolog_species_full ?hspecies_full ;
     blast:homolog_species ?hspecies .
