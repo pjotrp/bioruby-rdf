@@ -1,24 +1,33 @@
 # List all clusters that have signalP
 #
-#   ./scripts/sparql.sh script.rq
-# 
-# or
+# ../../../scripts/sparql.sh signalP-clusters.rq
 #
-#   env FILTER=phobius erb sparql/extra/gwp/signalP-clusters.rq |~/opt/bin/sparql-query "http://localhost:8000/sparql/?soft-limit=-1" -p|grep DNA|sort|./bin/strip_uri.rb
+# :Bx_DNA_signalp_Bx_DNA_tab_scaffold00252_2534  
+#              gene:gene_name     "scaffold00252_2534" ;
+#              paml:species       "Bx" ;
+#              paml:source        "DNA" ;
+#              signalp:transmembrane     true ; 
+#              signalp:signal_protein    true .
 
 <%= File.read(File.dirname(__FILE__)+'/preamble.rq')  %>
+<%
+   h=ENV['HASH'].split(',').map{ |s| s.split('=') }.to_h
+   by_cluster  = h['by_cluster']       # clusters only
+%>
 
+<% if by_cluster %>
+SELECT distinct ?cluster WHERE 
+<% else %>
 SELECT distinct ?cluster ?gene_name ?transmembrane WHERE 
-# SELECT distinct ?cluster WHERE 
+<% end %>
 {
-  ?id      :signalP true .
-  # ?id      :phobius true .
-  ?id      :gene_name ?gene_name .
-  ?id      :species ?species .
-  ?id      :source ?source .
-  ?id2     :gene_name ?gene_name .
-  ?id2     :species ?species .
-  ?id2     :source ?source .
-  ?id2     :cluster ?cluster .
-  OPTIONAL { ?id :transmembrane ?transmembrane } .
+  ?id      signalp:signal_protein  true ;
+           gene:gene_name ?gene_name ;
+           paml:species ?species ;
+           paml:source ?source .
+  ?id2     gene:gene_name ?gene_name ;
+           paml:species ?species ;
+           paml:source ?source ;
+           gwp:cluster ?cluster .
+  OPTIONAL { ?id signalp:transmembrane ?transmembrane } .
 }

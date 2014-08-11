@@ -4,6 +4,8 @@ prefix dc: <http://purl.org/dc/elements/1.1/>
 prefix gwp: <http://biobeat.org/rdf/gwp#> 
 prefix paml: <http://biobeat.org/rdf/paml#> 
 prefix blast: <http://biobeat.org/rdf/blast#>
+prefix gene: <http://biobeat.org/rdf/gwp/gene-names#> 
+prefix signalp: <http://biobeat.org/rdf/signalp#> 
+prefix phobius: <http://biobeat.org/rdf/phobius#> 
 prefix : <http://biobeat.org/rdf/ns#> 
-
 
