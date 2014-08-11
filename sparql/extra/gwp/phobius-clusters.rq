@@ -1,0 +1,39 @@
+# List all clusters that have phobius
+#
+# ../../../scripts/sparql.sh phobius-clusters.rq
+#
+
+<%= File.read(File.dirname(__FILE__)+'/preamble.rq')  %>
+
+#  :Bx_DNA_phobius_Bx_DNA_tab_scaffold01145_1447
+#    gene:gene_name     "scaffold01145_1447" ;
+#    paml:species       "Bx" ;
+#    paml:source        "DNA" ;
+#    :signal_protein    true ;
+#    :transmembrane     true .
+
+<%
+   h=ENV['HASH'].split(',').map{ |s| s.split('=') }.to_h
+   tmm = h['tmm']
+   by_cluster  = h['by_cluster']       # clusters only
+%>
+
+<% if by_cluster %>
+SELECT distinct ?cluster WHERE 
+<% else %>
+SELECT distinct ?cluster ?gene_name ?transmembrane WHERE 
+<% end %>
+{
+  ?id      phobius:signal_protein  true ;
+           gene:gene_name ?gene_name ;
+           paml:species ?species ;
+           paml:source ?source .
+  <% if tmm %>
+  ?id phobius:transmembrane true .
+  ?id phobius:transmembrane ?transmembrane .
+  <% end %>
+  ?id2     gene:gene_name ?gene_name ;
+           paml:species ?species ;
+           paml:source ?source ;
+           gwp:cluster ?cluster .
+}
