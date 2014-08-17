@@ -1,6 +1,6 @@
 # List all clusters that have phobius
 #
-# ../../../scripts/sparql.sh phobius-clusters.rq
+# env HASH="by_cluster=1" ../../../scripts/sparql.sh phobius-clusters.rq
 #
 
 <%= File.read(File.dirname(__FILE__)+'/preamble.rq')  %>

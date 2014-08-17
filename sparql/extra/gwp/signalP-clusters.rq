@@ -1,6 +1,6 @@
 # List all clusters that have signalP
 #
-# ../../../scripts/sparql.sh signalP-clusters.rq
+# env HASH="by_cluster=1" ../../../scripts/sparql.sh signalP-clusters.rq
 #
 # :Bx_DNA_signalp_Bx_DNA_tab_scaffold00252_2534  
 #              gene:gene_name     "scaffold00252_2534" ;
@@ -12,6 +12,7 @@
 <%= File.read(File.dirname(__FILE__)+'/preamble.rq')  %>
 <%
    h=ENV['HASH'].split(',').map{ |s| s.split('=') }.to_h
+   tmm = h['tmm']
    by_cluster  = h['by_cluster']       # clusters only
 %>
 
@@ -25,6 +26,9 @@ SELECT distinct ?cluster ?gene_name ?transmembrane WHERE
            gene:gene_name ?gene_name ;
            paml:species ?species ;
            paml:source ?source .
+  <% if tmm %>
+  ?id signalp:transmembrane true .
+  <% end %>
   ?id2     gene:gene_name ?gene_name ;
            paml:species ?species ;
            paml:source ?source ;
