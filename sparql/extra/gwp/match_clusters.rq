@@ -45,10 +45,10 @@
     paml:source "<%= source1 %>" .
   # ---- Find homolog genes
   ?hgene
-    a blast:refseq_match ;
+    a blast:species_match ;
     blast:homolog_species ?species ;
     # :homolog_species "<%= species1 %>" ; <--- should be species1
-    gwp:homolog_cluster ?cluster ; 
+    blast:homolog_cluster ?cluster ; 
     gwp:cluster ?hcluster .         # (gwp ns)
   ?hcluster 
     paml:species ?hspecies .

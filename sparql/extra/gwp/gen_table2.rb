@@ -134,7 +134,7 @@ assert(minc_cluster_plantp.size == 9) if do_assert
 #      references to other Mi EST clusters, but not to self
 catA = csv_parse.call("env HASH=\"by_cluster=1,species1=#{species},is_pos_sel=1,source1=#{TYPE},species2=Other,is_pos_sel2=1\" ../../../scripts/sparql-csv.sh match_clusters.rq").drop(1).flatten
 # ==== we have catA
-assert(catA.size == 8,catA.size) if do_assert 
+assert(catA.size == 10,catA.size) if do_assert 
 
 # ---- 3a catA plant only
 plant_pathogenA = catA.select { |c| ann[c] and ann[c].include?(:plant_pathogen) }
@@ -142,16 +142,16 @@ p [:red, plant_pathogenA.size]
 # ==== we have catA orange and red!
 otherA = catA - plant_pathogenA
 p [:orange, otherA.size]
-assert(otherA.size == 6,otherA.size.to_s) if do_assert 
+assert(otherA.size == 8,otherA.size.to_s) if do_assert 
 
 # ---- Now we can have the unique PSC (catC green) (&)
 catC = all - catA - catH
 p [:unique_PSC, catC.size]
-assert(catC.size == 7,"Was #{catC.size}") if do_assert
+assert(catC.size == 6,"Was #{catC.size}") if do_assert
 
 assert(catA & catC == [],"There should be no overlap between catA and catC")
 catB = all - catA - catC 
-assert(catB.size == 28,catB.size) if do_assert
+assert(catB.size == 27,catB.size) if do_assert
 
 # ---- Fetch conserved (catB)
 p '** all **********************'
