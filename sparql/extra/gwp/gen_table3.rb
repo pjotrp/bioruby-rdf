@@ -1,31 +1,22 @@
 #! /usr/bin/env ruby
 #
-# ./gen_table2.rb species=Mi source=CDS
-# ./gen_table2.rb species=Mi source=DNA
+# ./gen_table3.rb species=Mi source=CDS (default)
+# ./gen_table3.rb species=Mi source=DNA
 #
-# Display relative contribution to Mi PSC. Note that we should allow
-# for some overlap.
+# catA: Mi conserved Plant Pathogen only
+#   catA1: PSC-PSC (light green)
+#   catA2: PSC     (dark green)
+# catB: Mi conserved Non-plant-pathogen (incl. Refseq)
+#   catB1: CDS     (light red)
+#   catB2: ORF     (dark red)
+# catC: Mi unique  (light blue)
 #
-# catA: conserved Plant Pathogen only
-#   catA1: PSC-PSC
-#   catA2: PSC
-# catB: conserved Refseq
-# catC: Mi unique
+# Not plotted are
 #
-# catA: conserved PSC-PSC
-#   cat_A_pp
-#   cat_A refseq
-# catB: conserved
-#   cat B_pp
-#   cat B_refseq
-# catC: list PSC-unique
-# all:  All PSC (catA+catB+catC)
-# catH: All clusters that have BLAST homologs, including refSeq
+# catH: All Refseq matches
+#
 # ann:  All BLST annotated for :matches, :(plant_)pathogen, :refseq, 
 #                              :cds and :dna in catH 
-#
-# Check the old numbers in f72915dce47cea29d964f28d4575e6819fe3dfeb
-#
 require 'csv'
 require 'solid_assert'
 
@@ -39,7 +30,12 @@ species = 'Mi' if not species
 source  = 'CDS' if not source
 
 TYPE = source
-do_assert = (TYPE=='CDS' and species == 'Mi')
+is_cds    = (TYPE=='CDS')
+is_orf    = (TYPE=='DNA')
+do_assert = (species == 'Mi')
+do_cassert = (is_cds and species == 'Mi')
+short = ( is_cds ? species+'_c' : species+'_o' )
+      
 
 # Bm_DNA  Cb_DNA  Ce_DNA  Gp_DNA  Mh_DNA  Mi_DNA  Pi_DNA  Pp_DNA  Ts_CDS
 # Bx_DNA  Ce_CDS  Gp_CDS  Mh_CDS  Mi_CDS  Pi_CDS  Pp_CDS  Sr_DNA  Ts_DNA
@@ -55,20 +51,30 @@ csv_parse = lambda { |cmd|
   CSV::parse(`#{cmd}`)
 }
 
+newvar = lambda { |type, value, tot = nil|
+  if tot
+    print "\\newvar{#{short}#{type}}{#{value} (#{(value*100.0/tot).round(0)}\\%)}\n"
+  else
+    print "\\newvar{#{short}#{type}}{#{value}}\n"
+  end
+}
+
 minc_cluster_prop = {} # cluster properties
 # ---- 1. Get the full list of Minc PSC in all (&)
 all1 = csv_parse.call("env species=#{species} source=#{TYPE} ../../../scripts/sparql-csv.sh count_pos_sel.rq")
 all = all1.drop(1).map { |l| c = l[2] ; minc_cluster_prop[c] = {} ; c }
-p [:num_PSC, all.size]
+p [:num_PSC, species, source, all.size]
+newvar.call('',all.size)
 # ==== all
-assert(all.size == 43) if do_assert   
+assert((is_cds && all.size == 43) || all.size == 325) if do_assert   
 
-# ---- 2. Annotate for homologs
-# ---- 2a. Get all PSC that have homologs *catH* (&)
-# Note that catH overlaps with catA and that catH is larger than all PSC(!)
+# ---- 2. Annotate for Refseq homologs
 catH = csv_parse.call("env HASH=\"by_cluster=1,species=#{species},source1=#{TYPE}\" ../../../scripts/sparql-csv.sh blast2.rq").drop(1).flatten
 # ==== catH
-assert(catH.size == 36,"Expect 36 was #{catH.size}") if do_assert
+newvar.call('nr_perc',catH.size,all.size)
+assert(catH.size == 36,"Expect 36 was #{catH.size}") if do_cassert
+
+exit
 
 # ---- 2b. Annotate plantP only (&)
 #      catH contains all ann PSC. So we can select those that
