@@ -71,8 +71,11 @@ assert((is_cds && all.size == 43) || all.size == 325) if do_assert
 # ---- 2. Annotate for Refseq homologs
 catH = csv_parse.call("env HASH=\"by_cluster=1,species=#{species},source1=#{TYPE}\" ../../../scripts/sparql-csv.sh blast2.rq").flatten
 # ==== catH
-newvar.call('nr_perc',catH.size,all.size)
+newvar.call('blast_perc',catH.size,all.size)
 assert(catH.size == 36,"Expect 36 was #{catH.size}") if do_cassert
+
+newvar.call('refseq',csv_parse.call("env HASH=\"by_cluster=1,species=#{species},blast=refseq,source1=#{TYPE}\" ../../../scripts/sparql-csv.sh blast2.rq").flatten
+)
 
 exit
 
