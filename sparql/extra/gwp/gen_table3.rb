@@ -52,10 +52,9 @@ csv_parse = lambda { |cmd|
 }
 
 newvar = lambda { |type, value, tot = nil|
+  print "\\newvar{#{short}#{type}}{#{value}}\n"
   if tot
-    print "\\newvar{#{short}#{type}}{#{value} (#{(value*100.0/tot).round(0)}\\%)}\n"
-  else
-    print "\\newvar{#{short}#{type}}{#{value}}\n"
+    print "\\newvar{#{short}#{type}_perc}{#{value} (#{(value*100.0/tot).round(0)}\\%)}\n"
   end
 }
 
@@ -71,13 +70,11 @@ assert((is_cds && all.size == 43) || all.size == 325) if do_assert
 # ---- 2. Annotate for Refseq homologs
 catH = csv_parse.call("env HASH=\"by_cluster=1,species=#{species},source1=#{TYPE}\" ../../../scripts/sparql-csv.sh blast2.rq").flatten
 # ==== catH
-newvar.call('blast_perc',catH.size,all.size)
+newvar.call('blast',catH.size,all.size)
 assert(catH.size == 36,"Expect 36 was #{catH.size}") if do_cassert
 
-newvar.call('refseq',csv_parse.call("env HASH=\"by_cluster=1,species=#{species},blast=refseq,source1=#{TYPE}\" ../../../scripts/sparql-csv.sh blast2.rq").flatten
-)
-
-exit
+newvar.call('blast_refseq',csv_parse.call("env HASH=\"by_cluster=1,species=#{species},blast=refseq,source1=#{TYPE}\" ../../../scripts/sparql-csv.sh blast2.rq").flatten.size,all.size)
+newvar.call('blast_species',csv_parse.call("env HASH=\"by_cluster=1,species=#{species},blast=species,source1=#{TYPE}\" ../../../scripts/sparql-csv.sh blast2.rq").flatten.size,all.size)
 
 # ---- 2b. Annotate plantP only (&)
 #      catH contains all ann PSC. So we can select those that
@@ -93,21 +90,21 @@ matches = list1.inject(Hash.new) { |h,a|
 }
 # p [:matches, matches]
 
+# ---- Start annotation
 ann = {}
-
 matches.each { |cluster,ms| 
-  plant  = false
-  patho  = false
-  free   = false
-  other  = false
+  plantp  = false
+  animalp = false
+  free    = false
+  other   = false
 
   ms.keys.each { | s |
-    assert(s != species)  # Make sure there is no accidental self reference
-    assert(s != 'Nema')  # Make sure there is no accidental self reference
+    assert(s != species)  # Make sure there is no self reference
+    assert(s != 'Nema')  # Make sure there is no self reference
     if PLANT_PATHOGENS.include?(s)
-      plant = true 
+      plantp = true 
     elsif ANIMAL_PATHOGENS.include?(s)
-      patho = true 
+      animalp = true 
     elsif FREE_LIVING.include?(s)
       free = true
     else
@@ -119,9 +116,10 @@ matches.each { |cluster,ms|
     # nothing
   elsif free
     ann[cluster] << :free
-  elsif patho
+  elsif animalp
     ann[cluster] << :pathogen
-  elsif plant
+    ann[cluster] << :animal_pathogen
+  elsif plantp
     ann[cluster] << :pathogen
     ann[cluster] << :plant_pathogen
   end
@@ -144,12 +142,17 @@ matches.each { |cluster,ms|
   ann[cluster] << :cds if cds
   ann[cluster] << :dna if dna
 }
-p [:annotated, ann.sort]
+# p [:annotated, ann.sort]
 
 minc_cluster_plantp = ann.keys.select { |k| ann[k].include?(:plant_pathogen) }
+minc_cluster_animalp = ann.keys.select { |k| ann[k].include?(:animal_pathogen) }
 p [:plantP, minc_cluster_plantp.size ]
-assert(minc_cluster_plantp.size == 9) if do_assert 
+assert(minc_cluster_plantp.size == 9) if is_cds and do_assert 
 
+newvar.call('plantp',minc_cluster_plantp.size,all.size)
+newvar.call('animalp',minc_cluster_animalp.size,all.size)
+
+exit
 # ---- 2c and 2d. Annotated in ann! (&)
 
 # ---- 3. Fetch matching PSC (catA) &
