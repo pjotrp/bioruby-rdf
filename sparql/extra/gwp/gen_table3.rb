@@ -48,7 +48,7 @@ ALL_PATHOGENS  = PLANT_PATHOGENS + ANIMAL_PATHOGENS + FREE_LIVING
 
 csv_parse = lambda { |cmd|
   $stderr.print "===> Calling: #{cmd}\n"
-  CSV::parse(`#{cmd}`)
+  CSV::parse(`#{cmd}`).drop(1)
 }
 
 newvar = lambda { |type, value, tot = nil|
@@ -62,14 +62,14 @@ newvar = lambda { |type, value, tot = nil|
 minc_cluster_prop = {} # cluster properties
 # ---- 1. Get the full list of Minc PSC in all (&)
 all1 = csv_parse.call("env species=#{species} source=#{TYPE} ../../../scripts/sparql-csv.sh count_pos_sel.rq")
-all = all1.drop(1).map { |l| c = l[2] ; minc_cluster_prop[c] = {} ; c }
+all = all1.map { |l| c = l[2] ; minc_cluster_prop[c] = {} ; c }
 p [:num_PSC, species, source, all.size]
 newvar.call('',all.size)
 # ==== all
 assert((is_cds && all.size == 43) || all.size == 325) if do_assert   
 
 # ---- 2. Annotate for Refseq homologs
-catH = csv_parse.call("env HASH=\"by_cluster=1,species=#{species},source1=#{TYPE}\" ../../../scripts/sparql-csv.sh blast2.rq").drop(1).flatten
+catH = csv_parse.call("env HASH=\"by_cluster=1,species=#{species},source1=#{TYPE}\" ../../../scripts/sparql-csv.sh blast2.rq").flatten
 # ==== catH
 newvar.call('nr_perc',catH.size,all.size)
 assert(catH.size == 36,"Expect 36 was #{catH.size}") if do_cassert
@@ -79,7 +79,7 @@ exit
 # ---- 2b. Annotate plantP only (&)
 #      catH contains all ann PSC. So we can select those that
 #      contain only-plant matches
-list1 = csv_parse.call("env HASH=\"by_gene=1,species=#{species},source1=#{TYPE}\" ../../../scripts/sparql-csv.sh blast2.rq").drop(1)
+list1 = csv_parse.call("env HASH=\"by_gene=1,species=#{species},source1=#{TYPE}\" ../../../scripts/sparql-csv.sh blast2.rq")
 # Create a hash of clusters that contain species and num
 matches = list1.inject(Hash.new) { |h,a| 
   cluster = a[0]
@@ -152,7 +152,7 @@ assert(minc_cluster_plantp.size == 9) if do_assert
 # ---- 3. Fetch matching PSC (catA) &
 #      Cat. A - create pairs of cluster + species, the list may contain
 #      references to other Mi EST clusters, but not to self
-catA = csv_parse.call("env HASH=\"by_cluster=1,species1=#{species},is_pos_sel=1,source1=#{TYPE},species2=Other,is_pos_sel2=1\" ../../../scripts/sparql-csv.sh match_clusters.rq").drop(1).flatten
+catA = csv_parse.call("env HASH=\"by_cluster=1,species1=#{species},is_pos_sel=1,source1=#{TYPE},species2=Other,is_pos_sel2=1\" ../../../scripts/sparql-csv.sh match_clusters.rq").flatten
 # ==== we have catA
 assert(catA.size == 10,catA.size) if do_assert 
 
