@@ -152,7 +152,9 @@ assert(minc_cluster_plantp.size == 9) if is_cds and do_assert
 newvar.call('plantp',minc_cluster_plantp.size,all.size)
 newvar.call('animalp',minc_cluster_animalp.size,all.size)
 
-exit
+minc_cluster_plantp.each { |c|
+  p [c,ann[c]]
+}
 # ---- 2c and 2d. Annotated in ann! (&)
 
 # ---- 3. Fetch matching PSC (catA) &
@@ -160,7 +162,24 @@ exit
 #      references to other Mi EST clusters, but not to self
 catA = csv_parse.call("env HASH=\"by_cluster=1,species1=#{species},is_pos_sel=1,source1=#{TYPE},species2=Other,is_pos_sel2=1\" ../../../scripts/sparql-csv.sh match_clusters.rq").flatten
 # ==== we have catA
-assert(catA.size == 10,catA.size) if do_assert 
+assert(catA.size == 10,catA.size) if is_cds and do_assert 
+newvar.call('psps',catA.size,all.size)
+
+catA_plantp = catA.map { |c|
+  if ann[c]
+    res = ann[c].include?(:plant_pathogen) and not ann[c].include?(:refseq)
+    # p ann[c] if res
+    res
+  else
+    false
+  end
+}.delete_if { |r| !r }
+
+p catA_plantp
+
+newvar.call('psps_plantp',catA_plantp.size,all.size)
+
+exit
 
 # ---- 3a catA plant only
 plant_pathogenA = catA.select { |c| ann[c] and ann[c].include?(:plant_pathogen) }
