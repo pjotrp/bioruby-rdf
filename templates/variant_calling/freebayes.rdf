@@ -31,13 +31,11 @@
 @prefix : <http://biobeat.org/rdf/freebayes#> .
 
 <%
-   variant_type = if ENV["INFILE"] =~ /germl/
+   variant_type = if ENV["INFILE"] =~ /germl/i
                     'germline'
                   else
                     'somatic'
                   end
-   # 
-   # 20      9370527 .       A       G       MBC129  8       5       9       23
    File.open(ENV["INFILE"]).each_line do |line|
      next if line =~ /^(#|Chr)/
      (chr,pos,descr,ref,alt,sample,n_dp,n_ro,n_ao,t_dp,t_ro,t_ao) = line.split(/\t/)
@@ -50,12 +48,12 @@
   :<%= id %>  seq:ref         "<%= ref %>" .
   :<%= id %>  seq:alt         "<%= alt %>" .
 <% if n_ro %>
+  :<%= id %>  freebayes:n_dp    <%= n_dp %> .
   :<%= id %>  freebayes:n_ro    <%= n_ro %> .
   :<%= id %>  freebayes:n_ao    <%= n_ao %> .
-  :<%= id %>  freebayes:n_dp    <%= n_dp %> .
+  :<%= id %>  freebayes:t_dp    <%= t_dp %> .
   :<%= id %>  freebayes:t_ro    <%= t_ro %> .
   :<%= id %>  freebayes:t_ao    <%= t_ao %> .
-  :<%= id %>  freebayes:t_dp    <%= t_dp %> .
 <% end %>
   :<%= id %>  mbc:sample      "<%= sample %>" .
   :<%= id %>  db:id         db:freebayes .
