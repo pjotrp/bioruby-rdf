@@ -1,3 +1,5 @@
+# RDF support module. Original is part of bioruby-rdf by Pjotr Prins
+#
 module BioRdf
 
   module RDF
