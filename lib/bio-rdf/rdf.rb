@@ -55,6 +55,7 @@ module BioRdf
 
     def Turtle::mangle_identifier(s)
       id = s.strip.gsub(/[^[:print:]]/, '').gsub(/[#)(,]/,"").gsub(/[%]/,"perc").gsub(/(\s|\.|\$|\/|\\|\>)+/,"_")
+      id = id.gsub(/\[|\]/,'')
       # id = URI::escape(id)
       id = id.gsub(/\|/,'_')
       id = id.gsub(/\-|:/,'_')

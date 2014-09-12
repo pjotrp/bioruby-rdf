@@ -7,5 +7,6 @@ prefix blast: <http://biobeat.org/rdf/blast#>
 prefix gene: <http://biobeat.org/rdf/gwp/gene-names#> 
 prefix signalp: <http://biobeat.org/rdf/signalp#> 
 prefix phobius: <http://biobeat.org/rdf/phobius#> 
+prefix mega: <http://biobeat.org/rdf/megablast#> 
 prefix : <http://biobeat.org/rdf/ns#> 
 
