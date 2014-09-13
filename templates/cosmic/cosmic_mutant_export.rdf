@@ -4,45 +4,64 @@
 #
 <%= File.read(File.dirname(__FILE__)+'/preamble.rdf')  %>
 <%
+   # COSMICv70
+   GENE_NAME=0
+   ACCESSION=1
+   HGNC_ID=3
+   SAMPLE_ID=5
+   TUMOR_ID=6
+   CANCER_TYPE=7
+   CANCER_SUBTYPE=8
+   COSMIC_ID=12
+   NUC_MUT=13
+   AA_MUT=14
+   MUTATION_TYPE=15
+   POSITION=17
+   PUBMED_ID=22
+   REMARK=27
+   
    File.open(ENV["INFILE"]).each_line do |line|
      fields = line.split(/\t/)
      next if fields.first == 'Gene name'
-     next if fields[13] == ''
-     if fields[10] !~ /silent/
+     # next if fields[13] == ''
+     # if fields[10] !~ /silent/
        gene = fields[0].split(/_/).first
-       (chr,pos1) = fields[13].split(/:/) if fields[13]
+       (chr,pos1) = fields[POSITION].split(/:/) if fields[POSITION]
        next if not pos1
        pos2 = pos1.split(/-/)
        next if not pos2
        pos = pos2[0]
-       cosmicid = fields[7]
-       nuc = fields[8]
-       ref = nuc[-3]
-       alt = nuc[-1]
-       descr = fields[3]
-       breast_cancer = true if descr =~ /breast/
-       cancer = true 
-       id = 'cosmic'+cosmicid+'_'+chr+'_'+pos
+       cosmic_id = fields[COSMIC_ID]
+       cosmic_sampleid = fields[SAMPLE_ID]
+       cosmic_tumorid = fields[TUMOR_ID]
+       nuc = fields[NUC_MUT]
+       cancer = fields[CANCER_TYPE]
+       breast_cancer = true if cancer =~ /breast/
+       ovarian_cancer = true if cancer =~ /ovar/
+       remark=fields[REMARK].strip
+       id = 'cosmic'+cosmic_id+'_'+cosmic_sampleid+'_'+chr+'_'+pos
 %>
   :<%= id %>  seq:chr         "<%= chr %>" .
   :<%= id %>  seq:pos         <%= pos %> .
-  :<%= id %>  seq:ref         "<%= ref %>" .
-  :<%= id %>  seq:alt         "<%= alt %>" .
   :<%= id %>  seq:gene_name   "<%= gene %>" .
   :<%= id %>  db:id        db:cosmic .
-  :<%= id %>  cosmic:id      "COSM<%= cosmicid %>" .
-  :<%= id %>  cosmic:nuc_mutation    "<%= nuc %>" .
-  :<%= id %>  cosmic:aa_mutation    "<%= fields[9] %>" .
+  :<%= id %>  cosmic:id      "COSM<%= cosmic_id %>" .
+  :<%= id %>  cosmic:tumor_id      "<%= cosmic_tumorid %>" .
+  :<%= id %>  cosmic:nuc_mutation    "<%= fields[NUC_MUT] %>" .
+  :<%= id %>  cosmic:aa_mutation    "<%= fields[AA_MUT] %>" .
   :<%= id %>  annotate:cancer         true .
   <% if breast_cancer %>:<%= id %>  annotate:breast_cancer  true .<% end %>
-  :<%= id %>  cosmic:sample      "<%= fields[2] %>" .
-  :<%= id %>  cosmic:descr       "<%= fields[11]+' '+fields[10] %>" .
-  :<%= id %>  disease:descr      "<%= descr %> cancer" .
-  <% if fields[6]!='' and fields[6]!='NS' %>
-  :<%= id %>  cosmic:subtype "<%= fields[6] %>" .
+  <% if ovarian_cancer %>:<%= id %>  annotate:ovarian_cancer  true .<% end %>
+  :<%= id %>  cosmic:sample_id    "<%= fields[SAMPLE_ID] %>" .
+  <% if remark and remark!='' %>
+  :<%= id %>  cosmic:remark       "<%= remark %>" .
   <% end %>
-  <% if fields[15] %>
-  :<%= id %>  :pmid "<%= fields[15] %>" .
+  :<%= id %>  disease:descr      "<%= cancer %> cancer" .
+  <% if fields[CANCER_SUBTYPE]!='' and fields[CANCER_SUBTYPE]!='NS' %>
+  :<%= id %>  cosmic:subtype "<%= fields[CANCER_SUBTYPE] %>" .
   <% end %>
-<%  end 
+  <% if fields[PUBMED_ID]!="" %>
+  :<%= id %>  ncbi:pmid "<%= fields[PUBMED_ID] %>" .
+  <% end %>
+<%  # end // silent
   end %>

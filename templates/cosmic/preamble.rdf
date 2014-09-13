@@ -8,5 +8,6 @@
 @prefix disease: <http://biobeat.org/rdf/disease#> .
 @prefix annotate: <http://biobeat.org/rdf/annotate#> .
 @prefix cosmic: <http://biobeat.org/rdf/cosmic/mutation#> .
+@prefix ncbi: <http://biobeat.org/rdf/ncbi#> .
 @prefix : <http://biobeat.org/rdf/cosmic/mutation#> .
 
