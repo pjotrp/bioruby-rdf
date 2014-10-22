@@ -1,0 +1,15 @@
+#   env HASH="by_gene=1,species=Mi,source=CDS" erb sparql/extra/gwp/blast.rq |~/opt/bin/sparql-query "http://localhost:8000/sparql/?soft-limit=-1" -p
+#
+# or the shorter
+#
+#   env HASH="is_pos_sel=1,include_dna=1,species_blast=1,species=Mi,source=CDS" ./scripts/sparql.sh sparql/extra/gwp/blast.rq  
+<%
+   # h=ENV['HASH'].split(',').map{ |s| s.split('=') }.to_h
+%>
+
+<%= File.read(File.dirname(__FILE__)+'/preamble.rq')  %>
+
+SELECT DISTINCT ?gene WHERE 
+{
+  ?id   mega:accession   ?gene .
+}
