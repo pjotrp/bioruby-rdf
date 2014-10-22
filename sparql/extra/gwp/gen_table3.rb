@@ -63,6 +63,12 @@ minc_cluster_prop = {} # cluster properties
 clusters1 = csv_parse.call("env HASH=is_pos_sel1=h,count=1 ../../../scripts/sparql-csv.sh count.rq")
 total_clusters = -1
 clusters1.each { |c| total_clusters = c[2].to_i if c[0]==species and c[1]==source }
+newvar.call('clusters',total_clusters)
+
+clusters2 = csv_parse.call("env HASH=is_pos_sel=true,count=1 ../../../scripts/sparql-csv.sh count.rq")
+total_ps_clusters = clusters2.inject(0) { |sum,c| (c[1]=='CDS' || c[1]=='DNA' ? sum + c[2].to_i : sum ) }
+newvar.call('_ps_clusters',total_ps_clusters)
+
 all1 = csv_parse.call("env species=#{species} source=#{TYPE} ../../../scripts/sparql-csv.sh count_pos_sel.rq")
 all = all1.map { |l| c = l[2] ; minc_cluster_prop[c] = {} ; c }
 p [:num_PSC, species, source, all.size,total_clusters]

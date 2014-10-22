@@ -4,6 +4,7 @@
 # Bx_DNA  Ce_CDS  Gp_CDS  Mh_CDS  Mi_CDS  Pi_CDS  Pp_CDS  Sr_DNA  Ts_DNA
 
 ./gen_table3.rb species=Mi source=CDS|grep newvar > vars.tex
+./gen_table3.rb species=Mi source=DNA|grep newvar >> vars.tex
 
 exit 0
 
