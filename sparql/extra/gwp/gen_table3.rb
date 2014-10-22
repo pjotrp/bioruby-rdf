@@ -22,7 +22,7 @@ require 'solid_assert'
 
 SolidAssert.enable_assertions
 h=ARGV.map{ |s| s.split('=') }.to_h
-p h
+p [:options,h]
 # inputs
 species     = h['species']
 source      = h['source']
@@ -60,10 +60,13 @@ newvar = lambda { |type, value, tot = nil|
 
 minc_cluster_prop = {} # cluster properties
 # ---- 1. Get the full list of Minc PSC in all (&)
+clusters1 = csv_parse.call("env HASH=is_pos_sel1=h,count=1 ../../../scripts/sparql-csv.sh count.rq")
+total_clusters = -1
+clusters1.each { |c| total_clusters = c[2].to_i if c[0]==species and c[1]==source }
 all1 = csv_parse.call("env species=#{species} source=#{TYPE} ../../../scripts/sparql-csv.sh count_pos_sel.rq")
 all = all1.map { |l| c = l[2] ; minc_cluster_prop[c] = {} ; c }
-p [:num_PSC, species, source, all.size]
-newvar.call('',all.size)
+p [:num_PSC, species, source, all.size,total_clusters]
+newvar.call('',all.size,total_clusters)
 # ==== all
 assert((is_cds && all.size == 43) || all.size == 325) if do_assert   
 

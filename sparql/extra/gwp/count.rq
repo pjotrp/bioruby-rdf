@@ -15,13 +15,26 @@ prefix hgnc: <http://identifiers.org/hgnc.symbol/>
 prefix doi: <http://dx.doi.org/>
 prefix : <http://biobeat.org/rdf/paml#>  
 
+<%
+   h=ENV['HASH'].split(',').map{ |s| s.split('=') }.to_h
+   is_pos_sel       = h['is_pos_sel']
+   count = h['count'] != 'false'
+%>
 
+<% if count %>
 SELECT ?species ?source (COUNT(?id) AS ?num) WHERE 
-# SELECT ?name ?source ?sites WHERE 
+<% else %>
+SELECT ?id ?species ?source WHERE 
+<% end %>
 { 
-  ?id :species ?species .
-  ?id :source ?source .
+  ?id :species ?species ;
+      :source ?source ;
+      :model "M78" .
+  <% if is_pos_sel %>
   ?id :is_pos_sel true .
+  <% end %>
 }
+<% if count %>
 GROUP by ?species ?source
-ORDER by ?species ?source
+# ORDER by ?species ?source
+<% end %>
