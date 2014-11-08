@@ -1,5 +1,5 @@
 #
-# Calculate \Mi_orfmega_perc\, i.e., all ORF PSC that match a CDS PSC
+# List all CDS that have an ORF match
 #
 
 <%= File.read(File.dirname(__FILE__)+'/preamble.rq')  %>
