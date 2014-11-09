@@ -1,10 +1,22 @@
 #
 # Calculate \Mi_orfmega_perc\, i.e., all ORF PSC that match a CDS PSC
 #
+# First select all ORF PSC (opsc) which are positively selected
 
 <%= File.read(File.dirname(__FILE__)+'/preamble.rq')  %>
 
-SELECT DISTINCT ?gene WHERE 
+SELECT DISTINCT ?cpscid WHERE 
 {
-  ?id   mega:accession   ?gene .
+  # ---- megablast_all.rdf
+  # ?oid    gene:gene_name   "Minc_Contig1_17" .
+  ?oid    gene:gene_name   ?orf ;
+          mega:accession   ?cds .
+  # ---- all_gene_names.rdf 
+  ?gnid   gene:gene_name   ?orf ;
+          gwp:cluster      ?opscid .
+  ?gnid2  gene:gene_name   ?cds ;
+          gwp:cluster      ?cpscid .
+  # ---- all_digest.rdf
+  ?opscid paml:is_pos_sel  true .
+  ?cpscid paml:is_pos_sel  true .
 }
