@@ -3,8 +3,9 @@
 # ./gen_table2.rb species=Mi source=CDS
 # ./gen_table2.rb species=Mi source=DNA
 #
-# Display relative contribution to Mi PSC. Note that we should allow
-# for some overlap.
+# Display relative contribution of conserved sequences to Mi PSC,
+# split on those PSC that match RefSeq, plant PSC, other CDS PSC and ORF PSC.
+# Note that we should allow for some overlap. This script builds up Fig 1.
 #
 # catA: conserved Plant Pathogen only
 #   catA1: PSC-PSC
