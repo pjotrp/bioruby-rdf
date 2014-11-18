@@ -32,10 +32,10 @@
 %>
   :<%= id %>  
     rdf:label  "<%= id %>" ;
-    :gene_name  "<%= gene %>" ;
+    gene:gene_name  "<%= gene %>" ;
     paml:species  "<%= species %>" ;
     paml:source  "<%= source %>" ;
-    gwp:cluster  :<%= species+'_'+source+'_'+cluster %> .
+    gwp:cluster  gwp:<%= species+'_'+source+'_'+cluster %> .
 <% end %>
 
 

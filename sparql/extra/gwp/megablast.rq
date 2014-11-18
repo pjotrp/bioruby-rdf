@@ -1,14 +1,62 @@
+# The MegaBLAST database contains all clusters with their genes and
+# how they relate to each other. The TYPE ENV variable defines what
+# query. TYPE can be
+#
+#   count_opsc : count ORF PSC clusters that have a CDS match (563)
+#   count_cpsc : count CDS PSC clusters that have an ORF match (141)
+#   count_opsc_ps : count ORF PSC clusters that have a CDS match (141)
+#   count_cpsc_ps : count CDS PSC clusters that have an ORF match (26)
+#   count_opsc_ps_ps : count ORF PSC clusters that have a ps CDS match (59)
+#   count_cpsc_ps_ps : count CDS PSC clusters that have a ps ORF match (17)
+#
+#   Unique PSC = 325-59 + 43 = 309
 #
 # Calculate \Mi_orfmega_perc\, i.e., all ORF PSC that match a CDS PSC
 #
 # First select all ORF PSC (opsc) which are positively selected
 
+<%
+  # h=ENV['TYPE'].split(',').map{ |s| s.split('=') }.to_h
+  type     = ENV['TYPE']
+  case type
+    when 'count_opsc'
+      search_opsc = true
+    when 'count_cpsc'
+      search_cpsc = true
+    when 'count_opsc_ps'
+      search_opsc = true
+      pos_sel_opsc = true
+      pos_sel_cpsc = false
+    when 'count_cpsc_ps'
+      search_cpsc = true
+      pos_sel_cpsc = true
+      pos_sel_opsc = false
+    when 'count_opsc_ps_ps'
+      search_opsc = true
+      pos_sel_opsc = true
+      pos_sel_cpsc = true
+    when 'count_cpsc_ps_ps'
+      search_cpsc = true
+      pos_sel_opsc = true
+      pos_sel_cpsc = true
+    when 'count_matches'
+      pos_sel_cpsc = true
+      pos_sel_opsc = true
+    end
+%>
+
 <%= File.read(File.dirname(__FILE__)+'/preamble.rq')  %>
 
-SELECT DISTINCT ?cpscid WHERE 
+<% if search_opsc %>
+  SELECT DISTINCT ?opscid WHERE 
+<% elsif search_cpsc %>
+  SELECT DISTINCT ?cpscid WHERE 
+<% else %> # type == 'both_pos_sel'
+  # opsc\_cpsc\_matches.tsv
+  SELECT DISTINCT ?cpscid ?opscid WHERE
+<% end %>
 {
-  # ---- megablast_all.rdf
-  # ?oid    gene:gene_name   "Minc_Contig1_17" .
+  # ---- megablast_all.rdf - find match in MegaBLAST
   ?oid    gene:gene_name   ?orf ;
           mega:accession   ?cds .
   # ---- all_gene_names.rdf 
@@ -17,6 +65,10 @@ SELECT DISTINCT ?cpscid WHERE
   ?gnid2  gene:gene_name   ?cds ;
           gwp:cluster      ?cpscid .
   # ---- all_digest.rdf
+  <% if pos_sel_opsc %>
   ?opscid paml:is_pos_sel  true .
+  <% end %>
+  <% if pos_sel_cpsc %>
   ?cpscid paml:is_pos_sel  true .
+  <% end %>
 }
