@@ -1,3 +1,5 @@
+# encoding: utf-8
+#
 require 'bio'
 
 module BioRdf
@@ -52,7 +54,7 @@ module BioRdf
           $stderr.print options
 
           pubmed_opts = {
-            'maxdate' => '2015/01/01',
+            'maxdate' => '2022/01/01',
             'retmax' => 1000,
           }
           pubmed_default = %w{pubmed authors title journal year volume issue pages doi url medline}
@@ -88,6 +90,8 @@ module BioRdf
             }
             if options.pubmed_citations
               $stderr.print "Fetching citations for ",reference.pubmed,' ',reference.title,"\n"
+              Encoding.default_external = Encoding::UTF_8
+
               res = `lynx --dump "http://www.ncbi.nlm.nih.gov/pubmed/#{reference.pubmed}"`
               res =~ /Cited by( over)? (\d+)/
               content << $2
